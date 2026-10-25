@@ -2,10 +2,6 @@
 
 ### 🌐 [Click Here to View My Card Please.](https://ceiko-mill.github.io/ceiko-mill/)
 
----
----
----
-
 ### 📂 Contents.
 
 1. **About Me** – Basic info, background, and details.
