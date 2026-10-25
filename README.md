@@ -16,9 +16,9 @@
 5.) **Music** – the bands that I always listen to, semi favorite bands are not listed.
 
 Socials: 
-### * **Spotify**:  [Kyo_mill](https://open.spotify.com/user/31vsejfj3kgrncenxnnidmzspeei?si=36caa5c4babe4d8f)
-### * **Youtube:**: [Kyo_mill2](https://www.youtube.com/@kyo_mill2)
-### * **Roblox**:   [Kellin_mill2](https://www.roblox.com/users/10506185/profile)
+### * **Spotify**:  [kyo_mill](https://open.spotify.com/user/31vsejfj3kgrncenxnnidmzspeei?si=36caa5c4babe4d8f)
+### * **Youtube:**: [kyo_mill2](https://www.youtube.com/@kyo_mill2)
+### * **Roblox**:   [kellin_mill2](https://www.roblox.com/users/10506185/profile)
 
 Favourite Youtubers:
 ### 1.) The Organic Chemistry Tutor [Sir Julio's Channel](https://www.youtube.com/@TheOrganicChemistryTutor)
