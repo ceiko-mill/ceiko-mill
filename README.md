@@ -1,4 +1,4 @@
-## ceikomill's card.
+## ceiko_mill's card.
 
 ### 🌐 [Click Here to View the Live Site Please.](https://ceikomill.github.io/ceikomill/)
 
