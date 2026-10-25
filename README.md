@@ -22,7 +22,7 @@
 
 *Well, my teachers kinda either get stuck or I couldn't understand them, so I just study home.*
 
-**Courses I desperately needed to watch:**
+**Courses(Playlists) I desperately needed to watch from him:**
 
 **Business**
 
