@@ -1,6 +1,6 @@
 ## ceiko_mill's card.
 
-### 🌐 [Click Here to View My Card Please.](https://ceikomill.github.io/ceikomill/)
+### 🌐 [Click Here to View My Card Please.](https://ceikomill.github.io/ceikode-mill/)
 
 
 ### 📂 Contents.
