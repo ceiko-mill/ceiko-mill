@@ -36,6 +36,12 @@
 5. [Biology](https://www.youtube.com/watch?v=Y3h2GNajvcY&list=PL0o_zxa4K1BX8lFpIiKY97cHfKp7JP2NV)
 6. [Biochemistry](https://www.youtube.com/watch?v=Bsk9hvXDJp8&list=PL0o_zxa4K1BWnb_W5mEnzvmp23QZCOO7G)
 
+
+
 #### 2.) Scammer Payback — [Sir Pierogi's Channel](https://www.youtube.com/@ScammerPayback)
 
 *He's making funny content while saving our grandparents from kolkata scammers, 10/10 channel*
+
+**His most unhinged videos**
+
+1. [Scammer BEGS For His Deleted Files As I Drink His Tears](https://www.youtube.com/watch?v=eq8cKjdNpCo)
