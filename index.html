@@ -341,7 +341,8 @@
   const GH_FOLDER = 'music';   // folder in the repo that holds your .mp3 files
   const BASS_HZ = 100, BASS_DB = 7;   // bass boost: low shelf (everything below ~100 Hz gets +7 dB)
   const MUD_HZ = 250, MUD_DB = -2;    // small cut at 250 Hz while boost is on, keeps the bass from sounding muddy
-  const MIN_LOAD_MS = 2200;    // how long the ". .. ..." loading screen shows at minimum
+  const PRELOAD_COUNT = 3;      // how many songs to download during the loading screen (the rest stream)
+  const MIN_LOAD_MS = 2200;    // minimum time the ". .. ..." loading screen shows (it waits longer if songs are still downloading)
 
   const $ = id => document.getElementById(id);
   const intro = $('intro'), dots = $('dots'), enterBtn = $('enterBtn');
@@ -365,17 +366,33 @@
     const r = await fetch('https://api.github.com/repos/' + user + '/' + repo + '/contents/' + GH_FOLDER);
     if (!r.ok) throw new Error('GitHub returned ' + r.status);
     const files = await r.json();
-    return files.filter(f => f.type === 'file' && /\.mp3$/i.test(f.name)).map(f => ({
+    const list = files.filter(f => f.type === 'file' && /\.mp3$/i.test(f.name)).map(f => ({
       name: pretty(f.name),
       src: pages ? GH_FOLDER + '/' + encodeURIComponent(f.name) : f.download_url
     }));
+    // preload only PRELOAD_COUNT random songs during the loading screen; the rest stream when played
+    // if a download fails, that track just keeps its normal streaming URL
+    const toPreload = shuffle(list.slice()).slice(0, PRELOAD_COUNT);
+    await Promise.all(toPreload.map(async t => {
+      t.preloaded = true;
+      try {
+        const res = await fetch(t.src);
+        if (!res.ok) throw new Error(res.status);
+        t.src = URL.createObjectURL(await res.blob());
+      } catch (e) { console.warn('Preload failed, will stream instead:', t.name, e); }
+    }));
+    return list;
   }
 
   /* ---------- SHUFFLE ---------- */
   let tracks = [], order = [], pos = 0, errCount = 0;
   const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
   function newOrder(prevLast) {
-    order = shuffle(tracks.map((_, i) => i));
+    const idx = tracks.map((_, i) => i);
+    // first playthrough: the preloaded songs go first (shuffled), then the rest (shuffled)
+    order = prevLast === -1
+      ? shuffle(idx.filter(i => tracks[i].preloaded)).concat(shuffle(idx.filter(i => !tracks[i].preloaded)))
+      : shuffle(idx);
     if (order.length > 1 && order[0] === prevLast) [order[0], order[1]] = [order[1], order[0]];
     pos = 0;
   }
