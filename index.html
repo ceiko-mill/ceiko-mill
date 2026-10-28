@@ -339,6 +339,8 @@
   const GH_USER   = 'ceiko-mill';        // your GitHub username (auto-detected when the site is on github.io)
   const GH_REPO   = 'ceiko-mill';        // your repo name (auto-detected when the site is on github.io)
   const GH_FOLDER = 'music';   // folder in the repo that holds your .mp3 files
+  const BASS_HZ = 100, BASS_DB = 7;   // bass boost: low shelf (everything below ~100 Hz gets +7 dB)
+  const MUD_HZ = 250, MUD_DB = -2;    // small cut at 250 Hz while boost is on, keeps the bass from sounding muddy
   const MIN_LOAD_MS = 2200;    // how long the ". .. ..." loading screen shows at minimum
 
   const $ = id => document.getElementById(id);
@@ -382,7 +384,7 @@
   const audio = new Audio();
   audio.crossOrigin = 'anonymous';
   audio.preload = 'auto';
-  let ctx = null, gainNode = null, bassNode = null;
+  let ctx = null, gainNode = null, bassNode = null, mudNode = null;
   let vol = 100, muted = false, bassOn = false;
 
   function initAudio() {
@@ -391,12 +393,14 @@
     ctx = new AC();
     const src = ctx.createMediaElementSource(audio);
     bassNode = ctx.createBiquadFilter();
-    bassNode.type = 'lowshelf'; bassNode.frequency.value = 160; bassNode.gain.value = bassOn ? 14 : 0;
+    bassNode.type = 'lowshelf'; bassNode.frequency.value = BASS_HZ; bassNode.gain.value = bassOn ? BASS_DB : 0;
+    mudNode = ctx.createBiquadFilter();
+    mudNode.type = 'peaking'; mudNode.frequency.value = MUD_HZ; mudNode.Q.value = 1; mudNode.gain.value = bassOn ? MUD_DB : 0;
     gainNode = ctx.createGain();
     const limiter = ctx.createDynamicsCompressor(); // keeps 200% + bass from distorting
     limiter.threshold.value = -3; limiter.knee.value = 3; limiter.ratio.value = 20;
     limiter.attack.value = 0.002; limiter.release.value = 0.15;
-    src.connect(bassNode); bassNode.connect(gainNode); gainNode.connect(limiter); limiter.connect(ctx.destination);
+    src.connect(bassNode); bassNode.connect(mudNode); mudNode.connect(gainNode); gainNode.connect(limiter); limiter.connect(ctx.destination);
     applyVol();
   }
   function applyVol() {
@@ -453,7 +457,10 @@
   pVol.addEventListener('input', () => { vol = +pVol.value; if (vol > 0) muted = false; applyVol(); });
   pBass.onclick = () => {
     bassOn = !bassOn;
-    if (bassNode) bassNode.gain.setTargetAtTime(bassOn ? 14 : 0, ctx.currentTime, 0.05);
+    if (bassNode) {
+      bassNode.gain.setTargetAtTime(bassOn ? BASS_DB : 0, ctx.currentTime, 0.05);
+      mudNode.gain.setTargetAtTime(bassOn ? MUD_DB : 0, ctx.currentTime, 0.05);
+    }
     pBass.classList.toggle('on', bassOn);
     pBass.setAttribute('aria-pressed', bassOn);
     $('pBassState').textContent = bassOn ? 'ON' : 'OFF';
