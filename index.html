@@ -227,8 +227,8 @@
     </div>
     <div class="p-vol">
       <button class="pbtn" id="pMute" type="button" aria-label="Mute"><svg class="i"><use id="pMuteUse" href="#p-vol"/></svg></button>
-      <input type="range" id="pVol" min="0" max="200" value="100" aria-label="Volume (up to 200%)">
-      <span class="p-pct" id="pPct">100%</span>
+      <input type="range" id="pVol" min="0" max="200" value="50" aria-label="Volume (up to 200%)">
+      <span class="p-pct" id="pPct">50%</span>
     </div>
     <button class="pbtn p-bass" id="pBass" type="button" aria-pressed="false"><span>Bass boost</span><span id="pBassState">OFF</span></button>
   </div>
@@ -385,7 +385,7 @@
   audio.crossOrigin = 'anonymous';
   audio.preload = 'auto';
   let ctx = null, gainNode = null, bassNode = null, mudNode = null;
-  let vol = 100, muted = false, bassOn = false;
+  let vol = 50, muted = false, bassOn = false;
 
   function initAudio() {
     const AC = window.AudioContext || window.webkitAudioContext;
