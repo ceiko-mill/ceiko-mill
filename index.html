@@ -344,11 +344,12 @@
   // Songs that play first, in this exact order (file name without .mp3; case doesn't matter, "_" counts as a space).
   // Anything not listed here plays afterwards in random order. Leave the list empty [] for fully random.
   const SONG_ORDER = [
-    // 'Green Day - Last Night on Earth',
-    // 'Paramore - Misery Business',
-    // 'Pierce The Veil - King for a Day',
+    "Sleeping With Sirens - If You Can't Hang",
+    'Chase Atlantic - Roxxane,
+    'Green Day - Last Night on Earth',
+    'Kuala - Bake Shop',
   ];
-  const KEEP_ORDER_EVERY_LOOP = false;  // true = replay the SONG_ORDER list first every loop; false = only on the first pass
+  const KEEP_ORDER_EVERY_LOOP = true;  // true = replay the SONG_ORDER list first every loop; false = only on the first pass
   const MIN_LOAD_MS = 2200;    // how long the ". .. ..." loading screen shows at minimum
 
   const $ = id => document.getElementById(id);
