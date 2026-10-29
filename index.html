@@ -339,6 +339,7 @@
   const GH_USER   = 'ceiko-mill';        // your GitHub username (auto-detected when the site is on github.io)
   const GH_REPO   = 'ceiko-mill';        // your repo name (auto-detected when the site is on github.io)
   const GH_FOLDER = 'music';   // folder in the repo that holds your .mp3 files
+  const FIRST_TRACK = 'Green Day - Last Night on Earth';   // always plays first (file name without .mp3)
   const BASS_HZ = 100, BASS_DB = 7;   // bass boost: low shelf (everything below ~100 Hz gets +7 dB)
   const MUD_HZ = 250, MUD_DB = -2;    // small cut at 250 Hz while boost is on, keeps the bass from sounding muddy
   const PRELOAD_COUNT = 3;      // how many songs to download during the loading screen (the rest stream)
@@ -372,7 +373,11 @@
     }));
     // preload only PRELOAD_COUNT random songs during the loading screen; the rest stream when played
     // if a download fails, that track just keeps its normal streaming URL
-    const toPreload = shuffle(list.slice()).slice(0, PRELOAD_COUNT);
+    // the FIRST_TRACK is always preloaded so it starts instantly when you press Enter
+    const first = list.find(t => t.name.toLowerCase() === FIRST_TRACK.toLowerCase());
+    if (first) first.first = true;
+    const others = shuffle(list.filter(t => t !== first));
+    const toPreload = first ? [first].concat(others.slice(0, PRELOAD_COUNT - 1)) : others.slice(0, PRELOAD_COUNT);
     await Promise.all(toPreload.map(async t => {
       t.preloaded = true;
       try {
@@ -390,9 +395,11 @@
   function newOrder(prevLast) {
     const idx = tracks.map((_, i) => i);
     // first playthrough: the preloaded songs go first (shuffled), then the rest (shuffled)
-    order = prevLast === -1
-      ? shuffle(idx.filter(i => tracks[i].preloaded)).concat(shuffle(idx.filter(i => !tracks[i].preloaded)))
-      : shuffle(idx);
+    if (prevLast === -1) {
+      const f = idx.filter(i => tracks[i].first);
+      const rest = idx.filter(i => !tracks[i].first);
+      order = f.concat(shuffle(rest.filter(i => tracks[i].preloaded)), shuffle(rest.filter(i => !tracks[i].preloaded)));
+    } else order = shuffle(idx);
     if (order.length > 1 && order[0] === prevLast) [order[0], order[1]] = [order[1], order[0]];
     pos = 0;
   }
