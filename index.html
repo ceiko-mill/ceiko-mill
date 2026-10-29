@@ -14,7 +14,8 @@
 <meta name="twitter:image" content="https://ceiko-mill.github.io/ceiko-mill/images/Avatar_Mill.jpg">
 <meta name="twitter:title" content="ceiko_mill's computer">
 <meta name="twitter:description" content="Welcome to ceiko_mill's Portfolio! Anime, bands, hobbies and a music player.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230f1511'/%3E%3Cpath d='M6 12.5V3l7-1.5v9' fill='none' stroke='%23d3d7cb' stroke-width='1.4'/%3E%3Ccircle cx='4.5' cy='12.5' r='1.5' fill='%23d3d7cb'/%3E%3Ccircle cx='11.5' cy='10.5' r='1.5' fill='%23d3d7cb'/%3E%3C/svg%3E">
+<link rel="icon" type="image/jpeg" href="images/Avatar_Mill.jpg">
+<link rel="apple-touch-icon" href="images/Avatar_Mill.jpg">
 <style>
   :root{
     --forest:#0a0e0b; --forest2:#131913; --ink:#0f1511;
@@ -456,7 +457,8 @@
     ms.metadata = new MediaMetadata({
       title: i > -1 ? name.slice(i + 3) : name,
       artist: i > -1 ? name.slice(0, i) : "ceiko_mill's computer",
-      album: "ceiko_mill's computer"
+      album: "ceiko_mill's computer",
+      artwork: [{ src: new URL('images/Avatar_Mill.jpg', location.href).href, sizes: '512x512', type: 'image/jpeg' }]
     });
   }
   function setPos() {
