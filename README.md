@@ -10,7 +10,7 @@
 
 2. **DNI List** – do not interact
 
-3. **The Note** – made my own definition of "Mill". (Chainsmokers reference)
+3. **The Note** – made my own definition of "Mill". (**The Chainsmokers** *Reference*)
 
 4. **Favorites** – animes, characters, hobbies
 
