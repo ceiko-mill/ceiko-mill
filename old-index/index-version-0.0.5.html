@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ceiko_mill's computer</title>
+<meta name="description" content="ceiko_mill's portfolio: anime, bands, hobbies and a music player.">
+<meta name="theme-color" content="#0a0e0b">
+<meta property="og:type" content="website">
+<meta property="og:title" content="ceiko_mill's computer">
+<meta property="og:description" content="Welcome to ceiko_mill's Portfolio! Anime, bands, hobbies and a music player.">
+<meta property="og:image" content="https://ceiko-mill.github.io/ceiko-mill/images/Avatar_Mill.jpg">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://ceiko-mill.github.io/ceiko-mill/images/Avatar_Mill.jpg">
+<meta name="twitter:title" content="ceiko_mill's computer">
+<meta name="twitter:description" content="Welcome to ceiko_mill's Portfolio! Anime, bands, hobbies and a music player.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%230f1511'/%3E%3Cpath d='M6 12.5V3l7-1.5v9' fill='none' stroke='%23d3d7cb' stroke-width='1.4'/%3E%3Ccircle cx='4.5' cy='12.5' r='1.5' fill='%23d3d7cb'/%3E%3Ccircle cx='11.5' cy='10.5' r='1.5' fill='%23d3d7cb'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --forest:#0a0e0b; --forest2:#131913; --ink:#0f1511;
+    --cream:#d3d7cb; --cream2:#bbc0b1; --sage:#74806a;
+    --rust:#586d62; --sky:#586d62; --text:#141a15; --line:#89917f;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+  body{
+    min-height:100vh;min-height:100dvh;display:flex;align-items:flex-start;justify-content:center;
+    padding:14px 12px 24px;overflow-x:hidden;
+    font-family:"Archivo","Helvetica Neue",Arial,sans-serif;font-style:italic;color:var(--text);
+    background-color:var(--forest);
+    background-image:
+      linear-gradient(45deg,var(--forest2) 25%,transparent 25%,transparent 75%,var(--forest2) 75%),
+      linear-gradient(45deg,var(--forest2) 25%,transparent 25%,transparent 75%,var(--forest2) 75%);
+    background-size:60px 60px;background-position:0 0,30px 30px;
+  }
+  svg.i{width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
+
+  /* ================= MOBILE / DEFAULT: stacked, fluid, normal scrolling ================= */
+  .stage{width:100%;max-width:600px}
+  .wrap{position:relative;padding-top:26px}
+  .tab{position:absolute;top:0;left:0;background:var(--ink);color:var(--cream);height:28px;padding:0 38px 0 10px;
+    display:flex;align-items:center;gap:7px;font-weight:700;font-size:14px;
+    border-top:2px solid var(--rust);clip-path:polygon(0 0,88% 0,100% 100%,0 100%)}
+  .window{display:flex;flex-direction:column;overflow:hidden;
+    border:3px solid var(--ink);outline:2px solid #2f3a31;background:var(--cream)}
+
+  .titlebar{background:var(--ink);color:var(--cream);display:flex;justify-content:space-between;align-items:center;
+    min-height:38px;padding:0 12px;font-size:15px;font-weight:600}
+  .titlebar span:first-child{display:flex;align-items:center;gap:8px;min-width:0}
+  .titlebar .x{font-size:18px;font-weight:700}
+  .toolbar{background:var(--cream2);border-bottom:1px solid var(--ink);display:flex;justify-content:space-between;
+    align-items:center;min-height:30px;padding:0 12px;font-size:12px}
+  .toolbar .icons{display:flex;gap:12px;font-size:14px}
+  .toolbar a{color:var(--text)}
+
+  .body{padding:0 12px;display:flex;flex-direction:column}
+  .row{padding:12px 0;border-top:1px solid var(--line)}
+  .row:first-child{border-top:0}
+
+  .pic{background:var(--cream2) center/cover no-repeat}
+  h2.head{font-size:17px;font-weight:800;display:flex;align-items:center;gap:6px;margin-bottom:6px;line-height:1.1}
+  h2.head svg{color:var(--rust)}
+  .hl{background:var(--sage);padding:0 3px}
+  .text{font-size:13px;line-height:1.5;overflow-wrap:anywhere}
+  .rule{border:0;border-top:1px solid var(--ink);margin:0 0 8px}
+
+  .top{display:grid;grid-template-columns:clamp(96px,28vw,150px) minmax(0,1fr);column-gap:14px;row-gap:12px;
+    grid-template-areas:"avatar prof" "dn dn" "banner banner" "note note"}
+  .avatar{grid-area:avatar;width:100%;aspect-ratio:1;border:3px solid var(--ink);border-radius:clamp(16px,5vw,26px);align-self:start}
+  .prof{grid-area:prof;min-width:0} .dn{grid-area:dn}
+  .bannerimg{grid-area:banner;width:100%;aspect-ratio:16/9;border:2px solid var(--ink)}
+  .note{grid-area:note;border:2px solid var(--ink)}
+  .note .nh{background:var(--sky);color:#fff;border-bottom:2px solid var(--ink);padding:4px 10px;font-weight:800;font-size:12px}
+  .note .nb{padding:8px 10px;font-size:12.5px;line-height:1.5}
+
+  .mid{display:grid;grid-template-columns:1fr;gap:12px}
+  .mid > div + div{border-top:1px solid var(--line);padding-top:12px}
+  .anime{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center}
+  .thumbs{display:flex;gap:8px}
+  .thumb{width:clamp(48px,14vw,68px);aspect-ratio:1;border:3px solid var(--ink);border-radius:clamp(12px,3.5vw,18px)}
+
+  .lists{display:grid;grid-template-columns:1fr;gap:10px}
+  .footer{height:20px;background:var(--cream2);border-top:1px solid var(--ink);margin:0 -12px}
+
+  /* very narrow phones: thumbs drop under the anime text */
+  @media (max-width:400px){
+    .anime{grid-template-columns:1fr}
+  }
+  /* tablets / small windows: three list columns */
+  @media (min-width:541px){
+    .lists{grid-template-columns:repeat(3,1fr);gap:14px}
+  }
+
+  /* ================= DESKTOP: fixed 16:9 stage that scales live with the window ================= */
+  @media (min-width:900px) and (min-height:540px){
+    body{align-items:center;padding:20px}
+    .stage{
+      container-type:inline-size;flex:none;aspect-ratio:16/9;max-width:none;
+      width:min(calc(100vw - 40px),calc((100vh - 40px) * 16 / 9));
+    }
+    .wrap{height:100%;padding-top:2.7cqw;display:flex;flex-direction:column}
+    .tab{height:2.8cqw;padding:0 3.6cqw 0 1cqw;gap:.7cqw;font-size:1.5cqw;border-top-width:.25cqw}
+    .window{flex:1;min-height:0;border-width:.3cqw;outline-width:.2cqw}
+
+    .titlebar{flex:none;min-height:0;height:3.6cqw;padding:0 1.2cqw;font-size:1.7cqw}
+    .titlebar span:first-child{gap:.8cqw}
+    .titlebar .x{font-size:2cqw}
+    .toolbar{flex:none;min-height:0;height:2.6cqw;padding:0 1.2cqw;font-size:1.2cqw}
+    .toolbar .icons{gap:1.4cqw;font-size:1.4cqw}
+
+    .body{flex:1;min-height:0;padding:0 1.2cqw}
+    .row{padding:.9cqw 0}
+    h2.head{font-size:1.9cqw;gap:.6cqw;margin-bottom:.5cqw}
+    .hl{padding:0 .3cqw}
+    .text{font-size:1.25cqw}
+    .rule{margin:0 0 .7cqw}
+
+    .top{flex:1 1 0;min-height:0;grid-template-columns:21.5cqw 1fr 1fr;grid-template-rows:auto minmax(0,1fr);
+      column-gap:1.4cqw;row-gap:.8cqw;grid-template-areas:"avatar prof dn" "avatar banner note"}
+    .avatar{align-self:center;border-width:.4cqw;border-radius:2.6cqw}
+    .bannerimg{height:100%;aspect-ratio:auto;min-height:0;border-width:.25cqw}
+    .note{min-height:0;display:flex;flex-direction:column;border-width:.25cqw}
+    .note .nh{flex:none;border-bottom-width:.25cqw;padding:.4cqw 1cqw;font-size:1.2cqw}
+    .note .nb{flex:1;padding:.8cqw 1cqw;font-size:1.3cqw;overflow:hidden}
+
+    .mid{grid-template-columns:1.05fr 1fr;gap:1.4cqw;align-items:center}
+    .mid > div + div{border-top:0;padding-top:0;border-left:1px solid var(--line);padding-left:1.4cqw}
+    .anime{grid-template-columns:1fr auto;gap:1.2cqw}
+    .thumbs{gap:.8cqw}
+    .thumb{width:6.4cqw;border-width:.4cqw;border-radius:1.8cqw}
+
+    .lists{grid-template-columns:repeat(3,1fr);gap:1.4cqw}
+    .footer{flex:none;margin:auto -1.2cqw 0;height:1.6cqw}
+  }
+
+  /* ================= INTRO / LOADING SCREEN ================= */
+  body.locked{overflow:hidden}
+  #intro{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;
+    color:var(--cream);background:rgba(4,7,5,.8);
+    -webkit-backdrop-filter:blur(16px) brightness(.6);backdrop-filter:blur(16px) brightness(.6);
+    transition:opacity .8s ease,visibility .8s}
+  #intro.out{opacity:0;visibility:hidden;pointer-events:none}
+  .loader{font-size:clamp(30px,8vw,52px);font-weight:800;line-height:1}
+  .loader span{display:inline-block;width:3ch;text-align:left}
+  .welcome{display:none;flex-direction:column;align-items:center;gap:22px;max-width:660px}
+  #intro.ready .loader{display:none}
+  #intro.ready .welcome{display:flex;animation:introIn .9s ease both}
+  @keyframes introIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+  .welcome h1{font-size:clamp(28px,7vw,54px);font-weight:800;line-height:1.1}
+  .enter{font:inherit;font-weight:800;font-size:clamp(15px,3.8vw,18px);padding:12px 28px;color:var(--ink);
+    background:var(--cream);border:3px solid var(--ink);outline:2px solid var(--sage);box-shadow:5px 5px 0 var(--rust);
+    cursor:pointer;transition:transform .12s,box-shadow .12s}
+  .enter:hover{transform:translate(2px,2px);box-shadow:3px 3px 0 var(--rust)}
+  .enter:focus-visible{outline:3px solid #fff;outline-offset:2px}
+  .warn{display:flex;align-items:center;gap:8px;font-size:12.5px;line-height:1.4;color:var(--cream2);
+    border:1px solid var(--sage);background:rgba(0,0,0,.35);padding:8px 12px;text-align:left}
+  .warn svg{width:16px;height:16px}
+
+  /* intro text scales continuously with the real window size (width AND height), so it also adapts on rotate/resize */
+  #intro{--u:min(1vw,1.6vh)}
+  .loader{font-size:clamp(28px,calc(var(--u)*6.5),88px)}
+  .welcome{max-width:min(92vw,max(660px,calc(var(--u)*62)))}
+  .welcome h1{font-size:clamp(26px,calc(var(--u)*5.5),72px)}
+  .enter{font-size:clamp(15px,calc(var(--u)*1.8),24px);padding:clamp(10px,calc(var(--u)*1.1),15px) clamp(22px,calc(var(--u)*2.6),38px)}
+  .warn{font-size:clamp(12px,calc(var(--u)*1.3),17px)}
+  .warn svg{width:1.3em;height:1.3em}
+
+  /* ================= MUSIC PLAYER ================= */
+  .player{position:fixed;right:14px;bottom:14px;width:min(260px,calc(100vw - 16px));z-index:50;
+    border:3px solid var(--ink);outline:2px solid #2f3a31;background:var(--cream);color:var(--text);
+    font-size:12px;box-shadow:0 8px 24px rgba(0,0,0,.45)}
+  .p-bar{display:flex;justify-content:space-between;align-items:center;height:30px;padding:0 6px 0 9px;
+    background:var(--ink);color:var(--cream);font-size:13px;font-weight:700;cursor:grab;user-select:none;-webkit-user-select:none;touch-action:none}
+  .p-bar span{display:flex;align-items:center;gap:6px}
+  .p-bar button{font:inherit;font-weight:800;width:22px;height:22px;line-height:1;color:var(--cream);background:none;border:1px solid var(--sage);cursor:pointer}
+  .p-bar button:hover{background:var(--sage);color:var(--ink)}
+  .p-body{display:flex;flex-direction:column;gap:9px;padding:10px}
+  .player.min .p-body{display:none}
+  .p-name{font-weight:800;font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .p-time{font-size:11px;opacity:.75;margin-top:2px}
+  .p-track{font-size:11px;font-weight:700;opacity:.9;margin-top:2px}
+  .player input[type=range]{-webkit-appearance:none;appearance:none;display:block;width:100%;height:10px;margin:0;cursor:pointer;
+    border:2px solid var(--ink);background:linear-gradient(to right,var(--rust) var(--p,0%),var(--cream2) var(--p,0%))}
+  .player input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:10px;height:16px;background:var(--ink);border:0;border-radius:0}
+  .player input[type=range]::-moz-range-thumb{width:10px;height:16px;background:var(--ink);border:0;border-radius:0}
+  .p-ctrl{display:flex;gap:6px}
+  .pbtn{font:inherit;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;
+    min-width:32px;height:32px;padding:0 8px;color:var(--ink);background:var(--cream2);border:2px solid var(--ink);cursor:pointer}
+  .pbtn svg{width:16px;height:16px}
+  .pbtn:hover{background:var(--sage)}
+  .pbtn.on{background:var(--ink);color:var(--cream)}
+  .pbtn:focus-visible,.p-bar button:focus-visible,.player input:focus-visible{outline:2px solid var(--rust);outline-offset:2px}
+  .p-play{flex:1}
+  .p-vol{display:flex;align-items:center;gap:8px}
+  .p-vol input{flex:1}
+  .p-pct{width:38px;text-align:right;font-weight:700;font-size:11px}
+  .p-bass{width:100%;justify-content:space-between}
+  @media (max-width:899px){body{padding-bottom:180px}}
+  @media (prefers-reduced-motion:reduce){#intro,#intro.ready .welcome{transition:none;animation:none}}
+</style>
+
+</head>
+<body class="locked">
+<noscript><style>#intro{display:none}</style></noscript>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="p-play" viewBox="0 0 16 16"><path d="M5 3l8 5-8 5z" fill="currentColor"/></symbol>
+  <symbol id="p-pause" viewBox="0 0 16 16"><rect x="4" y="3" width="3" height="10" fill="currentColor"/><rect x="9" y="3" width="3" height="10" fill="currentColor"/></symbol>
+  <symbol id="p-next" viewBox="0 0 16 16"><path d="M3 3l7 5-7 5z" fill="currentColor"/><path d="M13 3v10"/></symbol>
+  <symbol id="p-prev" viewBox="0 0 16 16"><path d="M13 3l-7 5 7 5z" fill="currentColor"/><path d="M3 3v10"/></symbol>
+  <symbol id="p-vol" viewBox="0 0 16 16"><path d="M2 6h3l4-3v10l-4-3H2z"/><path d="M11.5 5.5a3.5 3.5 0 010 5"/></symbol>
+  <symbol id="p-mute" viewBox="0 0 16 16"><path d="M2 6h3l4-3v10l-4-3H2z"/><path d="M11 6l4 4M15 6l-4 4"/></symbol>
+  <symbol id="p-warn" viewBox="0 0 16 16"><path d="M8 2L14.5 13.5h-13z"/><path d="M8 6.5v3.5M8 12v.2"/></symbol>
+</svg>
+
+<div id="intro" role="dialog" aria-modal="true" aria-label="Welcome">
+  <div class="loader" aria-label="Loading">loading<span id="dots">.</span></div>
+  <div class="welcome">
+    <h1>Welcome to ceiko_mill’s Portfolio!</h1>
+    <button class="enter" id="enterBtn" type="button">Enter the website</button>
+    <p class="warn"><svg class="i"><use href="#p-warn"/></svg>Warning: music will play as soon as you press Enter. You can mute it or turn it down in the player.</p>
+  </div>
+</div>
+
+<div class="player" id="player" aria-label="Music player">
+  <div class="p-bar" id="pBar">
+    <span><svg class="i"><use href="#note"/></svg>music.exe</span>
+    <button id="pMin" type="button" aria-label="Minimize player">_</button>
+  </div>
+  <div class="p-body">
+    <div>
+      <div class="p-name" id="pName">loading...</div>
+      <div class="p-track" id="pTrack">Track 0/0</div>
+      <div class="p-time" id="pTime">0:00 / 0:00</div>
+    </div>
+    <input type="range" id="pSeek" min="0" max="1000" value="0" aria-label="Seek">
+    <div class="p-ctrl">
+      <button class="pbtn" id="pPrev" type="button" aria-label="Previous"><svg class="i"><use href="#p-prev"/></svg></button>
+      <button class="pbtn p-play" id="pPlay" type="button" aria-label="Play or pause"><svg class="i"><use id="pPlayUse" href="#p-play"/></svg></button>
+      <button class="pbtn" id="pNext" type="button" aria-label="Next"><svg class="i"><use href="#p-next"/></svg></button>
+    </div>
+    <div class="p-vol">
+      <button class="pbtn" id="pMute" type="button" aria-label="Mute"><svg class="i"><use id="pMuteUse" href="#p-vol"/></svg></button>
+      <input type="range" id="pVol" min="0" max="200" value="25" aria-label="Volume (up to 200%)">
+      <span class="p-pct" id="pPct">25%</span>
+    </div>
+    <button class="pbtn p-bass" id="pBass" type="button" aria-pressed="false"><span>Bass boost</span><span id="pBassState">OFF</span></button>
+  </div>
+</div>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <symbol id="file" viewBox="0 0 16 16"><path d="M4 1.5h5.5L13 5v9.5H4z"/><path d="M9.5 1.5V5H13"/></symbol>
+  <symbol id="laptop" viewBox="0 0 16 16"><rect x="3" y="3" width="10" height="7" rx="1"/><path d="M1.5 13h13"/></symbol>
+  <symbol id="globe" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6"/><path d="M2 8h12M8 2c2.5 2.5 2.5 9.5 0 12M8 2c-2.5 2.5-2.5 9.5 0 12"/></symbol>
+  <symbol id="home" viewBox="0 0 16 16"><path d="M2 8l6-5.5L14 8M3.5 7v6.5h9V7"/></symbol>
+  <symbol id="search" viewBox="0 0 16 16"><circle cx="7" cy="7" r="4.5"/><path d="M10.5 10.5L14 14"/></symbol>
+  <symbol id="mail" viewBox="0 0 16 16"><rect x="2" y="3.5" width="12" height="9" rx="1"/><path d="M2.5 4.5L8 9l5.5-4.5"/></symbol>
+  <symbol id="bubble" viewBox="0 0 16 16"><circle cx="8" cy="7" r="5.5"/><circle cx="4" cy="14" r="1"/></symbol>
+  <symbol id="cloud" viewBox="0 0 16 16"><path d="M4.5 12.5a3 3 0 010-6 4 4 0 017.5 1 2.5 2.5 0 01-.5 5z"/></symbol>
+  <symbol id="onigiri" viewBox="0 0 16 16"><path d="M8 2.5L14 13H2z"/><path d="M6 10h4"/></symbol>
+  <symbol id="note" viewBox="0 0 16 16"><path d="M6 12.5V3l7-1.5v9"/><circle cx="4.5" cy="12.5" r="1.5"/><circle cx="11.5" cy="10.5" r="1.5"/></symbol>
+</svg>
+
+<div class="stage">
+<div class="wrap">
+  <div class="tab"><svg class="i"><use href="#file"/></svg>ARCH!VE</div>
+  <div class="window">
+    <div class="titlebar">
+      <span><svg class="i"><use href="#laptop"/></svg>ceiko_mill's computer !!</span>
+      <span class="x">X</span>
+    </div>
+    <div class="toolbar">
+      <div class="icons">
+        <svg class="i"><use href="#globe"/></svg><svg class="i"><use href="#home"/></svg>
+        <svg class="i"><use href="#search"/></svg><svg class="i"><use href="#mail"/></svg>
+      </div>
+      <div><a href="#">My Account</a> | <a href="#">Sign Out</a></div>
+    </div>
+
+    <div class="body">
+      <!-- TOP: avatar | profile | DN  /  banner | note -->
+      <div class="row top">
+        <div class="pic avatar" style="background-image:url('images/Avatar_Mill.jpg')"></div>
+
+        <div class="prof">
+          <h2 class="head"><svg class="i"><use href="#bubble"/></svg># CE!KO_MILL</h2>
+          <hr class="rule">
+          <p class="text">
+            <b>ceiko_mill</b><br>
+            % <b>HALF FILO / HALF CHINESE</b> !!<br>
+            <span class="hl"><u>male</u></span> <span class="hl">he/him</span><br>
+            <span class="hl"><u>Leo</u></span> <u>August</u> !! %
+          </p>
+        </div>
+
+        <div class="dn">
+          <h2 class="head"><svg class="i"><use href="#cloud"/></svg># DN!</h2>
+          <hr class="rule">
+          <p class="text">
+            <span class="hl">Do not Interact</span> : if you're a <b>pedophile</b>,
+            <b>flat earther</b>, <u>force religions</u>, <u>force genders</u>,
+            if ur <b>debating politics or religion</b>.
+          </p>
+        </div>
+
+        <div class="pic bannerimg" style="background-image:url('images/Banner_Mill.jpg')"></div>
+
+        <div class="note">
+          <div class="nh">N0TE%!?</div>
+          <div class="nb">
+            <b>mill</b> \ ˈmil \ <i>n</i>
+            <b>1</b> : An unyielding execution of a routine that requires no sentience.
+            <b>2</b> : An irrecoverable condition of automatic labor that manufactures architecture through the endless repetition of a simple action.
+          </div>
+        </div>
+      </div>
+
+      <!-- ANIME | BANDS -->
+      <div class="row mid">
+        <div class="anime">
+          <div>
+            <h2 class="head"><svg class="i"><use href="#onigiri"/></svg># AN!ME</h2>
+            <p class="text">Armed Girls Machiavellism, Witch Craft Works, Mairimashita! Iruma-kun, Bocchi The Rock!</p>
+          </div>
+          <div class="thumbs">
+            <div class="pic thumb" style="background-image:url('images/Icon1_Mill.jpg')"></div>
+            <div class="pic thumb" style="background-image:url('images/Icon2_Mill.jpg')"></div>
+            <div class="pic thumb" style="background-image:url('images/Icon3_Mill.jpg')"></div>
+          </div>
+        </div>
+        <div>
+          <h2 class="head"><svg class="i"><use href="#note"/></svg># B@NDS</h2>
+          <p class="text">Pierce The Veil, Sleeping With Sirens, Paramore, Flyleaf, Breaking Benjamin, Linkin Park, Falling In Reverse, Never Shout Never, Green Day, Fall Out Boy, Thousand Foot Krutch, Panic! At The Disco, My Chemical Romance.</p>
+        </div>
+      </div>
+
+      <!-- LISTS -->
+      <div class="row lists text">
+        <div><span class="hl">boys</span> : Luka (ALNST), Shion Tatsunami (Saihate Station)</div>
+        <div><span class="hl">girls</span> : Silence Suzuka (UMA), Hitori Gotoh (BTR)</div>
+        <div><span class="hl">hobbies</span> : Studying, Osu, Sudoku, Chess</div>
+      </div>
+
+      <div class="footer"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+(() => {
+  /* ---------- SETTINGS ---------- */
+  const GH_USER   = 'ceiko-mill';        // your GitHub username (auto-detected when the site is on github.io)
+  const GH_REPO   = 'ceiko-mill';        // your repo name (auto-detected when the site is on github.io)
+  const GH_FOLDER = 'music';   // folder in the repo that holds your .mp3 files
+  const BASS_HZ = 100, BASS_DB = 7;   // bass boost: low shelf (everything below ~100 Hz gets +7 dB)
+  const MUD_HZ = 250, MUD_DB = -2;    // small cut at 250 Hz while boost is on, keeps the bass from sounding muddy
+  // Songs that play first, in this exact order (file name without .mp3; case doesn't matter, "_" counts as a space).
+  // Anything not listed here plays afterwards in random order. Leave the list empty [] for fully random.
+  const SONG_ORDER = [
+    "Sleeping With Sirens - If You Can't Hang",
+    'Chase Atlantic - Roxanne.',
+    'Green Day - Last Night on Earth',
+    'Kuala - Bake Shop',
+  ];
+  const KEEP_ORDER_EVERY_LOOP = true;  // true = replay the SONG_ORDER list first every loop; false = only on the first pass
+  const MIN_LOAD_MS = 2200;    // how long the ". .. ..." loading screen shows at minimum
+
+  const $ = id => document.getElementById(id);
+  const pTrack = $('pTrack');
+  const intro = $('intro'), dots = $('dots'), enterBtn = $('enterBtn');
+  const player = $('player'), pBar = $('pBar'), pName = $('pName'), pTime = $('pTime'), pSeek = $('pSeek');
+  const pVol = $('pVol'), pPct = $('pPct'), pBass = $('pBass');
+
+  /* ---------- WHERE THE MUSIC LIVES ---------- */
+  const pages = location.hostname.match(/^([^.]+)\.github\.io$/i);
+  let user = GH_USER, repo = GH_REPO;
+  if (pages) {
+    user = user || pages[1];
+    if (!repo) {
+      const seg = location.pathname.split('/').filter(Boolean)[0];
+      repo = seg && !/\.\w+$/.test(seg) ? seg : pages[1] + '.github.io';
+    }
+  }
+  const pretty = f => { let n = f.replace(/\.mp3$/i, '').replace(/_/g, ' '); try { n = decodeURIComponent(n); } catch (e) {} return n; };
+
+  async function loadTracks() {
+    if (!user || !repo) throw new Error('Set GH_USER and GH_REPO at the top of the script');
+    const r = await fetch('https://api.github.com/repos/' + user + '/' + repo + '/contents/' + GH_FOLDER);
+    if (!r.ok) throw new Error('GitHub returned ' + r.status);
+    const files = await r.json();
+    return files.filter(f => f.type === 'file' && /\.mp3$/i.test(f.name)).map(f => ({
+      name: pretty(f.name),
+      src: pages ? GH_FOLDER + '/' + encodeURIComponent(f.name) : f.download_url
+    }));
+  }
+
+  /* ---------- SHUFFLE ---------- */
+  let tracks = [], order = [], pos = 0, errCount = 0;
+  const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+  const norm = s => s.toLowerCase().replace(/_/g, ' ').trim();
+  function newOrder(prevLast) {
+    const idx = tracks.map((_, i) => i);
+    const wanted = SONG_ORDER.map(norm);
+    const rank = i => wanted.indexOf(norm(tracks[i].name));
+    if (prevLast === -1 || KEEP_ORDER_EVERY_LOOP) {
+      // your listed songs first (in order), then everything else shuffled
+      const ranked = idx.filter(i => rank(i) >= 0).sort((a, b) => rank(a) - rank(b));
+      order = ranked.concat(shuffle(idx.filter(i => rank(i) < 0)));
+    } else {
+      order = shuffle(idx);
+      // avoid repeating the song that just finished
+      if (order.length > 1 && order[0] === prevLast) [order[0], order[1]] = [order[1], order[0]];
+    }
+    pos = 0;
+  }
+
+  /* ---------- AUDIO (volume up to 200% + bass boost via Web Audio) ---------- */
+  const audio = new Audio();
+  audio.crossOrigin = 'anonymous';
+  audio.preload = 'auto';
+  let ctx = null, gainNode = null, bassNode = null, mudNode = null;
+  let vol = 25, muted = false, bassOn = false;
+
+  function initAudio() {
+    const AC = window.AudioContext || window.webkitAudioContext;
+    if (!AC || ctx) return;
+    ctx = new AC();
+    const src = ctx.createMediaElementSource(audio);
+    bassNode = ctx.createBiquadFilter();
+    bassNode.type = 'lowshelf'; bassNode.frequency.value = BASS_HZ; bassNode.gain.value = bassOn ? BASS_DB : 0;
+    mudNode = ctx.createBiquadFilter();
+    mudNode.type = 'peaking'; mudNode.frequency.value = MUD_HZ; mudNode.Q.value = 1; mudNode.gain.value = bassOn ? MUD_DB : 0;
+    gainNode = ctx.createGain();
+    const limiter = ctx.createDynamicsCompressor(); // keeps 200% + bass from distorting
+    limiter.threshold.value = -3; limiter.knee.value = 3; limiter.ratio.value = 20;
+    limiter.attack.value = 0.002; limiter.release.value = 0.15;
+    src.connect(bassNode); bassNode.connect(mudNode); mudNode.connect(gainNode); gainNode.connect(limiter); limiter.connect(ctx.destination);
+    applyVol();
+  }
+  function applyVol() {
+    const v = muted ? 0 : vol / 100;
+    if (gainNode) gainNode.gain.setTargetAtTime(v, ctx.currentTime, 0.02);
+    else audio.volume = Math.min(1, v);
+    pPct.textContent = vol + '%';
+    pVol.style.setProperty('--p', (vol / 2) + '%');
+    $('pMuteUse').setAttribute('href', muted || vol === 0 ? '#p-mute' : '#p-vol');
+    $('pMute').classList.toggle('on', muted);
+  }
+
+  /* ---------- PLAYBACK ---------- */
+  /* ---------- LOCK SCREEN / MEDIA KEY CONTROLS ---------- */
+  const ms = 'mediaSession' in navigator ? navigator.mediaSession : null;
+  function setMeta(name) {
+    if (!ms || !window.MediaMetadata) return;
+    const i = name.indexOf(' - ');
+    ms.metadata = new MediaMetadata({
+      title: i > -1 ? name.slice(i + 3) : name,
+      artist: i > -1 ? name.slice(0, i) : "ceiko_mill's computer",
+      album: "ceiko_mill's computer"
+    });
+  }
+  function setPos() {
+    if (!ms || !ms.setPositionState || !isFinite(audio.duration) || !audio.duration) return;
+    try { ms.setPositionState({ duration: audio.duration, position: Math.min(audio.currentTime, audio.duration), playbackRate: audio.playbackRate || 1 }); } catch (e) {}
+  }
+  if (ms) {
+    const set = (a, f) => { try { ms.setActionHandler(a, f); } catch (e) {} };
+    set('play', () => { initAudio(); ctx && ctx.resume(); if (!audio.src) playCurrent(); else audio.play(); });
+    set('pause', () => audio.pause());
+    set('previoustrack', () => prev());
+    set('nexttrack', () => next());
+    set('seekto', d => { if (d.seekTime != null) { audio.currentTime = d.seekTime; setPos(); } });
+    set('seekbackward', d => { audio.currentTime = Math.max(0, audio.currentTime - (d.seekOffset || 10)); setPos(); });
+    set('seekforward', d => { audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + (d.seekOffset || 10)); setPos(); });
+    audio.addEventListener('play',  () => { ms.playbackState = 'playing'; });
+    audio.addEventListener('pause', () => { ms.playbackState = 'paused'; });
+    audio.addEventListener('loadedmetadata', setPos);
+    audio.addEventListener('seeked', setPos);
+  }
+
+  function playCurrent() {
+    const t = tracks[order[pos]]; if (!t) return;
+    audio.src = t.src; pName.textContent = t.name;
+    pTrack.textContent = 'Track ' + (pos + 1) + '/' + order.length;
+    setMeta(t.name);
+    audio.play().catch(() => {});
+  }
+  function next() {
+    if (!tracks.length) return;
+    if (pos + 1 >= order.length) newOrder(order[pos]); else pos++;
+    playCurrent();
+  }
+  function prev() {
+    if (!tracks.length) return;
+    if (audio.currentTime > 3) { audio.currentTime = 0; return; }
+    pos = pos === 0 ? order.length - 1 : pos - 1; // on the first song, wrap to the last one
+    playCurrent();
+  }
+  const fmt = s => isFinite(s) ? Math.floor(s / 60) + ':' + String(Math.floor(s % 60)).padStart(2, '0') : '0:00';
+
+  audio.addEventListener('ended', next);
+  audio.addEventListener('playing', () => { errCount = 0; });
+  audio.addEventListener('error', () => {
+    if (++errCount < tracks.length) next(); else { pName.textContent = 'could not play the music'; pTime.textContent = 'check the folder / file names'; }
+  });
+  audio.addEventListener('play',  () => $('pPlayUse').setAttribute('href', '#p-pause'));
+  audio.addEventListener('pause', () => $('pPlayUse').setAttribute('href', '#p-play'));
+  audio.addEventListener('timeupdate', () => {
+    if (!audio.duration) return;
+    const p = audio.currentTime / audio.duration;
+    if (!pSeek.matches(':active')) { pSeek.value = p * 1000; pSeek.style.setProperty('--p', (p * 100) + '%'); }
+    pTime.textContent = fmt(audio.currentTime) + ' / ' + fmt(audio.duration);
+  });
+
+  /* ---------- CONTROLS ---------- */
+  pSeek.addEventListener('input', () => {
+    if (audio.duration) audio.currentTime = pSeek.value / 1000 * audio.duration;
+    pSeek.style.setProperty('--p', (pSeek.value / 10) + '%');
+  });
+  $('pPlay').onclick = () => { if (!tracks.length) return; initAudio(); ctx && ctx.resume(); if (!audio.src) playCurrent(); else audio.paused ? audio.play() : audio.pause(); };
+  $('pNext').onclick = next;
+  $('pPrev').onclick = prev;
+  $('pMute').onclick = () => { muted = !muted; applyVol(); };
+  pVol.addEventListener('input', () => { vol = +pVol.value; if (vol > 0) muted = false; applyVol(); });
+  applyVol(); // sync slider fill + label with the default volume on load
+  pBass.onclick = () => {
+    bassOn = !bassOn;
+    if (bassNode) {
+      bassNode.gain.setTargetAtTime(bassOn ? BASS_DB : 0, ctx.currentTime, 0.05);
+      mudNode.gain.setTargetAtTime(bassOn ? MUD_DB : 0, ctx.currentTime, 0.05);
+    }
+    pBass.classList.toggle('on', bassOn);
+    pBass.setAttribute('aria-pressed', bassOn);
+    $('pBassState').textContent = bassOn ? 'ON' : 'OFF';
+  };
+  $('pMin').onclick = () => {
+    const m = player.classList.toggle('min');
+    $('pMin').textContent = m ? '+' : '_';
+    $('pMin').setAttribute('aria-label', m ? 'Expand player' : 'Minimize player');
+  };
+
+  /* drag the player by its title bar */
+  let drag = false, dx = 0, dy = 0;
+  pBar.addEventListener('pointerdown', e => {
+    if (e.target.closest('button')) return;
+    const r = player.getBoundingClientRect(); dx = e.clientX - r.left; dy = e.clientY - r.top;
+    drag = true; pBar.setPointerCapture(e.pointerId);
+  });
+  pBar.addEventListener('pointermove', e => {
+    if (!drag) return;
+    player.style.left = Math.min(Math.max(0, e.clientX - dx), innerWidth - player.offsetWidth) + 'px';
+    player.style.top = Math.min(Math.max(0, e.clientY - dy), innerHeight - player.offsetHeight) + 'px';
+    player.style.right = player.style.bottom = 'auto';
+  });
+  pBar.addEventListener('pointerup', () => { drag = false; });
+
+  /* ---------- INTRO ---------- */
+  let n = 1;
+  const dotTimer = setInterval(() => { n = n % 3 + 1; dots.textContent = '.'.repeat(n); }, 380);
+  let loadErr = null;
+  Promise.all([
+    loadTracks().catch(e => { loadErr = e; console.warn('Music load failed:', e); return []; }),
+    new Promise(r => setTimeout(r, MIN_LOAD_MS))
+  ]).then(([list]) => {
+    tracks = list;
+    if (tracks.length) { newOrder(-1); pName.textContent = 'ready to play'; pTrack.textContent = 'Track 1/' + order.length; pTime.textContent = tracks.length + ' tracks, shuffled'; }
+    else { pName.textContent = loadErr ? 'music failed to load' : 'no .mp3 files found'; pTime.textContent = loadErr ? loadErr.message : 'in /' + GH_FOLDER; }
+    clearInterval(dotTimer);
+    intro.classList.add('ready');
+    enterBtn.focus();
+  });
+
+  enterBtn.addEventListener('click', () => {
+    initAudio();
+    if (ctx) ctx.resume();
+    intro.classList.add('out');
+    document.body.classList.remove('locked');
+    if (tracks.length) playCurrent();
+  });
+})();
+</script>
+</body>
+</html>
