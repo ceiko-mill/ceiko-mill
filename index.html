@@ -563,18 +563,30 @@
     $('pMin').setAttribute('aria-label', m ? 'Expand player' : 'Minimize player');
   };
 
-  /* drag the player by its title bar */
+  /* drag the player by its title bar (also works when the page is turned sideways on phones) */
   let drag = false, dx = 0, dy = 0;
+  pBar.style.touchAction = 'none';
+  const rotated = () => matchMedia('(orientation:portrait) and (max-width:600px)').matches;
+  // screen pointer -> the page's own coordinates (the page is rotated 90deg clockwise on portrait phones)
+  const local = e => rotated() ? { x: e.clientY, y: innerWidth - e.clientX } : { x: e.clientX, y: e.clientY };
+  const metrics = () => {                       // the player may be drawn smaller than its layout size on phones
+    const pw = player.offsetWidth, ph = player.offsetHeight;
+    const k = pw ? player.getBoundingClientRect().width / pw : 1;
+    return { pw, ph, vw: pw * k, vh: ph * k };
+  };
   pBar.addEventListener('pointerdown', e => {
     if (e.target.closest('button')) return;
-    if (matchMedia('(orientation:portrait) and (max-width:600px)').matches) return; // page is rotated on phones, dragging stays off
-    const r = player.getBoundingClientRect(); dx = e.clientX - r.left; dy = e.clientY - r.top;
+    const p = local(e), m = metrics();
+    dx = p.x - (player.offsetLeft + m.pw - m.vw); dy = p.y - (player.offsetTop + m.ph - m.vh);
     drag = true; pBar.setPointerCapture(e.pointerId);
   });
   pBar.addEventListener('pointermove', e => {
     if (!drag) return;
-    player.style.left = Math.min(Math.max(0, e.clientX - dx), innerWidth - player.offsetWidth) + 'px';
-    player.style.top = Math.min(Math.max(0, e.clientY - dy), innerHeight - player.offsetHeight) + 'px';
+    const p = local(e), m = metrics();
+    const bw = rotated() ? innerHeight : innerWidth, bh = rotated() ? innerWidth : innerHeight;
+    const nx = Math.min(Math.max(0, p.x - dx), bw - m.vw), ny = Math.min(Math.max(0, p.y - dy), bh - m.vh);
+    player.style.left = (nx - (m.pw - m.vw)) + 'px';
+    player.style.top = (ny - (m.ph - m.vh)) + 'px';
     player.style.right = player.style.bottom = 'auto';
   });
   pBar.addEventListener('pointerup', () => { drag = false; });
