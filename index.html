@@ -93,7 +93,7 @@
   }
 
   /* ================= DESKTOP: fixed 16:9 stage that scales live with the window ================= */
-  @media (min-width:900px) and (min-height:540px){
+  @media (min-width:900px) and (min-height:540px), (orientation:portrait) and (max-width:600px), (orientation:landscape) and (max-height:539px){
     body{align-items:center;padding:20px}
     .stage{
       container-type:inline-size;flex:none;aspect-ratio:16/9;max-width:none;
@@ -124,11 +124,15 @@
     .note .nh{flex:none;border-bottom-width:.25cqw;padding:.4cqw 1cqw;font-size:1.2cqw}
     .note .nb{flex:1;padding:.8cqw 1cqw;font-size:1.3cqw;overflow:hidden}
 
-    .mid{grid-template-columns:.7fr 1.5fr;gap:1.4cqw;align-items:center}
+    .mid{grid-template-columns:.8fr 1.5fr;gap:1.4cqw;align-items:center}
     .mid > div + div{border-top:0;padding-top:0;border-left:1px solid var(--line);padding-left:1.4cqw}
-    .anime{grid-template-columns:1fr;gap:1cqw}
+    .anime{grid-template-columns:1fr auto;gap:1.2cqw}
     .thumbs{gap:.8cqw}
-    .thumb{width:6.4cqw;border-width:.4cqw;border-radius:1.8cqw}
+    .thumb{width:3.8cqw;border-width:.3cqw;border-radius:1.1cqw}
+    .mid .text{font-size:1.1cqw}
+    .mid{padding:.6cqw 0}
+    .mid .text{line-height:1.35}
+    .lists.text{font-size:1.1cqw}
 
     .lists{grid-template-columns:repeat(3,1fr);gap:1.4cqw}
     .footer{flex:none;margin:auto -1.2cqw 0;height:1.6cqw}
@@ -197,6 +201,24 @@
   .p-pct{width:38px;text-align:right;font-weight:700;font-size:11px}
   .p-bass{width:100%;justify-content:space-between}
   @media (max-width:899px){body{padding-bottom:180px}}
+
+  /* ===== PHONES: always show the landscape layout. In portrait the whole page is turned sideways and scaled to fit (never stretched). ===== */
+  @media (orientation:landscape) and (max-height:539px){
+    body{padding:8px;align-items:center}
+    .stage{width:min(calc(100vw - 16px),calc((100vh - 16px) * 16 / 9))}
+    .player{transform:scale(.62);transform-origin:bottom right;right:8px;bottom:8px}
+  }
+  @media (orientation:portrait) and (max-width:600px){
+    html{overflow:hidden}
+    body{
+      position:fixed;left:50%;top:50%;
+      width:100vh;width:100dvh;height:100vw;height:100dvw;min-height:0;
+      transform:translate(-50%,-50%) rotate(90deg);
+      padding:8px;overflow:hidden;align-items:center;
+    }
+    .stage{width:min(calc(100vh - 16px),calc((100vw - 16px) * 16 / 9));width:min(calc(100dvh - 16px),calc((100dvw - 16px) * 16 / 9))}
+    .player{transform:scale(.62);transform-origin:bottom right;right:8px;bottom:8px}
+  }
   @media (prefers-reduced-motion:reduce){#intro,#intro.ready .welcome{transition:none;animation:none}}
 </style>
 
@@ -545,6 +567,7 @@
   let drag = false, dx = 0, dy = 0;
   pBar.addEventListener('pointerdown', e => {
     if (e.target.closest('button')) return;
+    if (matchMedia('(orientation:portrait) and (max-width:600px)').matches) return; // page is rotated on phones, dragging stays off
     const r = player.getBoundingClientRect(); dx = e.clientX - r.left; dy = e.clientY - r.top;
     drag = true; pBar.setPointerCapture(e.pointerId);
   });
