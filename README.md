@@ -22,9 +22,9 @@
 
 * **Spotify**: [kyo_mill](https://open.spotify.com/user/31vsejfj3kgrncenxnnidmzspeei?si=36caa5c4babe4d8f)
 
-* **YouTube**: [kyo_mill2](https://www.youtube.com/@kyo_mill2)
+* **YouTube**: [kyo_mill2](https://www.youtube.com/@ceikomill)
 
-* **Discord**: [kellin_mill](https://discord://-/users/286552299168595969)
+* **Discord**: [kellin_mill](https://discord.com/users/164437587677806592)
 
 * **Roblox**: [kelliin_mill2](https://www.roblox.com/users/75527020/profile)
 
