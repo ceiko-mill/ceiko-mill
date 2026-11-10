@@ -405,6 +405,7 @@
     'Kuala - Bake Shop',
   ];
   const KEEP_ORDER_EVERY_LOOP = true;  // true = replay the SONG_ORDER list first every loop; false = only on the first pass
+  const PRELOAD_TIMEOUT_MS = 20000; // max wait for the first song to buffer before letting you in anyway
   const MIN_LOAD_MS = 2200;    // how long the ". .. ..." loading screen shows at minimum
 
   const $ = id => document.getElementById(id);
@@ -439,11 +440,18 @@
   /* ---------- SHUFFLE ---------- */
   let tracks = [], order = [], pos = 0, errCount = 0;
   const shuffle = a => { for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
-  const norm = s => s.toLowerCase().replace(/_/g, ' ').trim();
+  // Forgiving match: ignores case, accents, curly vs straight quotes, punctuation (like a trailing "."), "_" and extra spaces
+  const norm = s => s.normalize('NFKD').replace(/[\u0300-\u036f]/g, '').toLowerCase()
+    .replace(/['\u2018\u2019`\u00b4]/g, '').replace(/[^\p{L}\p{N}]+/gu, ' ').trim();
   function newOrder(prevLast) {
     const idx = tracks.map((_, i) => i);
     const wanted = SONG_ORDER.map(norm);
-    const rank = i => wanted.indexOf(norm(tracks[i].name));
+    const rank = i => {
+      const n = norm(tracks[i].name);
+      let r = wanted.indexOf(n);                                   // exact match first
+      if (r < 0) r = wanted.findIndex(w => w && (n.includes(w) || w.includes(n))); // then partial match
+      return r;
+    };
     if (prevLast === -1 || KEEP_ORDER_EVERY_LOOP) {
       // your listed songs first (in order), then everything else shuffled
       const ranked = idx.filter(i => rank(i) >= 0).sort((a, b) => rank(a) - rank(b));
@@ -454,6 +462,10 @@
       if (order.length > 1 && order[0] === prevLast) [order[0], order[1]] = [order[1], order[0]];
     }
     pos = 0;
+  }
+  function warnUnmatched() {
+    const names = tracks.map(t => norm(t.name));
+    SONG_ORDER.forEach(w => { const n = norm(w); if (!names.some(x => x === n || x.includes(n) || n.includes(x))) console.warn('SONG_ORDER entry not found in /' + GH_FOLDER + ':', w); });
   }
 
   /* ---------- AUDIO (volume up to 200% + bass boost via Web Audio) ---------- */
@@ -523,10 +535,28 @@
 
   function playCurrent() {
     const t = tracks[order[pos]]; if (!t) return;
-    audio.src = t.src; pName.textContent = t.name;
+    if (loadedSrc !== t.src) { audio.src = t.src; loadedSrc = t.src; } else audio.currentTime = 0;
+    pName.textContent = t.name;
     pTrack.textContent = 'Track ' + (pos + 1) + '/' + order.length;
     setMeta(t.name);
     audio.play().catch(() => {});
+    preloadNext();
+  }
+  /* ---------- PRELOAD ---------- */
+  let loadedSrc = '';
+  const nextAudio = new Audio(); nextAudio.preload = 'auto';
+  function preloadNext() { // warm the browser cache with the upcoming song so there is no gap
+    const t = tracks[order[(pos + 1) % order.length]];
+    if (t && order.length > 1) { nextAudio.src = t.src; nextAudio.load(); }
+  }
+  function preloadFirst(maxMs) { // resolves when the first song can play through (or on error / timeout)
+    const t = tracks[order[0]];
+    return new Promise(res => {
+      audio.src = t.src; loadedSrc = t.src; audio.preload = 'auto'; audio.load();
+      const done = () => { clearTimeout(timer); audio.removeEventListener('canplaythrough', done); audio.removeEventListener('error', done); res(); };
+      const timer = setTimeout(done, maxMs);
+      audio.addEventListener('canplaythrough', done); audio.addEventListener('error', done);
+    });
   }
   function next() {
     if (!tracks.length) return;
@@ -622,9 +652,14 @@
   Promise.all([
     loadTracks().catch(e => { loadErr = e; console.warn('Music load failed:', e); return []; }),
     new Promise(r => setTimeout(r, MIN_LOAD_MS))
-  ]).then(([list]) => {
+  ]).then(async ([list]) => {
     tracks = list;
-    if (tracks.length) { newOrder(-1); pName.textContent = 'ready to play'; pTrack.textContent = 'Track 1/' + order.length; pTime.textContent = tracks.length + ' tracks, shuffled'; }
+    if (tracks.length) {
+      newOrder(-1); warnUnmatched();
+      await preloadFirst(PRELOAD_TIMEOUT_MS);   // wait for the first song before letting you in
+      preloadNext();
+      pName.textContent = tracks[order[0]].name; pTrack.textContent = 'Track 1/' + order.length; pTime.textContent = tracks.length + ' tracks loaded';
+    }
     else { pName.textContent = loadErr ? 'music failed to load' : 'no .mp3 files found'; pTime.textContent = loadErr ? loadErr.message : 'in /' + GH_FOLDER; }
     clearInterval(dotTimer);
     intro.classList.add('ready');
