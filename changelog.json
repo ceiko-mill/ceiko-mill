@@ -1,14 +1,12 @@
 [
   [
     "Version 0.0.6.0 - Rebuild",
-    "The playlist dropdowns now look and feel like Spotify, and the taskbar finally does something: the Start button opens a real menu, and every icon in the tray opens its own panel.",
-    "+ Spotify-style dropdowns in the playlist tab with a green outline, green highlight and a checkmark on the selected option",
-    "+ Start menu with pinned apps, app search and a restart button",
-    "+ Volume panel in the tray with a slider, mute and now playing controls",
-    "+ Calendar panel when you click the clock",
-    "+ Network panel that shows online status and offline mode",
-    "+ Hidden icons panel with a bass boost switch and shortcuts",
-    "- Clicking the tray speaker no longer mutes right away, it opens the volume panel instead",
-    "* Changelog is now one simple list: headline, description, then + - * lines"
+    "This rebuild is the biggest update yet, I have redesigned this from a browser to a whole windows experience. functions closely like windows 11.",
+    "+ changelogs.json - this is in a json so i dont have to keep updating the damn index.html",
+    "+ playlist.csv - now i can use spotify to show you my music taste, used a csv to create my own design and remove spotify 100 song preview limitations.",
+    "+ added 3 new tabs, PLAYLIST (Spotify, Online), Info (info about the site), Settings (self explanatory).",
+    "+ sw.js - this saves the site, is the backbone of the settings, so u dont have to spend data on loading again.",
+    "- favourite bands section, old nonfunctioning designs",
+    "* the whole design"
   ]
 ]
