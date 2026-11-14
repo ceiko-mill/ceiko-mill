@@ -6,7 +6,13 @@
     "+ playlist.csv - now i can use spotify to show you my music taste, used a csv to create my own design and remove spotify 100 song preview limitations.",
     "+ added 3 new tabs, PLAYLIST (Spotify, Online), Info (info about the site), Settings (self explanatory).",
     "+ sw.js - this saves the site, is the backbone of the settings, so u dont have to spend data on loading again.",
+    "+ socials.json - new SOCIALS tab in !NF0, filled from a json file. Spotify, YouTube, Discord and Roblox are in there, add or remove lines whenever.",
+    "+ full repo link in !NF0 > About.",
+    "+ sw.js now saves socials.json too, so the tab works offline.",
     "- favourite bands section, old nonfunctioning designs",
-    "* the whole design"
+    "- version label in the ARCH!VE window title",
+    "* the whole design",
+    "* archive layout - every card is the same small size now (4 small + 1 long, 2x2 + 1 long on medium windows, 1 column on phones), so the banner gets the leftover space and fits properly.",
+    "* readme tab - ### headings and <br> line breaks now show up properly instead of as raw text."
   ]
 ]

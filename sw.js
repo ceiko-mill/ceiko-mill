@@ -1,6 +1,6 @@
 // Offline cache: everything is saved on the first visit. Bump V to force visitors to re-download changed images/files.
 const V = 'ceiko-v2';
-const CORE = ['./', 'index.html', 'images/Avatar_Mill.jpg', 'images/Banner_Mill.jpg', 'images/Icon1_Mill.jpg', 'images/Icon2_Mill.jpg', 'images/Icon3_Mill.jpg', 'images/Wallpaper.jpg', 'playlist.csv', 'changelog.json', 'README.md', 'playlist.json'];
+const CORE = ['./', 'index.html', 'images/Avatar_Mill.jpg', 'images/Banner_Mill.jpg', 'images/Icon1_Mill.jpg', 'images/Icon2_Mill.jpg', 'images/Icon3_Mill.jpg', 'images/Wallpaper.jpg', 'playlist.csv', 'changelog.json', 'README.md', 'playlist.json', 'socials.json'];
 self.addEventListener('install', e => e.waitUntil(caches.open(V).then(c => Promise.all(CORE.map(u => c.add(u).catch(() => {})))).then(() => self.skipWaiting())));
 self.addEventListener('activate', e => e.waitUntil(caches.keys().then(ks => Promise.all(ks.filter(k => k !== V).map(k => caches.delete(k)))).then(() => self.clients.claim())));
 self.addEventListener('message', e => {

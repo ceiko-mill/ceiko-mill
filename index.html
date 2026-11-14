@@ -51,25 +51,12 @@
   .panel.center{display:flex}
 
   /* ===== ARCHIVE ===== */
-  .arch{--av:clamp(96px,14vw,150px);--ov:70px;display:grid;grid-template-columns:1fr;gap:18px;padding:clamp(14px,2vw,28px);align-content:start;max-width:1400px;margin:0 auto}
-  /* wide window: everything fits without scrolling. The banner takes the leftover height and crops (background-size:cover);
-     the avatar scales with the window height; the notes/anime/favs cards sit in a 2-column block. Narrow window = stacked + scroll. */
+  /* Tile layout: every card is the same compact size. Wide window = banner on top, 4 small cards in a row + 1 long card under them.
+     Medium = 2x2 small cards + the long one. Narrow = one column. The banner takes whatever height is left over, so it always fits. */
+  .arch{--av:clamp(96px,14vw,150px);--ov:70px;display:grid;grid-template-columns:minmax(0,1fr);gap:14px;padding:clamp(12px,2vw,24px);align-content:start;max-width:1400px;margin:0 auto}
   #panelArchive{container:arch/size}
-  @container arch (min-width:900px){
-    .arch{--av:clamp(72px,18cqh,150px);--ov:calc(var(--av)*.47);height:100cqh;grid-template-columns:minmax(250px,320px) minmax(0,1fr);
-      grid-template-rows:minmax(calc(var(--ov) + 72px),400px) auto;gap:clamp(12px,2.2cqh,20px) 22px;padding:clamp(10px,2.4cqh,22px) clamp(14px,2cqw,26px)}
-    .hero{display:flex;flex-direction:column;min-height:0}
-    .bannerimg{flex:1;min-height:0;aspect-ratio:auto;max-height:none}
-    .side,.main{gap:clamp(10px,2cqh,16px)}
-    .main{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));align-content:start}
-    .main > .card:first-child{grid-column:1/-1}
-    .anime{grid-template-columns:1fr;gap:10px;align-items:start}
-    .lists{grid-template-columns:1fr;gap:6px}
-    .card .nb{padding:8px 12px}
-  }
-  .side,.main{display:flex;flex-direction:column;gap:18px;min-width:0}
   .pic{background:var(--cream2) center/cover no-repeat}
-  .hero{grid-column:1/-1;position:relative;margin-bottom:var(--ov)}
+  .hero{position:relative;margin-bottom:var(--ov)}
   .avatar{position:absolute;left:clamp(10px,2vw,28px);bottom:calc(var(--ov)*-1);z-index:1;width:var(--av);aspect-ratio:1;border:4px solid var(--cream);outline:3px solid var(--ink);border-radius:26px}
   .hero-name{position:absolute;left:calc(clamp(10px,2vw,28px) + var(--av) + 16px);bottom:calc(var(--ov)*-.83);font-weight:800;font-size:clamp(18px,2.4vw,30px)}
   .bannerimg{position:relative;width:100%;aspect-ratio:16/5;max-height:280px;border:2px solid var(--ink);border-bottom:0}
@@ -78,12 +65,25 @@
   .card > h2{display:flex;align-items:center;gap:6px;background:var(--rust);color:#fff;border-bottom:2px solid var(--ink);padding:5px 10px;font-size:13px;font-weight:800}
   .card .nb{padding:10px 12px;font-size:13.5px;line-height:1.55;overflow-wrap:anywhere}
   .hl{background:var(--sage);padding:0 3px}
-  .anime{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center}
-  .thumbs{display:flex;gap:8px}
-  .thumb{width:clamp(48px,6vw,72px);aspect-ratio:1;border:3px solid var(--ink);border-radius:18px}
-  .lists{display:grid;grid-template-columns:1fr;gap:10px}
-  @media(min-width:700px){.lists{grid-template-columns:repeat(3,1fr);gap:16px}}
-  @media(max-width:400px){.anime{grid-template-columns:1fr}}
+  .cards{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;min-width:0}
+  .arch .card{display:flex;flex-direction:column;min-width:0}
+  .arch .card > h2{padding:4px 9px;font-size:12px}
+  .arch .card .nb{flex:1;padding:8px 10px;font-size:12.5px;line-height:1.5}
+  .anime{display:flex;flex-direction:column;gap:8px}
+  .thumbs{display:flex;gap:6px}
+  .thumb{width:44px;aspect-ratio:1;border:2px solid var(--ink);border-radius:12px}
+  .lists{display:flex;flex-direction:column;gap:5px}
+  @container arch (min-width:560px){
+    .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .c-long{grid-column:1/-1}
+  }
+  @container arch (min-width:900px){
+    .arch{--av:clamp(72px,18cqh,150px);--ov:calc(var(--av)*.47);height:100cqh;
+      grid-template-rows:minmax(calc(var(--ov) + 72px),400px) auto;gap:clamp(10px,2cqh,16px);padding:clamp(10px,2.4cqh,22px) clamp(14px,2cqw,26px)}
+    .hero{display:flex;flex-direction:column;min-height:0}
+    .bannerimg{flex:1;min-height:0;aspect-ratio:auto;max-height:none}
+    .cards{grid-template-columns:repeat(4,minmax(0,1fr))}
+  }
 
   /* ===== MUSIC ===== */
   .mp{margin:auto;width:min(860px,100%);display:grid;grid-template-columns:clamp(110px,24vw,240px) minmax(0,1fr);gap:clamp(16px,3vw,40px);align-items:center;padding:20px}
@@ -168,7 +168,7 @@
   .inf-name{font-weight:800;font-size:clamp(16px,2.2vw,22px)}
   .inf-ver{font-weight:800;font-size:clamp(22px,3.4vw,34px);line-height:1.1}
   .kv{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 18px;font-size:13.5px;line-height:1.45}
-  .kv dt{font-weight:800} .kv dd{overflow-wrap:anywhere}
+  .kv dt{font-weight:800} .kv dd{overflow-wrap:anywhere} .kv a{color:var(--ink);font-weight:700}
   .ok{color:#1d4d2b} .bad{color:#7a2f2a}
   .muted{font-size:12.5px;opacity:.8;line-height:1.5}
   #logList{display:flex;flex-direction:column;gap:14px}
@@ -363,14 +363,14 @@
 
 <div class="desktop">
   <!-- ARCHIVE -->
-  <section class="win" id="wArchive" data-icon="file" data-title="ARCH!VE" data-ver="VERS!ON 0.0.5.5"><div class="panel" id="panelArchive">
+  <section class="win" id="wArchive" data-icon="file" data-title="ARCH!VE"><div class="panel" id="panelArchive">
     <div class="arch">
       <div class="hero">
         <div class="pic bannerimg" style="background-image:url('images/Banner_Mill.jpg')"></div>
         <div class="pic avatar" style="background-image:url('images/Avatar_Mill.jpg')"></div>
         <div class="hero-name">ceiko_mill</div>
       </div>
-      <aside class="side">
+      <div class="cards">
         <section class="card">
           <h2><svg class="i"><use href="#bubble"/></svg># CE!KO_MILL</h2>
           <p class="nb">
@@ -385,16 +385,6 @@
             <span class="hl">Do not Interact</span> : if you're a <b>pedophile</b>,
             <b>flat earther</b>, <u>force religions</u>, <u>force genders</u>,
             if ur <b>debating politics or religion</b>.
-          </p>
-        </section>
-      </aside>
-      <div class="main">
-        <section class="card">
-          <h2>N0TE%!?</h2>
-          <p class="nb">
-            <b>mill</b> \ ˈmil \ <i>n</i>
-            <b>1</b> : An unyielding execution of a routine that requires no sentience.
-            <b>2</b> : An irrecoverable condition of automatic labor that manufactures architecture through the endless repetition of a simple action.
           </p>
         </section>
         <section class="card">
@@ -415,6 +405,14 @@
             <div><span class="hl">girls</span> : Silence Suzuka (UMA), Hitori Gotoh (BTR)</div>
             <div><span class="hl">hobbies</span> : Studying, Osu, Sudoku, Chess</div>
           </div>
+        </section>
+        <section class="card c-long">
+          <h2>N0TE%!?</h2>
+          <p class="nb">
+            <b>mill</b> \ ˈmil \ <i>n</i>
+            <b>1</b> : An unyielding execution of a routine that requires no sentience.
+            <b>2</b> : An irrecoverable condition of automatic labor that manufactures architecture through the endless repetition of a simple action.
+          </p>
         </section>
       </div>
     </div>
@@ -478,6 +476,7 @@
   <section class="win" id="wInfo" data-icon="info" data-title="!NF0"><div class="panel col" id="panelInfo">
     <div class="tabs" role="tablist">
       <button class="tab" role="tab" type="button" data-tab="about" aria-selected="true">About</button>
+      <button class="tab" role="tab" type="button" data-tab="socials" aria-selected="false">Socials</button>
       <button class="tab" role="tab" type="button" data-tab="log" aria-selected="false">Changelog</button>
       <button class="tab" role="tab" type="button" data-tab="readme" aria-selected="false">Readme</button>
     </div>
@@ -491,6 +490,7 @@
           <h2><svg class="i"><use href="#info"/></svg># ABOUT TH!S S!TE</h2>
           <dl class="nb kv">
             <dt>Version</dt><dd id="aVer">-</dd>
+            <dt>Repository</dt><dd><a id="aRepo" href="https://github.com/ceiko-mill/ceiko-mill" target="_blank" rel="noopener noreferrer">https://github.com/ceiko-mill/ceiko-mill</a></dd>
             <dt>Latest release</dt><dd id="aDate">-</dd>
             <dt>Releases listed</dt><dd id="aCount">-</dd>
             <dt>Songs</dt><dd id="aTracks">-</dd>
@@ -498,8 +498,9 @@
             <dt>Saving</dt><dd id="aSaving">-</dd>
           </dl>
         </section>
-        <p class="muted">The version and the changelog come from <b>changelog.json</b>, and the readme comes from <b>README.md</b>. Edit those files to update this window; you never need to touch index.html.</p>
+        <p class="muted">The version and the changelog come from <b>changelog.json</b>, the socials from <b>socials.json</b> and the readme from <b>README.md</b>. Edit those files to update this window; you never need to touch index.html.</p>
       </div>
+      <div class="pane" data-pane="socials" hidden><div id="socList">loading...</div></div>
       <div class="pane" data-pane="log" hidden><div id="logList"></div></div>
       <div class="pane" data-pane="readme" hidden><div class="md" id="mdReadme">loading...</div></div>
     </div>
@@ -1141,31 +1142,44 @@
   }
 
   /* ---------- !NF0 WINDOW: version + changelog + readme (loaded from changelog.json and README.md) ---------- */
-  const CHANGELOG_FILE = 'changelog.json', README_FILE = 'README.md';
+  const CHANGELOG_FILE = 'changelog.json', README_FILE = 'README.md', SOCIALS_FILE = 'socials.json';
   const el = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null && txt !== '') e.textContent = txt; return e; };
-  function inline(parent, text) {    // **bold**, *italic*, `code`, [text](https://link)
-    const re = /`([^`]+)`|\*\*([^*]+)\*\*|\*([^*\s][^*]*)\*|\[([^\]]+)\]\((https?:\/\/[^\s)]+|mailto:[^\s)]+)\)/g;
+  function inline(parent, text) {    // **bold**, *italic*, `code`, [text](https://link), and <b> <i> <br> if the readme uses html
+    const re = /`([^`]+)`|\*\*([^*]+)\*\*|<(?:b|strong)>(.+?)<\/(?:b|strong)>|\*([^*\s][^*]*)\*|<(?:i|em)>(.+?)<\/(?:i|em)>|\[([^\]]+)\]\((https?:\/\/[^\s)]+|mailto:[^\s)]+)\)|<br\s*\/?>/gi;
     let last = 0, m;
     while ((m = re.exec(text))) {
       if (m.index > last) parent.append(text.slice(last, m.index));
       if (m[1] != null) parent.append(el('code', '', m[1]));
-      else if (m[2] != null) parent.append(el('b', '', m[2]));
-      else if (m[3] != null) parent.append(el('i', '', m[3]));
-      else { const a = el('a', '', m[4]); a.href = m[5]; a.target = '_blank'; a.rel = 'noopener noreferrer'; parent.append(a); }
+      else if (m[2] != null || m[3] != null) { const b = el('b'); inline(b, m[2] != null ? m[2] : m[3]); parent.append(b); }
+      else if (m[4] != null || m[5] != null) { const i = el('i'); inline(i, m[4] != null ? m[4] : m[5]); parent.append(i); }
+      else if (m[6] != null) { const a = el('a', '', m[6]); a.href = m[7]; a.target = '_blank'; a.rel = 'noopener noreferrer'; parent.append(a); }
+      else parent.append(el('br'));
       last = re.lastIndex;
     }
     if (last < text.length) parent.append(text.slice(last));
   }
   function renderMd(md, into) {      // tiny markdown: headings, lists, tables, code blocks, rules, paragraphs
     into.replaceChildren();
-    const lines = md.replace(/\r/g, '').split('\n'), isRow = s => /^\s*\|.*\|\s*$/.test(s);
+    const isRow = s => /^\s*\|.*\|\s*$/.test(s), lines = [];
+    let fence = false;
+    md.replace(/\r/g, '').split('\n').forEach(l => {   // a <br> between pieces of text becomes a real line break (code blocks and tables keep theirs)
+      if (/^\s*```/.test(l)) { fence = !fence; lines.push(l); return; }
+      if (fence || isRow(l)) { lines.push(l); return; }
+      const parts = l.split(/<br\s*\/?>/i), n = parts.length;
+      parts.forEach((p, k) => { if (k === n - 1 && n > 1 && !p.trim()) return; lines.push(p + (k < n - 1 ? '  ' : '')); });
+    });
     let i = 0, list = null, para = [];
-    const flush = () => { if (para.length) { const p = el('p'); inline(p, para.join(' ')); into.append(p); para = []; } };
+    const flush = () => {
+      if (!para.length) return;
+      const p = el('p'); para.join(' ').split('\u0001').forEach((s, k, a) => { s = s.trim(); if (s) inline(p, s); if (k < a.length - 1 && a[k + 1].trim()) p.append(el('br')); });
+      into.append(p); para = [];
+    };
+    const heading = (hashes, txt) => { const h = el('h' + Math.min(hashes.length + 1, 4)); inline(h, txt); into.append(h); };
     while (i < lines.length) {
       const ln = lines[i]; let m;
-      if (/^```/.test(ln)) {
+      if (/^\s*```/.test(ln)) {
         flush(); list = null; const buf = []; i++;
-        while (i < lines.length && !/^```/.test(lines[i])) buf.push(lines[i++]);
+        while (i < lines.length && !/^\s*```/.test(lines[i])) buf.push(lines[i++]);
         i++; const pre = el('pre'); pre.append(el('code', '', buf.join('\n'))); into.append(pre); continue;
       }
       if (!ln.trim()) { flush(); list = null; i++; continue; }
@@ -1179,13 +1193,17 @@
         rows.slice(sep ? 2 : 1).forEach(r => { const tr = el('tr'); cells(r).forEach(c => { const d = el('td'); inline(d, c); tr.append(d); }); tb.append(tr); });
         t.append(th, tb); into.append(t); continue;
       }
-      if ((m = /^(#{1,3})\s+(.*)$/.exec(ln))) { flush(); list = null; const h = el('h' + (m[1].length + 1)); inline(h, m[2]); into.append(h); }
+      if ((m = /^\s*(#{1,6})\s+(\S.*)$/.exec(ln))) { flush(); list = null; heading(m[1], m[2].trim()); }
       else if (/^(-{3,}|\*{3,})$/.test(ln.trim())) { flush(); list = null; into.append(el('hr')); }
       else if ((m = /^\s*([-*]|\d+\.)\s+(.*)$/.exec(ln))) {
-        flush(); const tag = /\d/.test(m[1]) ? 'ol' : 'ul';
-        if (!list || list.tagName.toLowerCase() !== tag) { list = el(tag); into.append(list); }
-        const li = el('li'); inline(li, m[2]); list.append(li);
-      } else { list = null; para.push(ln.trim()); }
+        flush(); let h;
+        if ((h = /^(#{1,6})\s+(\S.*)$/.exec(m[2]))) { list = null; heading(h[1], h[2].trim()); }   // "* ### Title" is still a heading
+        else {
+          const tag = /\d/.test(m[1]) ? 'ol' : 'ul';
+          if (!list || list.tagName.toLowerCase() !== tag) { list = el(tag); into.append(list); }
+          const li = el('li'); inline(li, m[2].trim()); list.append(li);
+        }
+      } else { list = null; para.push(ln.trim() + (/\s{2,}$/.test(ln) ? '\u0001' : '')); }
       i++;
     }
     flush();
@@ -1224,6 +1242,7 @@
     $('swUsage').textContent = o.usage || 'unknown';
   }
   async function refreshAbout() {    // the live lines in !NF0 > About
+    if (user && repo) { const ra = $('aRepo'), u = 'https://github.com/' + user + '/' + repo; ra.href = u; ra.textContent = u; }
     $('aTracks').textContent = tracks.length ? tracks.length + ' songs loaded' : 'none loaded';
     $('aSaving').textContent = !S.save ? 'Off (starts fresh every visit)' : S.autosave ? 'On, autosave' : 'On, manual (Save now)';
     const o = await swInfo();
@@ -1244,8 +1263,7 @@
     $('infVer').textContent = version ? 'v' + version : 'version unknown';
     $('infDate').textContent = name;
     $('aVer').textContent = version || 'unknown'; $('aDate').textContent = name || '-'; $('aCount').textContent = String(entries.length);
-    const av = document.querySelector('#wArchive .ver'); if (av && version) av.textContent = 'VERS!ON ' + version;
-    const list = $('logList'); list.replaceChildren();
+        const list = $('logList'); list.replaceChildren();
     if (!entries.length) list.append(el('p', 'muted', data ? 'changelog.json needs a list of entries (see the example).' : 'changelog.json was not found next to index.html.'));
     const KIND = { '+': ['add', 'added'], '-': ['rem', 'removed'], '*': ['chg', 'changed'] };
     entries.forEach((lines, i) => {
@@ -1263,14 +1281,30 @@
     if (md != null) renderMd(md, $('mdReadme')); else $('mdReadme').textContent = 'README.md was not found next to index.html.';
     refreshAbout();
   }
+  async function loadSocials() {     // Socials tab: [{ "platform": "Spotify", "name": "kyo_mill", "url": "https://..." }, ...]
+    const box = $('socList'); box.replaceChildren();
+    let data = null;
+    try { data = JSON.parse(await getText(SOCIALS_FILE)); } catch (e) { console.warn('socials.json not loaded:', e); }
+    const items = (Array.isArray(data) ? data : []).filter(x => x && typeof x === 'object' && x.url);
+    if (!items.length) { box.append(el('p', 'muted', data ? 'socials.json needs a list of entries with a platform, name and url.' : 'socials.json was not found next to index.html.')); return; }
+    const card = el('section', 'card'), h = el('h2'), dl = el('dl', 'nb kv');
+    h.append(el('span', '', '# SOC!ALS'));
+    items.forEach(x => {
+      dl.append(el('dt', '', String(x.platform || 'Link')));
+      const dd = el('dd'), a = el('a', '', String(x.name || x.url));
+      if (/^https?:\/\//i.test(x.url)) { a.href = x.url; a.target = '_blank'; a.rel = 'noopener noreferrer'; }
+      dd.append(a); dl.append(dd);
+    });
+    card.append(h, dl); box.append(card);
+  }
   function showTab(name) {
     document.querySelectorAll('#wInfo .tab').forEach(t => t.setAttribute('aria-selected', String(t.dataset.tab === name)));
     document.querySelectorAll('#wInfo [data-pane]').forEach(p => { p.hidden = p.dataset.pane !== name; });
   }
   document.querySelectorAll('#wInfo .tab').forEach(t => t.addEventListener('click', () => showTab(t.dataset.tab)));
-  tbLeft.querySelector('.app[data-win="wInfo"]').addEventListener('click', () => { if (Date.now() - infoAt > 60000) loadInfo(); else refreshAbout(); });
+  tbLeft.querySelector('.app[data-win="wInfo"]').addEventListener('click', () => { if (Date.now() - infoAt > 60000) { loadInfo(); loadSocials(); } else refreshAbout(); });
   tbLeft.querySelector('.app[data-win="wSettings"]').addEventListener('click', refreshSW);
-  loadInfo();
+  loadInfo(); loadSocials();
 
   /* ---------- SPOTIFY-STYLE DROPDOWNS (replace the plain browser select, same value + change event) ---------- */
   const CHEV = '<svg class="i" viewBox="0 0 16 16"><path d="M3 6l5 5 5-5"/></svg>', TICK = '<svg class="i" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 5"/></svg>';
