@@ -18,220 +18,157 @@
 <link rel="apple-touch-icon" href="images/Avatar_Mill.jpg">
 <style>
   :root{
-    --forest:#0a0e0b; --forest2:#131913; --ink:#0f1511;
-    --cream:#d3d7cb; --cream2:#bbc0b1; --sage:#74806a;
-    --rust:#586d62; --sky:#586d62; --text:#141a15; --line:#89917f;
+    --ink:#0f1511; --cream:#a4aa98; --cream2:#8b927e; --lt:#d3d7cb;
+    --sage:#74806a; --rust:#586d62; --text:#101612; --line:#6a7260;
   }
   *{box-sizing:border-box;margin:0;padding:0}
-  html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
-  body{
-    min-height:100vh;min-height:100dvh;display:flex;align-items:flex-start;justify-content:center;
-    padding:14px 12px 24px;overflow-x:hidden;
-    font-family:"Archivo","Helvetica Neue",Arial,sans-serif;font-style:italic;color:var(--text);
-    background-color:var(--forest);
-    background-image:
-      linear-gradient(45deg,var(--forest2) 25%,transparent 25%,transparent 75%,var(--forest2) 75%),
-      linear-gradient(45deg,var(--forest2) 25%,transparent 25%,transparent 75%,var(--forest2) 75%);
-    background-size:60px 60px;background-position:0 0,30px 30px;
-  }
+  html,body{height:100%;overflow:hidden;-webkit-text-size-adjust:100%}
+  body{font-family:"Archivo","Helvetica Neue",Arial,sans-serif;font-style:italic;color:var(--text);background:var(--ink)}
+  [hidden]{display:none!important}
   svg.i{width:1em;height:1em;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round;flex:none}
 
-  /* ================= MOBILE / DEFAULT: stacked, fluid, normal scrolling ================= */
-  .stage{width:100%;max-width:600px}
-  .wrap{position:relative;padding-top:26px}
-  [hidden]{display:none!important}
-  .tabs{position:absolute;top:0;left:0;display:flex;z-index:2}
-  .tab{position:relative;font:inherit;font-weight:700;font-size:14px;cursor:pointer;background:#1c261f;color:var(--sage);
-    height:28px;padding:0 38px 0 10px;display:flex;align-items:center;gap:7px;border:0;
-    border-top:2px solid #2f3a31;clip-path:polygon(0 0,88% 0,100% 100%,0 100%)}
-  .tab + .tab{margin-left:-14px}
-  .tab:hover{color:var(--cream)}
-  .tab[aria-selected=true]{background:var(--ink);color:var(--cream);border-top-color:var(--rust);z-index:1}
-  .tab:focus-visible{outline:2px solid var(--cream);outline-offset:-5px}
-  .window{display:flex;flex-direction:column;overflow:hidden;
-    border:3px solid var(--ink);outline:2px solid #2f3a31;background:var(--cream)}
+  /* ===== DESKTOP + WINDOWS ===== */
+  .desktop{position:fixed;inset:0 0 48px 0;overflow:hidden;background:#0f1511 url(images/Wallpaper.jpg) center/cover no-repeat}
+  .win{position:absolute;display:flex;flex-direction:column;background:var(--cream);border:1px solid #000;border-radius:8px;overflow:hidden;box-shadow:0 10px 40px rgba(0,0,0,.55);animation:winIn .14s ease}
+  .win.hid{display:none} .win.max{border:0;border-radius:0;box-shadow:none}
+  @keyframes winIn{from{opacity:0;transform:scale(.97)}to{opacity:1;transform:none}}
+  .win:not(.focus) iframe,.desktop.dragging iframe{pointer-events:none}
+  .wbar{flex:none;height:34px;display:flex;justify-content:space-between;align-items:stretch;background:#1a211c;color:#8e968a;font-size:13px;font-weight:600;touch-action:none;user-select:none}
+  .win.focus .wbar{background:var(--ink);color:var(--lt)}
+  .tt{display:flex;align-items:center;gap:8px;padding-left:12px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .tt svg{font-size:15px;color:var(--sage)} .ver{font-size:.8em;color:var(--sage)}
+  .caps{display:flex}
+  .cap{width:46px;display:flex;align-items:center;justify-content:center;background:transparent;border:0;color:inherit;cursor:default}
+  .cap svg{width:10px;height:10px;stroke:currentColor;fill:none;stroke-width:1}
+  .cap:hover{background:rgba(255,255,255,.12)} .cap.close:hover{background:#c42b1c;color:#fff}
+  .rz{position:absolute;z-index:5;touch-action:none}
+  .win.max .rz{display:none}
+  .rz[data-d=n]{top:0;left:10px;right:10px;height:5px;cursor:ns-resize} .rz[data-d=s]{bottom:0;left:10px;right:10px;height:6px;cursor:ns-resize}
+  .rz[data-d=e]{right:0;top:10px;bottom:10px;width:6px;cursor:ew-resize} .rz[data-d=w]{left:0;top:10px;bottom:10px;width:6px;cursor:ew-resize}
+  .rz[data-d=ne],.rz[data-d=sw]{width:12px;height:12px;cursor:nesw-resize} .rz[data-d=nw],.rz[data-d=se]{width:12px;height:12px;cursor:nwse-resize}
+  .rz[data-d=ne]{top:0;right:0} .rz[data-d=nw]{top:0;left:0} .rz[data-d=se]{bottom:0;right:0} .rz[data-d=sw]{bottom:0;left:0}
+  .panel{flex:1;min-height:0;overflow:auto}
+  .panel.center{display:flex}
 
-  .titlebar{background:var(--ink);color:var(--cream);display:flex;justify-content:space-between;align-items:center;
-    min-height:38px;padding:0 12px;font-size:15px;font-weight:600}
-  .titlebar span:first-child{display:flex;align-items:center;gap:8px;min-width:0}
-  .titlebar .x{font-size:18px;font-weight:700}
-  .ver{font-size:.72em;font-weight:600;color:var(--sage);white-space:nowrap;align-self:center}
-  .toolbar{background:var(--cream2);border-bottom:1px solid var(--ink);display:flex;justify-content:space-between;
-    align-items:center;min-height:30px;padding:0 12px;font-size:12px}
-  .toolbar .icons{display:flex;gap:12px;font-size:14px}
-  .toolbar a{color:var(--text)}
-
-  .body{padding:0 12px;display:flex;flex-direction:column}
-  .row{padding:12px 0;border-top:1px solid var(--line)}
-  .row:first-child{border-top:0}
-
+  /* ===== ARCHIVE ===== */
+  .arch{display:grid;grid-template-columns:1fr;gap:18px;padding:clamp(14px,2vw,28px);align-content:start;max-width:1400px;margin:0 auto}
+  @media(min-width:900px){.arch{grid-template-columns:minmax(260px,320px) minmax(0,1fr);gap:24px}}
+  .side,.main{display:flex;flex-direction:column;gap:18px;min-width:0}
   .pic{background:var(--cream2) center/cover no-repeat}
-  h2.head{font-size:17px;font-weight:800;display:flex;align-items:center;gap:6px;margin-bottom:6px;line-height:1.1}
-  h2.head svg{color:var(--rust)}
+  .hero{grid-column:1/-1;position:relative;margin-bottom:70px}
+  .avatar{position:absolute;left:clamp(10px,2vw,28px);bottom:-70px;z-index:1;width:clamp(96px,14vw,150px);aspect-ratio:1;border:4px solid var(--cream);outline:3px solid var(--ink);border-radius:26px}
+  .hero-name{position:absolute;left:calc(clamp(10px,2vw,28px) + clamp(96px,14vw,150px) + 16px);bottom:-58px;font-weight:800;font-size:clamp(18px,2.4vw,30px)}
+  .bannerimg{position:relative;width:100%;aspect-ratio:16/5;max-height:280px;border:2px solid var(--ink);border-bottom:0}
+  .bannerimg::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--cream) 100%)}
+  .card{border:2px solid var(--ink)}
+  .card > h2{display:flex;align-items:center;gap:6px;background:var(--rust);color:#fff;border-bottom:2px solid var(--ink);padding:5px 10px;font-size:13px;font-weight:800}
+  .card .nb{padding:10px 12px;font-size:13.5px;line-height:1.55;overflow-wrap:anywhere}
   .hl{background:var(--sage);padding:0 3px}
-  .text{font-size:13px;line-height:1.5;overflow-wrap:anywhere}
-  .rule{border:0;border-top:1px solid var(--ink);margin:0 0 8px}
-
-  .top{display:grid;grid-template-columns:clamp(96px,28vw,150px) minmax(0,1fr);column-gap:14px;row-gap:12px;
-    grid-template-areas:"avatar prof" "dn dn" "banner banner" "note note"}
-  .avatar{grid-area:avatar;width:100%;aspect-ratio:1;border:3px solid var(--ink);border-radius:clamp(16px,5vw,26px);align-self:start}
-  .prof{grid-area:prof;min-width:0} .dn{grid-area:dn}
-  .bannerimg{grid-area:banner;width:100%;aspect-ratio:16/9;border:2px solid var(--ink)}
-  .note{grid-area:note;border:2px solid var(--ink)}
-  .note .nh{background:var(--sky);color:#fff;border-bottom:2px solid var(--ink);padding:4px 10px;font-weight:800;font-size:12px}
-  .note .nb{padding:8px 10px;font-size:12.5px;line-height:1.5}
-
-  .mid{display:grid;grid-template-columns:1fr;gap:12px}
-  .mid > div + div{border-top:1px solid var(--line);padding-top:12px}
-  .anime{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:12px;align-items:center}
+  .anime{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:14px;align-items:center}
   .thumbs{display:flex;gap:8px}
-  .thumb{width:clamp(48px,14vw,68px);aspect-ratio:1;border:3px solid var(--ink);border-radius:clamp(12px,3.5vw,18px)}
-
-  .spotify{display:block;width:100%;height:352px;border:0;border-radius:12px;background:var(--ink)}
-  .pl{display:flex;flex-direction:column;gap:10px;padding:14px 0 16px}
-  .pl-note{font-size:13px;line-height:1.5;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
-  .pl-app{display:flex;flex-direction:column;gap:8px}
-  .pl-fb{display:flex;flex-direction:column}
-  .pl-bar{display:flex;align-items:center;gap:10px}
-  .pl-bar input{flex:1;min-width:0;height:32px;padding:0 8px;font:inherit;font-size:12px;color:var(--ink);
-    background:var(--cream2);border:2px solid var(--ink);border-radius:0;-webkit-appearance:none;appearance:none}
-  .pl-bar input:focus-visible{outline:2px solid var(--rust);outline-offset:2px}
-  .pl-count{font-size:11px;font-weight:700;white-space:nowrap}
-  .pl-list{height:320px;overflow-y:auto;overscroll-behavior:contain;border:2px solid var(--ink);background:var(--cream2)}
-  .pl-row{display:grid;grid-template-columns:34px minmax(0,1fr) auto;column-gap:8px;align-items:center;width:100%;
-    text-align:left;font:inherit;font-size:12px;color:var(--ink);background:transparent;border:0;border-bottom:1px solid var(--line);
-    padding:6px 8px;cursor:pointer}
-  .pl-row:hover{background:var(--sage)}
-  .pl-row.on{background:var(--ink);color:var(--cream)}
-  .pl-row:focus-visible{outline:2px solid var(--rust);outline-offset:-3px}
-  .pl-idx,.pl-dur{font-size:11px;opacity:.75}
-  .pl-t{min-width:0}
-  .pl-t b,.pl-t small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .pl-t small{font-size:11px;opacity:.8;margin-top:1px}
-  .pl-empty{padding:14px 10px;font-size:12px}
-  .pl-embed{display:block;width:100%;height:80px;border:0;border-radius:12px}
-  .plinks{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
-  .plink{font:inherit;font-weight:800;font-size:12px;display:inline-flex;align-items:center;justify-content:center;
-    min-height:30px;padding:0 10px;color:var(--ink);background:var(--cream2);border:2px solid var(--ink);cursor:pointer;text-decoration:none}
-  .plink:hover{background:var(--sage)}
-  .plink:focus-visible{outline:2px solid var(--rust);outline-offset:2px}
+  .thumb{width:clamp(48px,6vw,72px);aspect-ratio:1;border:3px solid var(--ink);border-radius:18px}
   .lists{display:grid;grid-template-columns:1fr;gap:10px}
-  .footer{height:20px;background:var(--cream2);border-top:1px solid var(--ink);margin:0 -12px}
+  @media(min-width:700px){.lists{grid-template-columns:repeat(3,1fr);gap:16px}}
+  @media(max-width:400px){.anime{grid-template-columns:1fr}}
 
-  /* very narrow phones: thumbs drop under the anime text */
-  @media (max-width:400px){
-    .anime{grid-template-columns:1fr}
-  }
-  /* tablets / small windows: three list columns */
-  @media (min-width:541px){
-    .lists{grid-template-columns:repeat(3,1fr);gap:14px}
-  }
-
-  /* ================= MUSIC TAB ================= */
-  .mp{display:grid;grid-template-columns:clamp(96px,28vw,150px) minmax(0,1fr);gap:14px;align-items:center;padding:14px 0 16px}
-  .mp-cover{width:100%;aspect-ratio:1;border:3px solid var(--ink);border-radius:clamp(16px,5vw,26px)}
-  .mp-main{min-width:0;display:flex;flex-direction:column;gap:9px}
-  .p-name{font-weight:800;font-size:15px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .p-time{font-size:11px;opacity:.75;margin-top:2px}
-  .p-track{font-size:11px;font-weight:700;opacity:.9;margin-top:2px}
-  .mp input[type=range]{-webkit-appearance:none;appearance:none;display:block;width:100%;height:10px;margin:0;cursor:pointer;
+  /* ===== MUSIC ===== */
+  .mp{margin:auto;width:min(860px,100%);display:grid;grid-template-columns:clamp(110px,24vw,240px) minmax(0,1fr);gap:clamp(16px,3vw,40px);align-items:center;padding:20px}
+  .mp-cover{width:100%;aspect-ratio:1;border:3px solid var(--ink);border-radius:clamp(18px,4vw,36px)}
+  .mp-main{min-width:0;display:flex;flex-direction:column;gap:12px}
+  .p-name{font-weight:800;font-size:clamp(16px,2.2vw,24px);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .p-time{font-size:12px;opacity:.8;margin-top:2px} .p-track{font-size:12px;font-weight:700;margin-top:3px}
+  .mp input[type=range]{-webkit-appearance:none;appearance:none;display:block;width:100%;height:12px;margin:0;cursor:pointer;
     border:2px solid var(--ink);background:linear-gradient(to right,var(--rust) var(--p,0%),var(--cream2) var(--p,0%))}
-  .mp input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:10px;height:16px;background:var(--ink);border:0;border-radius:0}
-  .mp input[type=range]::-moz-range-thumb{width:10px;height:16px;background:var(--ink);border:0;border-radius:0}
+  .mp input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:10px;height:18px;background:var(--ink);border:0}
+  .mp input[type=range]::-moz-range-thumb{width:10px;height:18px;background:var(--ink);border:0;border-radius:0}
   .p-ctrl{display:flex;gap:6px}
-  .pbtn{font:inherit;font-weight:800;font-size:12px;display:flex;align-items:center;justify-content:center;
-    min-width:32px;height:32px;padding:0 8px;color:var(--ink);background:var(--cream2);border:2px solid var(--ink);cursor:pointer}
-  .pbtn svg{width:16px;height:16px}
-  .pbtn:hover{background:var(--sage)}
-  .pbtn.on{background:var(--ink);color:var(--cream)}
+  .pbtn{font:inherit;font-weight:800;font-size:13px;display:flex;align-items:center;justify-content:center;min-width:38px;height:38px;padding:0 10px;color:var(--ink);background:var(--cream2);border:2px solid var(--ink);cursor:pointer}
+  .pbtn svg{width:18px;height:18px}
+  .pbtn:hover{background:var(--sage)} .pbtn.on{background:var(--ink);color:var(--lt)}
   .pbtn:focus-visible,.mp input:focus-visible{outline:2px solid var(--rust);outline-offset:2px}
   .p-play{flex:1}
-  .p-vol{display:flex;align-items:center;gap:8px}
-  .p-vol input{flex:1}
-  .p-pct{width:38px;text-align:right;font-weight:700;font-size:11px}
+  .p-vol{display:flex;align-items:center;gap:10px} .p-vol input{flex:1}
+  .p-pct{width:42px;text-align:right;font-weight:700;font-size:12px}
   .p-bass{width:100%;justify-content:space-between}
-  @media (max-width:400px){.mp{grid-template-columns:1fr}.mp-cover{max-width:150px}}
+  @media(max-width:520px){.mp{grid-template-columns:1fr}.mp-cover{max-width:180px}}
 
-  /* ================= DESKTOP: fixed 16:9 stage that scales live with the window ================= */
-  @media (min-width:900px) and (min-height:540px), (orientation:portrait) and (max-width:600px), (orientation:landscape) and (max-height:539px){
-    body{align-items:center;padding:20px}
-    .stage{
-      container-type:inline-size;flex:none;aspect-ratio:16/9;max-width:none;
-      width:min(calc(100vw - 40px),calc((100vh - 40px) * 16 / 9));
-    }
-    .wrap{height:100%;padding-top:2.7cqw;display:flex;flex-direction:column}
-    .tab{height:2.8cqw;padding:0 3.6cqw 0 1cqw;gap:.7cqw;font-size:1.5cqw;border-top-width:.25cqw}
-    .tab + .tab{margin-left:-1.4cqw}
-    .window{flex:1;min-height:0;border-width:.3cqw;outline-width:.2cqw}
-
-    .titlebar{flex:none;min-height:0;height:3.6cqw;padding:0 1.2cqw;font-size:1.7cqw}
-    .titlebar span:first-child{gap:.8cqw}
-    .titlebar .x{font-size:2cqw}
-    .toolbar{flex:none;min-height:0;height:2.6cqw;padding:0 1.2cqw;font-size:1.2cqw}
-    .toolbar .icons{gap:1.4cqw;font-size:1.4cqw}
-
-    .body{flex:1;min-height:0;padding:0 1.2cqw}
-    .row{padding:.9cqw 0}
-    h2.head{font-size:1.9cqw;gap:.6cqw;margin-bottom:.5cqw}
-    .hl{padding:0 .3cqw}
-    .text{font-size:1.25cqw}
-    .rule{margin:0 0 .7cqw}
-
-    .top{flex:1 1 0;min-height:0;grid-template-columns:21.5cqw 1fr 1fr;grid-template-rows:auto minmax(0,1fr);
-      column-gap:1.4cqw;row-gap:.8cqw;grid-template-areas:"avatar prof dn" "avatar banner note"}
-    .avatar{align-self:center;border-width:.4cqw;border-radius:2.6cqw}
-    .bannerimg{height:100%;aspect-ratio:auto;min-height:0;border-width:.25cqw}
-    .note{min-height:0;display:flex;flex-direction:column;border-width:.25cqw}
-    .note .nh{flex:none;border-bottom-width:.25cqw;padding:.4cqw 1cqw;font-size:1.2cqw}
-    .note .nb{flex:1;padding:.8cqw 1cqw;font-size:1.3cqw;overflow:hidden}
-
-    .mid{grid-template-columns:.8fr 1.5fr;gap:1.4cqw;align-items:center}
-    .mid > div + div{border-top:0;padding-top:0;border-left:1px solid var(--line);padding-left:1.4cqw}
-    .anime{grid-template-columns:1fr auto;gap:1.2cqw}
-    .thumbs{gap:.8cqw}
-    .thumb{width:3.8cqw;border-width:.3cqw;border-radius:1.1cqw}
-    .mid .text{font-size:1.1cqw}
-    .mid{padding:.6cqw 0}
-    .mid .text{line-height:1.35}
-    .lists.text{font-size:1.1cqw}
-    .pl{flex:1;min-height:0;gap:1cqw;padding:1.2cqw 4cqw}
-    .spotify{flex:1;min-height:0;height:auto;border-radius:1.2cqw}
-    .pl-app{flex:1;min-height:0;gap:.8cqw}
-    .pl-fb{flex:1;min-height:0}
-    .pl-bar{flex:none;gap:1cqw}
-    .pl-bar input{height:2.6cqw;font-size:1.2cqw;padding:0 .8cqw;border-width:.25cqw}
-    .pl-count{font-size:1.1cqw}
-    .pl-list{flex:1;min-height:0;height:auto;border-width:.25cqw}
-    .pl-row{grid-template-columns:3.2cqw minmax(0,1fr) auto;column-gap:.8cqw;font-size:1.25cqw;padding:.5cqw .8cqw}
-    .pl-idx,.pl-dur,.pl-t small{font-size:1.05cqw}
-    .pl-empty{font-size:1.2cqw;padding:1.2cqw}
-    .pl-embed{flex:none;height:max(80px,7cqw);border-radius:1.2cqw}
-    .pl-note{flex:none;font-size:1.2cqw;gap:1cqw}
-    .plinks{gap:.8cqw;margin-top:.6cqw}
-    .plink{min-height:2.6cqw;padding:0 1cqw;font-size:1.1cqw;border-width:.25cqw}
-
-    .lists{grid-template-columns:repeat(3,1fr);gap:1.4cqw}
-    .footer{flex:none;margin:auto -1.2cqw 0;height:1.6cqw}
-
-    .mp{flex:1;min-height:0;grid-template-columns:22cqw minmax(0,1fr);gap:3cqw;padding:1.2cqw 4cqw}
-    .mp-cover{border-width:.4cqw;border-radius:2.6cqw}
-    .mp-main{gap:1.1cqw}
-    .p-name{font-size:2.2cqw}
-    .p-time,.p-track{font-size:1.2cqw;margin-top:.3cqw}
-    .mp input[type=range]{height:1.2cqw;border-width:.25cqw}
-    .mp input[type=range]::-webkit-slider-thumb{width:1.2cqw;height:2cqw}
-    .mp input[type=range]::-moz-range-thumb{width:1.2cqw;height:2cqw}
-    .p-ctrl{gap:.8cqw}
-    .pbtn{min-width:3.6cqw;height:3.6cqw;padding:0 1cqw;font-size:1.3cqw;border-width:.25cqw}
-    .pbtn svg{width:1.8cqw;height:1.8cqw}
-    .p-vol{gap:1cqw}
-    .p-pct{width:4.5cqw;font-size:1.2cqw}
+  /* ===== SPOTIFY TAB (matches Spotify's dark embed) ===== */
+  .sp{background:#121212;color:#fff;font-style:normal;font-family:"Circular Sp","Figtree","Helvetica Neue",Arial,sans-serif;display:flex;flex-direction:column}
+  .sp .pl-fb{flex:1;min-height:0;display:flex}
+  .sp .spotify{flex:1;width:100%;height:100%;border:0;background:#121212}
+  .pl-app{flex:1;min-height:0;display:flex;flex-direction:column}
+  .sp-hero{flex:none;display:flex;align-items:flex-end;gap:20px;padding:24px 24px 18px;background:linear-gradient(180deg,#3d5a45 0%,#1f2f25 100%)}
+  .sp-art{width:clamp(72px,12vw,150px);aspect-ratio:1;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#450af5,#8e8ee5);box-shadow:0 4px 60px rgba(0,0,0,.5);border-radius:4px;font-size:clamp(32px,6vw,64px)}
+  .sp-meta{min-width:0}
+  .sp-meta small{font-size:12px;font-weight:700}
+  .sp-meta h1{font-size:clamp(22px,4.5vw,56px);font-weight:900;line-height:1.1;letter-spacing:-.02em;margin:4px 0 8px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .sp-meta p{font-size:13px;color:#d9d9d9}
+  .sp-tools{flex:none;display:flex;align-items:center;gap:14px;padding:14px 24px;background:rgba(0,0,0,.2)}
+  .sp-open{display:inline-flex;align-items:center;height:36px;padding:0 20px;border-radius:500px;background:#1ed760;color:#000;font-weight:700;font-size:14px;text-decoration:none;white-space:nowrap}
+  .sp-open:hover{background:#3be477;transform:scale(1.03)}
+  .sp-tools input{flex:1;min-width:0;max-width:340px;margin-left:auto;height:34px;padding:0 14px;font:inherit;font-size:14px;color:#fff;background:#2a2a2a;border:0;border-radius:4px;outline:0;-webkit-appearance:none;appearance:none}
+  .sp-tools{flex-wrap:wrap}
+  .sp-tools select{height:34px;padding:0 10px;font:inherit;font-size:13px;color:#fff;background:#2a2a2a;border:0;border-radius:4px;outline:0;cursor:pointer}
+  .sp-tools select:focus{box-shadow:0 0 0 2px #fff}
+  .sp-tools input::placeholder{color:#b3b3b3}
+  .sp-tools input:focus{box-shadow:0 0 0 2px #fff}
+  .pl-count{display:inline}
+  .sp-cols,.pl-row{display:grid;grid-template-columns:40px minmax(0,2fr) minmax(0,1.3fr) 56px;column-gap:14px;align-items:center}
+  .sp-cols{flex:none;margin:0 24px;padding:8px 16px;font-size:12px;letter-spacing:.1em;text-transform:uppercase;color:#b3b3b3;border-bottom:1px solid #2a2a2a}
+  .sp-cols span:first-child,.pl-idx{text-align:center}
+  .sp-cols span:last-child,.pl-dur{text-align:right}
+  .pl-list{flex:1;min-height:0;overflow-y:auto;overscroll-behavior:contain;padding:8px 24px 12px;scrollbar-width:thin;scrollbar-color:#727272 transparent}
+  .pl-list::-webkit-scrollbar{width:12px} .pl-list::-webkit-scrollbar-thumb{background:#727272;border:3px solid #121212;border-radius:8px}
+  .pl-row{width:100%;height:56px;padding:0 16px;text-align:left;font:inherit;font-size:14px;color:#b3b3b3;background:transparent;border:0;border-radius:4px;cursor:pointer}
+  .pl-row:hover{background:rgba(255,255,255,.1)}
+  .pl-row:focus-visible{outline:2px solid #fff;outline-offset:-2px}
+  .pl-row.on .pl-t b{color:#1ed760}
+  .pl-idx{font-size:15px;font-variant-numeric:tabular-nums}
+  .pl-row:hover .pl-idx{font-size:0}
+  .pl-row:hover .pl-idx::before{content:"\25B6";font-size:12px;color:#fff}
+  .pl-t,.pl-alb{min-width:0} .pl-t b,.pl-t small,.pl-alb{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pl-t b{font-weight:400;font-size:16px;color:#fff}
+  .pl-t small{font-size:14px;margin-top:2px}
+  .pl-row:hover .pl-t small,.pl-row:hover .pl-alb{color:#fff}
+  .pl-empty{padding:20px 16px;font-size:14px;color:#b3b3b3}
+  .pl-embed{flex:none;display:block;width:calc(100% - 16px);height:80px;margin:0 8px 8px;border:0;border-radius:12px}
+  @media(max-width:700px){
+    .sp-cols,.pl-row{grid-template-columns:32px minmax(0,1fr) 48px;column-gap:10px}
+    .sp-cols span:nth-child(3),.pl-alb{display:none}
+    .sp-cols{margin:0 8px}.pl-list{padding:6px 8px}.sp-hero,.sp-tools{padding-left:14px;padding-right:14px}
   }
 
-  /* ================= INTRO / LOADING SCREEN ================= */
+  /* ===== WINDOWS 11 TASKBAR ===== */
+  .taskbar{position:fixed;left:0;right:0;bottom:0;height:48px;z-index:50;display:flex;align-items:center;justify-content:space-between;
+    padding:0 6px;background:#000;border-top:1px solid #1f1f1f;color:#fff;font-style:normal;
+    font-family:"Segoe UI Variable","Segoe UI",system-ui,-apple-system,Arial,sans-serif;user-select:none}
+  .tb-left,.tray{display:flex;align-items:center;gap:2px;min-width:0}
+  .tbtn{position:relative;height:40px;min-width:44px;padding:0 10px;display:flex;align-items:center;justify-content:center;gap:8px;
+    background:transparent;color:#fff;border:0;border-radius:5px;font:inherit;font-size:13px;white-space:nowrap;cursor:pointer}
+  .tbtn:hover{background:rgba(255,255,255,.09)}
+  .tbtn:active{background:rgba(255,255,255,.05)}
+  .tbtn:focus-visible{outline:2px solid #fff;outline-offset:-2px}
+  .tbtn svg{width:20px;height:20px}
+  .start svg{width:22px;height:22px;fill:var(--sage);stroke:none}
+  .app{padding:0 14px}
+  .app svg{color:var(--lt)}
+  .app{touch-action:none}
+  .app::after{content:"";position:absolute;bottom:2px;left:50%;width:6px;height:3px;border-radius:3px;background:#8f8f8f;transform:translateX(-50%);transition:width .15s;opacity:0}
+  .app[data-s=open]::after,.app[data-s=focus]::after{opacity:1}
+  .app[data-s=focus]{background:rgba(255,255,255,.1)}
+  .app[data-s=focus]::after{width:16px;background:var(--sage)}
+  .app.dragging{z-index:6;background:rgba(255,255,255,.16);transition:none}
+  .tray .wf{width:19px;height:19px;stroke-width:2}
+  .tray .tbtn{padding:0 8px}
+  .tray svg{width:17px;height:17px;stroke-width:1.5}
+  .clock{flex-direction:column;gap:0;align-items:flex-end;justify-content:center;font-size:12px;line-height:1.3;padding:0 8px;cursor:default}
+  @media(max-width:600px){.app span{display:none}.app{padding:0 12px}.tray .wifi{display:none}}
+  @media(max-width:380px){.tray .chev{display:none}}
+
+/* ================= INTRO / LOADING SCREEN ================= */
   body.locked{overflow:hidden}
   #intro{position:fixed;inset:0;z-index:1000;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;
-    color:var(--cream);background:rgba(4,7,5,.8);
+    color:var(--lt);background:rgba(4,7,5,.8);
     -webkit-backdrop-filter:blur(16px) brightness(.6);backdrop-filter:blur(16px) brightness(.6);
     transition:opacity .8s ease,visibility .8s}
   #intro.out{opacity:0;visibility:hidden;pointer-events:none}
@@ -243,11 +180,11 @@
   @keyframes introIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
   .welcome h1{font-size:clamp(28px,7vw,54px);font-weight:800;line-height:1.1}
   .enter{font:inherit;font-weight:800;font-size:clamp(15px,3.8vw,18px);padding:12px 28px;color:var(--ink);
-    background:var(--cream);border:3px solid var(--ink);outline:2px solid var(--sage);box-shadow:5px 5px 0 var(--rust);
+    background:var(--lt);border:3px solid var(--ink);outline:2px solid var(--sage);box-shadow:5px 5px 0 var(--rust);
     cursor:pointer;transition:transform .12s,box-shadow .12s}
   .enter:hover{transform:translate(2px,2px);box-shadow:3px 3px 0 var(--rust)}
   .enter:focus-visible{outline:3px solid #fff;outline-offset:2px}
-  .warn{display:flex;align-items:center;gap:8px;font-size:12.5px;line-height:1.4;color:var(--cream2);
+  .warn{display:flex;align-items:center;gap:8px;font-size:12.5px;line-height:1.4;color:var(--lt);
     border:1px solid var(--sage);background:rgba(0,0,0,.35);padding:8px 12px;text-align:left}
   .warn svg{width:16px;height:16px}
 
@@ -261,24 +198,9 @@
   .warn svg{width:1.3em;height:1.3em}
 
 
-  /* ===== PHONES: always show the landscape layout. In portrait the whole page is turned sideways and scaled to fit (never stretched). ===== */
-  @media (orientation:landscape) and (max-height:539px){
-    body{padding:8px;align-items:center}
-    .stage{width:min(calc(100vw - 16px),calc((100vh - 16px) * 16 / 9))}
-  }
-  @media (orientation:portrait) and (max-width:600px){
-    html{overflow:hidden}
-    body{
-      position:fixed;left:50%;top:50%;
-      width:100vh;width:100dvh;height:100vw;height:100dvw;min-height:0;
-      transform:translate(-50%,-50%) rotate(90deg);
-      padding:8px;overflow:hidden;align-items:center;
-    }
-    .stage{width:min(calc(100vh - 16px),calc((100vw - 16px) * 16 / 9));width:min(calc(100dvh - 16px),calc((100dvw - 16px) * 16 / 9))}
-  }
+  
   @media (prefers-reduced-motion:reduce){#intro,#intro.ready .welcome{transition:none;animation:none}}
 </style>
-
 </head>
 <body class="locked">
 <noscript><style>#intro{display:none}</style></noscript>
@@ -314,151 +236,136 @@
   <symbol id="note" viewBox="0 0 16 16"><path d="M6 12.5V3l7-1.5v9"/><circle cx="4.5" cy="12.5" r="1.5"/><circle cx="11.5" cy="10.5" r="1.5"/></symbol>
 </svg>
 
-<div class="stage">
-<div class="wrap">
-  <div class="tabs" role="tablist">
-    <button class="tab" type="button" role="tab" aria-selected="true" aria-controls="panelArchive" data-panel="panelArchive"><svg class="i"><use href="#file"/></svg>ARCH!VE</button>
-    <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="panelMusic" data-panel="panelMusic"><svg class="i"><use href="#note"/></svg>MUS!C</button>
-    <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="panelPlaylist" data-panel="panelPlaylist"><svg class="i"><use href="#note"/></svg>PLAYL!ST</button>
-  </div>
-  <div class="window">
-    <div class="titlebar">
-      <span><svg class="i"><use href="#laptop"/></svg>ceiko_mill's computer !! <small class="ver">VERS!ON 0.0.5.5</small></span>
-      <span class="x">X</span>
-    </div>
-    <div class="toolbar">
-      <div class="icons">
-        <svg class="i"><use href="#globe"/></svg><svg class="i"><use href="#home"/></svg>
-        <svg class="i"><use href="#search"/></svg><svg class="i"><use href="#mail"/></svg>
-      </div>
-      <div><a href="#">My Account</a> | <a href="#">Sign Out</a></div>
-    </div>
 
-    <div class="body" id="panelArchive" role="tabpanel">
-      <!-- TOP: avatar | profile | DN  /  banner | note -->
-      <div class="row top">
+<div class="desktop">
+  <!-- ARCHIVE -->
+  <section class="win" id="wArchive" data-icon="file" data-title="ARCH!VE" data-ver="VERS!ON 0.0.5.5"><div class="panel" id="panelArchive">
+    <div class="arch">
+      <div class="hero">
+        <div class="pic bannerimg" style="background-image:url('images/Banner_Mill.jpg')"></div>
         <div class="pic avatar" style="background-image:url('images/Avatar_Mill.jpg')"></div>
-
-        <div class="prof">
-          <h2 class="head"><svg class="i"><use href="#bubble"/></svg># CE!KO_MILL</h2>
-          <hr class="rule">
-          <p class="text">
-            <b>ceiko_mill</b><br>
+        <div class="hero-name">ceiko_mill</div>
+      </div>
+      <aside class="side">
+        <section class="card">
+          <h2><svg class="i"><use href="#bubble"/></svg># CE!KO_MILL</h2>
+          <p class="nb">
             % <b>HALF FILO / HALF CHINESE</b> !!<br>
             <span class="hl"><u>male</u></span> <span class="hl">he/him</span><br>
             <span class="hl"><u>Leo</u></span> <u>August</u> !! %
           </p>
-        </div>
-
-        <div class="dn">
-          <h2 class="head"><svg class="i"><use href="#cloud"/></svg># DN!</h2>
-          <hr class="rule">
-          <p class="text">
+        </section>
+        <section class="card">
+          <h2><svg class="i"><use href="#cloud"/></svg># DN!</h2>
+          <p class="nb">
             <span class="hl">Do not Interact</span> : if you're a <b>pedophile</b>,
             <b>flat earther</b>, <u>force religions</u>, <u>force genders</u>,
             if ur <b>debating politics or religion</b>.
           </p>
-        </div>
-
-        <div class="pic bannerimg" style="background-image:url('images/Banner_Mill.jpg')"></div>
-
-        <div class="note">
-          <div class="nh">N0TE%!?</div>
-          <div class="nb">
+        </section>
+      </aside>
+      <div class="main">
+        <section class="card">
+          <h2>N0TE%!?</h2>
+          <p class="nb">
             <b>mill</b> \ ˈmil \ <i>n</i>
             <b>1</b> : An unyielding execution of a routine that requires no sentience.
             <b>2</b> : An irrecoverable condition of automatic labor that manufactures architecture through the endless repetition of a simple action.
+          </p>
+        </section>
+        <section class="card">
+          <h2><svg class="i"><use href="#onigiri"/></svg># AN!ME</h2>
+          <div class="nb anime">
+            <p>Armed Girls Machiavellism, Witch Craft Works, Mairimashita! Iruma-kun, Bocchi The Rock!</p>
+            <div class="thumbs">
+              <div class="pic thumb" style="background-image:url('images/Icon1_Mill.jpg')"></div>
+              <div class="pic thumb" style="background-image:url('images/Icon2_Mill.jpg')"></div>
+              <div class="pic thumb" style="background-image:url('images/Icon3_Mill.jpg')"></div>
+            </div>
           </div>
-        </div>
+        </section>
+        <section class="card">
+          <h2><svg class="i"><use href="#file"/></svg># FAVS</h2>
+          <div class="nb lists">
+            <div><span class="hl">boys</span> : Luka (ALNST), Shion Tatsunami (Saihate Station)</div>
+            <div><span class="hl">girls</span> : Silence Suzuka (UMA), Hitori Gotoh (BTR)</div>
+            <div><span class="hl">hobbies</span> : Studying, Osu, Sudoku, Chess</div>
+          </div>
+        </section>
       </div>
-
-      <!-- ANIME | BANDS -->
-      <div class="row mid">
-        <div class="anime">
-          <div>
-            <h2 class="head"><svg class="i"><use href="#onigiri"/></svg># AN!ME</h2>
-            <p class="text">Armed Girls Machiavellism, Witch Craft Works, Mairimashita! Iruma-kun, Bocchi The Rock!</p>
-          </div>
-          <div class="thumbs">
-            <div class="pic thumb" style="background-image:url('images/Icon1_Mill.jpg')"></div>
-            <div class="pic thumb" style="background-image:url('images/Icon2_Mill.jpg')"></div>
-            <div class="pic thumb" style="background-image:url('images/Icon3_Mill.jpg')"></div>
-          </div>
-        </div>
-        <div>
-          <h2 class="head"><svg class="i"><use href="#note"/></svg># PLAYL!ST</h2>
-          <p class="text">My Spotify playlist! Browse it in the PLAYL!ST tab, or open it directly (no Spotify account needed to see it).</p>
-          <div class="plinks">
-            <button class="plink" type="button" id="goPlaylist">Browse playlist</button>
-            <a class="plink" href="https://open.spotify.com/playlist/71fnYEGAXnxM7I5WVB4umN" target="_blank" rel="noopener noreferrer">Open on Spotify &#8599;</a>
-          </div>
-        </div>
-      </div>
-
-      <!-- LISTS -->
-      <div class="row lists text">
-        <div><span class="hl">boys</span> : Luka (ALNST), Shion Tatsunami (Saihate Station)</div>
-        <div><span class="hl">girls</span> : Silence Suzuka (UMA), Hitori Gotoh (BTR)</div>
-        <div><span class="hl">hobbies</span> : Studying, Osu, Sudoku, Chess</div>
-      </div>
-
-      <div class="footer"></div>
-    </div>
-
-    <!-- MUSIC TAB -->
-    <div class="body" id="panelMusic" role="tabpanel" hidden>
-      <div class="mp">
-        <div class="pic mp-cover" style="background-image:url('images/Avatar_Mill.jpg')"></div>
-        <div class="mp-main">
-          <div>
-            <div class="p-name" id="pName">loading...</div>
-            <div class="p-track" id="pTrack">Track 0/0</div>
-            <div class="p-time" id="pTime">0:00 / 0:00</div>
-          </div>
-          <input type="range" id="pSeek" min="0" max="1000" value="0" aria-label="Seek">
-          <div class="p-ctrl">
-            <button class="pbtn" id="pPrev" type="button" aria-label="Previous"><svg class="i"><use href="#p-prev"/></svg></button>
-            <button class="pbtn p-play" id="pPlay" type="button" aria-label="Play or pause"><svg class="i"><use id="pPlayUse" href="#p-play"/></svg></button>
-            <button class="pbtn" id="pNext" type="button" aria-label="Next"><svg class="i"><use href="#p-next"/></svg></button>
-          </div>
-          <div class="p-vol">
-            <button class="pbtn" id="pMute" type="button" aria-label="Mute"><svg class="i"><use id="pMuteUse" href="#p-vol"/></svg></button>
-            <input type="range" id="pVol" min="0" max="200" value="25" aria-label="Volume (up to 200%)">
-            <span class="p-pct" id="pPct">25%</span>
-          </div>
-          <button class="pbtn p-bass" id="pBass" type="button" aria-pressed="false"><span>Bass boost</span><span id="pBassState">OFF</span></button>
-        </div>
-      </div>
-      <div class="footer"></div>
-    </div>
-
-    <!-- PLAYLIST TAB -->
-    <div class="body" id="panelPlaylist" role="tabpanel" hidden>
-      <div class="pl">
-        <!-- custom track list (filled from playlist.csv) -->
-        <div class="pl-app" id="plApp" hidden>
-          <div class="pl-bar">
-            <input type="search" id="plSearch" placeholder="search songs, artists, albums..." aria-label="Search the playlist" autocomplete="off">
-            <span class="pl-count" id="plCount"></span>
-          </div>
-          <div class="pl-list" id="plList"></div>
-          <iframe class="pl-embed" id="plEmbed" title="Selected song" hidden
-            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
-        </div>
-        <!-- fallback while playlist.csv is missing: Spotify's own player (first 100 songs only) -->
-        <div class="pl-fb" id="plFallback">
-          <iframe class="spotify" title="ceiko_mill's Spotify playlist"
-            src="https://open.spotify.com/embed/playlist/71fnYEGAXnxM7I5WVB4umN?utm_source=generator&theme=0"
-            loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
-        </div>
-        <p class="pl-note">Want the whole thing on Spotify?
-          <a class="plink" href="https://open.spotify.com/playlist/71fnYEGAXnxM7I5WVB4umN" target="_blank" rel="noopener noreferrer">Click here to see my Spotify playlist &#8599;</a></p>
-      </div>
-      <div class="footer"></div>
     </div>
   </div>
+  </section>
+
+  <!-- MUSIC -->
+  <section class="win" id="wMusic" data-icon="note" data-title="MUS!C"><div class="panel center" id="panelMusic">
+    <div class="mp">
+      <div class="pic mp-cover" style="background-image:url('images/Avatar_Mill.jpg')"></div>
+      <div class="mp-main">
+        <div>
+          <div class="p-name" id="pName">loading...</div>
+          <div class="p-track" id="pTrack">Track 0/0</div>
+          <div class="p-time" id="pTime">0:00 / 0:00</div>
+        </div>
+        <input type="range" id="pSeek" min="0" max="1000" value="0" aria-label="Seek">
+        <div class="p-ctrl">
+          <button class="pbtn" id="pPrev" type="button" aria-label="Previous"><svg class="i"><use href="#p-prev"/></svg></button>
+          <button class="pbtn p-play" id="pPlay" type="button" aria-label="Play or pause"><svg class="i"><use id="pPlayUse" href="#p-play"/></svg></button>
+          <button class="pbtn" id="pNext" type="button" aria-label="Next"><svg class="i"><use href="#p-next"/></svg></button>
+        </div>
+        <div class="p-vol">
+          <button class="pbtn" id="pMute" type="button" aria-label="Mute"><svg class="i"><use id="pMuteUse" href="#p-vol"/></svg></button>
+          <input type="range" id="pVol" min="0" max="200" value="25" aria-label="Volume (up to 200%)">
+          <span class="p-pct" id="pPct">25%</span>
+        </div>
+        <button class="pbtn p-bass" id="pBass" type="button" aria-pressed="false"><span>Bass boost</span><span id="pBassState">OFF</span></button>
+      </div>
+    </div>
+  </div>
+  </section>
+
+  <!-- PLAYLIST (Spotify look) -->
+  <section class="win" id="wPlaylist" data-icon="p-vol" data-title="PLAYL!ST"><div class="panel sp" id="panelPlaylist">
+    <div class="pl-app" id="plApp" hidden>
+      <div class="sp-hero">
+        <div class="sp-art"><svg class="i"><use href="#note"/></svg></div>
+        <div class="sp-meta"><small>Playlist</small><h1>ceiko_mill's playlist</h1><p><span class="pl-count" id="plCount"></span></p></div>
+      </div>
+      <div class="sp-tools">
+        <a class="sp-open" href="https://open.spotify.com/playlist/71fnYEGAXnxM7I5WVB4umN" target="_blank" rel="noopener noreferrer">Open on Spotify</a>
+        <input type="search" id="plSearch" placeholder="Search in playlist" aria-label="Search the playlist" autocomplete="off">
+        <select id="plField" aria-label="Search in"><option value="all">Search: All</option><option value="name">Title</option><option value="artist">Artist</option><option value="album">Album</option></select>
+        <select id="plSort" aria-label="Sort by"><option value="n">Sort: Playlist order</option><option value="name">Title</option><option value="artist">Artist</option><option value="album">Album</option></select>
+      </div>
+      <div class="sp-cols"><span>#</span><span>Title</span><span>Album</span><span>&#9719;</span></div>
+      <div class="pl-list" id="plList"></div>
+      <iframe class="pl-embed" id="plEmbed" title="Selected song" hidden allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+    </div>
+    <!-- fallback while playlist.csv is missing: Spotify's own embed, filling the whole tab -->
+    <div class="pl-fb" id="plFallback">
+      <iframe class="spotify" title="ceiko_mill's Spotify playlist"
+        src="https://open.spotify.com/embed/playlist/71fnYEGAXnxM7I5WVB4umN?utm_source=generator&theme=0"
+        loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+    </div>
+  </div>
+  </section>
 </div>
-</div>
+
+<!-- WINDOWS 11 TASKBAR -->
+<nav class="taskbar" aria-label="Taskbar">
+  <div class="tb-left">
+    <button class="tbtn start" type="button" aria-label="Start"><svg viewBox="0 0 24 24"><path d="M3 3h8.3v8.3H3zM12.7 3H21v8.3h-8.3zM3 12.7h8.3V21H3zM12.7 12.7H21V21h-8.3z"/></svg></button>
+    <button class="tbtn app" type="button" data-win="wArchive" data-s="closed"><svg class="i"><use href="#file"/></svg><span>ARCH!VE</span></button>
+    <button class="tbtn app" type="button" data-win="wMusic" data-s="closed"><svg class="i"><use href="#note"/></svg><span>MUS!C</span></button>
+    <button class="tbtn app" type="button" data-win="wPlaylist" data-s="closed"><svg class="i"><use href="#p-vol"/></svg><span>PLAYL!ST</span></button>
+  </div>
+  <div class="tray">
+    <button class="tbtn chev" type="button" aria-label="Show hidden icons"><svg class="i" viewBox="0 0 16 16"><path d="M4 10l4-4 4 4"/></svg></button>
+    <span class="tbtn wifi" aria-hidden="true"><svg class="i wf" viewBox="0 0 20 20"><path d="M2 7.2a11.5 11.5 0 0116 0M4.7 10.3a7.6 7.6 0 0110.6 0M7.4 13.3a3.7 3.7 0 015.2 0"/><circle cx="10" cy="16.4" r="1.3" fill="currentColor" stroke="none"/></svg></span>
+    <button class="tbtn" id="trayVol" type="button" aria-label="Mute or unmute"><svg class="i" viewBox="0 0 16 16"><use id="trayVolUse" href="#p-vol"/></svg></button>
+    <span class="tbtn clock"><span id="clkT">8:45 PM</span><span id="clkD">11/14/2026</span></span>
+  </div>
+</nav>
 
 <script>
 (() => {
@@ -570,6 +477,7 @@
     pVol.style.setProperty('--p', (vol / 2) + '%');
     $('pMuteUse').setAttribute('href', muted || vol === 0 ? '#p-mute' : '#p-vol');
     $('pMute').classList.toggle('on', muted);
+    $('trayVolUse').setAttribute('href', muted || vol === 0 ? '#p-mute' : '#p-vol');
   }
 
   /* ---------- PLAYBACK ---------- */
@@ -701,21 +609,109 @@
     input.addEventListener('pointercancel', end);
     input.addEventListener('lostpointercapture', end);
   }
-  const rotated = () => matchMedia('(orientation:portrait) and (max-width:600px)').matches;
+  const rotated = () => false;
   makeDraggable(pSeek);
   makeDraggable(pVol);
 
-  /* ---------- TABS (music keeps playing while you're on the archive tab) ---------- */
-  const tabBtns = document.querySelectorAll('.tab');
-  function showTab(id) {
-    tabBtns.forEach(b => {
-      const on = b.dataset.panel === id;
-      b.setAttribute('aria-selected', on);
-      $(b.dataset.panel).hidden = !on;
+  /* ---------- WINDOW MANAGER (drag, resize, minimize, maximize, close; layout remembered per visitor) ---------- */
+  const LS = 'ceiko.layout.v1';
+  const desk = document.querySelector('.desktop'), tbLeft = document.querySelector('.tb-left');
+  const MINW = 380, MINH = 280, BAR = 34;
+  const DEF = { wArchive: { w: 1100, h: 720, s: 'open' }, wMusic: { w: 780, h: 430, s: 'closed' }, wPlaylist: { w: 720, h: 640, s: 'closed' } };
+  const CAPS = '<button class="cap min" aria-label="Minimize"><svg viewBox="0 0 10 10"><path d="M0 5h10"/></svg></button><button class="cap mx" aria-label="Maximize"></button><button class="cap close" aria-label="Close"><svg viewBox="0 0 10 10"><path d="M.5.5l9 9M9.5.5l-9 9"/></svg></button>';
+  const RESTORE = '<path d="M2.5 2.5V.5h7v7h-2M.5 2.5h7v7h-7z"/>', SQUARE = '<rect x=".5" y=".5" width="9" height="9"/>';
+  let saved = {}; try { saved = JSON.parse(localStorage.getItem(LS)) || {}; } catch (e) {}
+  const W = {}; let zTop = 10, focusId = null;
+  const dsz = () => ({ w: desk.clientWidth, h: desk.clientHeight });
+  const small = () => innerWidth < 700;
+  const save = () => { try { localStorage.setItem(LS, JSON.stringify({ order: [...tbLeft.querySelectorAll('.app')].map(b => b.dataset.win), focus: focusId,
+    wins: Object.fromEntries(Object.entries(W).map(([k, v]) => [k, { x: v.x, y: v.y, w: v.w, h: v.h, max: v.max, s: v.s, z: v.z }])) })); } catch (e) {} };
+  const clamp = v => { const d = dsz();
+    v.w = Math.max(Math.min(MINW, d.w), Math.min(v.w, d.w)); v.h = Math.max(Math.min(MINH, d.h), Math.min(v.h, d.h));
+    v.x = Math.min(Math.max(v.x, 120 - v.w), d.w - 120); v.y = Math.min(Math.max(v.y, 0), d.h - BAR); };
+  const refresh = () => Object.entries(W).forEach(([id, v]) => {
+    const e = v.el, m = v.max || small(), f = focusId === id && v.s === 'open';
+    e.classList.toggle('max', m); e.classList.toggle('hid', v.s !== 'open'); e.classList.toggle('focus', f);
+    if (m) { e.style.left = e.style.top = '0'; e.style.width = e.style.height = '100%'; }
+    else { clamp(v); e.style.left = v.x + 'px'; e.style.top = v.y + 'px'; e.style.width = v.w + 'px'; e.style.height = v.h + 'px'; }
+    e.style.zIndex = v.z;
+    v.mx.innerHTML = '<svg viewBox="0 0 10 10">' + (v.max ? RESTORE : SQUARE) + '</svg>';
+    v.btn.dataset.s = v.s === 'closed' ? 'closed' : f ? 'focus' : 'open';
+  });
+  const topOpen = () => Object.entries(W).filter(([, v]) => v.s === 'open').sort((a, b) => b[1].z - a[1].z)[0];
+  const focusWin = id => { W[id].z = ++zTop; focusId = id; refresh(); save(); };
+  const setState = (id, st) => { W[id].s = st;
+    if (st === 'open') { W[id].z = ++zTop; focusId = id; } else if (focusId === id) { const t = topOpen(); focusId = t ? t[0] : null; }
+    refresh(); save(); };
+  const track = (el, ev, mv, done) => { // pointer-capture drag helper
+    el.setPointerCapture(ev.pointerId); desk.classList.add('dragging');
+    const up = () => { el.removeEventListener('pointermove', mv); el.removeEventListener('pointerup', up); el.removeEventListener('pointercancel', up); desk.classList.remove('dragging'); done(); };
+    el.addEventListener('pointermove', mv); el.addEventListener('pointerup', up); el.addEventListener('pointercancel', up); };
+
+  document.querySelectorAll('.win').forEach((e, i) => {
+    const id = e.id, d = DEF[id], sv = (saved.wins || {})[id] || {}, ds = dsz();
+    const v = { el: e, btn: tbLeft.querySelector('.app[data-win="' + id + '"]'), max: !!sv.max, s: sv.s || d.s, z: sv.z || ++zTop };
+    v.w = sv.w || Math.min(d.w, Math.round(ds.w * .9)); v.h = sv.h || Math.min(d.h, Math.round(ds.h * .9));
+    v.x = sv.x != null ? sv.x : Math.round((ds.w - v.w) / 2) + i * 30; v.y = sv.y != null ? sv.y : Math.max(0, Math.round((ds.h - v.h) / 2)) + i * 20;
+    zTop = Math.max(zTop, v.z);
+    e.insertAdjacentHTML('afterbegin', '<div class="wbar"><span class="tt"><svg class="i"><use href="#' + e.dataset.icon + '"/></svg>' + e.dataset.title + (e.dataset.ver ? ' <small class="ver">' + e.dataset.ver + '</small>' : '') + '</span><span class="caps">' + CAPS + '</span></div>');
+    ['n', 's', 'e', 'w', 'ne', 'nw', 'se', 'sw'].forEach(k => e.insertAdjacentHTML('beforeend', '<i class="rz" data-d="' + k + '"></i>'));
+    v.mx = e.querySelector('.mx'); W[id] = v;
+    const bar = e.querySelector('.wbar');
+    e.addEventListener('pointerdown', () => { if (focusId !== id) focusWin(id); });
+    e.querySelector('.min').onclick = () => setState(id, 'min');
+    e.querySelector('.close').onclick = () => setState(id, 'closed');
+    v.mx.onclick = () => { v.max = !v.max; refresh(); save(); };
+    bar.addEventListener('dblclick', ev => { if (!ev.target.closest('.cap')) v.mx.click(); });
+    bar.addEventListener('pointerdown', ev => {
+      if (ev.target.closest('.cap') || ev.button > 0 || v.max || small()) return;
+      const sx = ev.clientX, sy = ev.clientY, ox = v.x, oy = v.y;
+      track(bar, ev, m => { v.x = ox + m.clientX - sx; v.y = oy + m.clientY - sy; refresh(); }, save);
     });
-  }
-  tabBtns.forEach(b => b.addEventListener('click', () => showTab(b.dataset.panel)));
-  $('goPlaylist').addEventListener('click', () => showTab('panelPlaylist'));
+    e.querySelectorAll('.rz').forEach(h => h.addEventListener('pointerdown', ev => {
+      if (ev.button > 0 || v.max || small()) return;
+      ev.preventDefault();
+      const dir = h.dataset.d, s0 = { x: v.x, y: v.y, w: v.w, h: v.h }, sx = ev.clientX, sy = ev.clientY, dd = dsz();
+      const mw = Math.min(MINW, dd.w), mh = Math.min(MINH, dd.h);
+      track(h, ev, m => {
+        const dx = m.clientX - sx, dy = m.clientY - sy;
+        let w = s0.w, hh = s0.h, x = s0.x, y = s0.y;
+        if (dir.includes('e')) w = s0.w + dx;
+        if (dir.includes('w')) w = s0.w - dx;
+        if (dir.includes('s')) hh = s0.h + dy;
+        if (dir.includes('n')) hh = s0.h - dy;
+        w = Math.max(mw, Math.min(w, dd.w)); hh = Math.max(mh, Math.min(hh, dd.h));
+        if (dir.includes('w')) x = s0.x + s0.w - w;
+        if (dir.includes('n')) y = s0.y + s0.h - hh;
+        if (y < 0) { hh += y; y = 0; }
+        hh = Math.max(mh, Math.min(hh, dd.h - y));
+        Object.assign(v, { x, y, w, h: hh }); refresh();
+      }, save);
+    }));
+    v.btn.addEventListener('click', () => { if (v.s !== 'open') setState(id, 'open'); else if (focusId === id) setState(id, 'min'); else focusWin(id); });
+  });
+  (saved.order || []).forEach(id => { const b = tbLeft.querySelector('.app[data-win="' + id + '"]'); if (b) tbLeft.appendChild(b); });
+  { const t = topOpen(); focusId = saved.focus && W[saved.focus] && W[saved.focus].s === 'open' ? saved.focus : t ? t[0] : null; }
+  refresh();
+  addEventListener('resize', refresh);
+
+  /* taskbar: apps are pinned for good (no context menu), but can be dragged into a new order */
+  document.querySelector('.taskbar').addEventListener('contextmenu', e => e.preventDefault());
+  let td = null, noClick = false;
+  tbLeft.addEventListener('click', e => { if (noClick) { e.stopPropagation(); e.preventDefault(); } }, true);
+  tbLeft.addEventListener('pointerdown', e => { const b = e.target.closest('.app'); if (b && e.button < 1) td = { b, sx: e.clientX, left: b.getBoundingClientRect().left, moved: false }; });
+  addEventListener('pointermove', e => {
+    if (!td) return; const b = td.b, dx = e.clientX - td.sx;
+    if (!td.moved) { if (Math.abs(dx) < 6) return; td.moved = true; b.classList.add('dragging'); }
+    b.style.transform = '';
+    const want = td.left + dx, list = () => [...tbLeft.querySelectorAll('.app')];
+    const c = () => want + b.offsetWidth / 2, i = list().indexOf(b), prev = list()[i - 1], next = list()[i + 1];
+    if (prev && c() < prev.getBoundingClientRect().left + prev.offsetWidth / 2) tbLeft.insertBefore(b, prev);
+    else if (next && c() > next.getBoundingClientRect().left + next.offsetWidth / 2) tbLeft.insertBefore(next, b);
+    b.style.transform = 'translateX(' + (want - b.getBoundingClientRect().left) + 'px)';
+  });
+  const endDrag = () => { if (!td) return; if (td.moved) { td.b.classList.remove('dragging'); td.b.style.transform = ''; noClick = true; setTimeout(() => noClick = false, 0); save(); } td = null; };
+  addEventListener('pointerup', endDrag); addEventListener('pointercancel', endDrag);
 
   /* ---------- PLAYLIST: custom track list (reads playlist.csv exported from Spotify) ---------- */
   const PLAYLIST_CSV = 'playlist.csv';   // put the Exportify CSV next to index.html with this name
@@ -766,10 +762,10 @@
         const idx = document.createElement('span'); idx.className = 'pl-idx'; idx.textContent = s.n;
         const t = document.createElement('span'); t.className = 'pl-t';
         const nm = document.createElement('b'); nm.textContent = s.name;
-        const sm = document.createElement('small'); sm.textContent = [s.artist, s.album].filter(Boolean).join(' \u2022 ');
+        const sm = document.createElement('small'); sm.textContent = s.artist;
         t.append(nm, sm);
         const d = document.createElement('span'); d.className = 'pl-dur'; d.textContent = s.dur;
-        b.append(idx, t, d);
+        const al = document.createElement('span'); al.className = 'pl-alb'; al.textContent = s.album; b.append(idx, t, al, d);
         b.addEventListener('click', () => {
           if (!s.id) { window.open('https://open.spotify.com/search/' + encodeURIComponent(s.name + ' ' + s.artist), '_blank', 'noopener'); return; }
           if (activeBtn) activeBtn.classList.remove('on');
@@ -788,14 +784,16 @@
       };
       const render = () => {
         const q = search.value.trim().toLowerCase();
-        shown = q ? songs.filter(s => s.hay.includes(q)) : songs;
+        const fld = $('plField').value, srt = $('plSort').value;
+        shown = q ? songs.filter(s => (fld === 'all' ? s.hay : (s[fld] || '').toLowerCase()).includes(q)) : songs.slice();
+        if (srt !== 'n') shown.sort((a, b) => String(a[srt] || '').localeCompare(String(b[srt] || '')));
         list.replaceChildren(); drawn = 0; activeBtn = null; list.scrollTop = 0;
         count.textContent = (q ? shown.length + ' of ' : '') + songs.length.toLocaleString() + ' songs';
         if (!shown.length) { const e = document.createElement('div'); e.className = 'pl-empty'; e.textContent = 'no songs match that search'; list.appendChild(e); }
         more();
       };
       list.addEventListener('scroll', () => { if (list.scrollTop + list.clientHeight >= list.scrollHeight - 250) more(); });
-      search.addEventListener('input', render);
+      search.addEventListener('input', render); $('plField').addEventListener('change', render); $('plSort').addEventListener('change', render);
       render();
       fb.hidden = true; app.hidden = false;
     } catch (e) {
@@ -803,15 +801,33 @@
     }
   })();
 
+  /* ---------- TASKBAR CLOCK + TRAY ---------- */
+  const clkT = $('clkT'), clkD = $('clkD');
+  const tick = () => { const d = new Date();
+    clkT.textContent = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
+    clkD.textContent = d.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' }); };
+  tick(); setInterval(tick, 1000);
+  $('trayVol').addEventListener('click', () => $('pMute').click());
+
+  /* ---------- OFFLINE CACHE (service worker saves everything after the first visit) ---------- */
+  if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) navigator.serviceWorker.register('sw.js').catch(() => {});
+  function precache() {
+    if (!('serviceWorker' in navigator)) return;
+    const urls = tracks.map(t => new URL(t.src, location.href).href).filter(u => u.startsWith(location.origin));
+    navigator.serviceWorker.ready.then(r => r.active && r.active.postMessage({ type: 'precache', urls })).catch(() => {});
+  }
+
   /* ---------- INTRO ---------- */
   let n = 1;
   const dotTimer = setInterval(() => { n = n % 3 + 1; dots.textContent = '.'.repeat(n); }, 380);
   let loadErr = null;
   Promise.all([
-    loadTracks().catch(e => { loadErr = e; console.warn('Music load failed:', e); return []; }),
+    loadTracks().catch(e => { loadErr = e; console.warn('Music load failed:', e);
+      try { const c = JSON.parse(localStorage.getItem('ceiko.tracks')); if (c && c.length) { loadErr = null; return c; } } catch (_) {} return []; }),
     new Promise(r => setTimeout(r, MIN_LOAD_MS))
   ]).then(async ([list]) => {
     tracks = list;
+    if (list.length) { try { localStorage.setItem('ceiko.tracks', JSON.stringify(list)); } catch (_) {} precache(); }
     if (tracks.length) {
       newOrder(-1); warnUnmatched();
       await preloadFirst(PRELOAD_TIMEOUT_MS);   // wait for the first song before letting you in
