@@ -1484,12 +1484,12 @@
   /* ---------- ON-SCREEN KEYBOARD (phones): our own small keyboard for the search bars, so the phone's portrait keyboard never opens ---------- */
   const VK_SEL = '#plSearch, .st-q';   // the search bars that get it
   const VK_LAYERS = {
-    abc: [['q','w','e','r','t','y','u','i','o','p'], [' ','a','s','d','f','g','h','j','k','l',' '], ['z','x','c','v','b','n','m','BS'], ['SYM','-',"'",'SP','.','GO']],
+    abc: [['q','w','e','r','t','y','u','i','o','p'], [' ','a','s','d','f','g','h','j','k','l',' '], ['SH','z','x','c','v','b','n','m','BS'], ['SYM','-',"'",'SP','.','GO']],
     sym: [['1','2','3','4','5','6','7','8','9','0'], ['-','_','.',',',"'",'"','(',')','&','!'], ['/',':',';','?','@','#','+','=','BS'], ['ABC','SP','GO']]
   };
-  const VK_LABEL = { BS: '\u232B', SP: 'space', GO: 'Go', SYM: '?123', ABC: 'abc' };
+  const VK_LABEL = { BS: '\u232B', SP: 'space', GO: 'Go', SYM: '?123', ABC: 'abc', SH: '\u21E7' };
   const vk = el('div', 'vk'); vk.hidden = true; vk.setAttribute('aria-hidden', 'true'); document.body.append(vk);
-  let vkT = null, vkLayer = 'abc', vkRep = null;
+  let vkT = null, vkLayer = 'abc', vkRep = null, vkShift = false;
   const stopRep = () => { clearTimeout(vkRep); clearInterval(vkRep); vkRep = null; };
   function drawVK() {
     vk.replaceChildren();
@@ -1497,22 +1497,27 @@
       const row = el('div', 'vk-r');
       r.forEach(k => {
         if (k === ' ') { row.append(el('span', 'vk-s')); return; }
-        const cls = k === 'BS' || k === 'SYM' || k === 'ABC' ? ' w' : k === 'SP' ? ' sp' : k === 'GO' ? ' go' : '';
-        const b = el('button', 'vk-k' + cls, VK_LABEL[k] || k); b.type = 'button'; b.tabIndex = -1; b.dataset.k = k; row.append(b);
+        const cls = k === 'BS' || k === 'SYM' || k === 'ABC' || k === 'SH' ? ' w' : k === 'SP' ? ' sp' : k === 'GO' ? ' go' : '';
+        const b = el('button', 'vk-k' + cls + (k === 'SH' && vkShift ? ' on' : ''), VK_LABEL[k] || (vkShift ? k.toUpperCase() : k));
+        b.type = 'button'; b.tabIndex = -1; b.dataset.k = k; row.append(b);
       });
       vk.append(row);
     });
   }
-  const showVK = inp => { vkT = inp; vkLayer = 'abc'; drawVK(); vk.hidden = false; };
+  const showVK = inp => { vkT = inp; vkLayer = 'abc'; vkShift = false; drawVK(); vk.hidden = false; };
   const hideVK = () => { vkT = null; vk.hidden = true; stopRep(); };
   function vkKey(k) {
     if (!vkT) return;
     if (k === 'SYM' || k === 'ABC') { vkLayer = k === 'SYM' ? 'sym' : 'abc'; drawVK(); return; }
+    if (k === 'SH') { vkShift = !vkShift; drawVK(); return; }
     if (k === 'GO') { const t = vkT; t.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true })); hideVK(); t.blur(); return; }
     let s = vkT.selectionStart, e = vkT.selectionEnd; if (s == null) s = e = vkT.value.length;
     if (k === 'BS') { if (s === e) { if (!s) return; s--; } vkT.setRangeText('', s, e, 'end'); }
-    else vkT.setRangeText(k === 'SP' ? ' ' : k, s, e, 'end');
-    vkT.dispatchEvent(new Event('input', { bubbles: true }));   // the playlist / start menu filter listens for this
+    else {
+      vkT.setRangeText(k === 'SP' ? ' ' : (vkShift ? k.toUpperCase() : k), s, e, 'end');
+      if (vkShift) { vkShift = false; drawVK(); }   // one tap = one capital
+    }
+    vkT.dispatchEvent(new Event('input', { bubbles: true }));
   }
   vk.addEventListener('pointerdown', e => {
     e.preventDefault();   // keep the cursor in the search bar
