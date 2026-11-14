@@ -87,6 +87,34 @@
   .thumbs{display:flex;gap:8px}
   .thumb{width:clamp(48px,14vw,68px);aspect-ratio:1;border:3px solid var(--ink);border-radius:clamp(12px,3.5vw,18px)}
 
+  .spotify{display:block;width:100%;height:352px;border:0;border-radius:12px;background:var(--ink)}
+  .pl{display:flex;flex-direction:column;gap:10px;padding:14px 0 16px}
+  .pl-note{font-size:13px;line-height:1.5;display:flex;flex-wrap:wrap;align-items:center;gap:8px}
+  .pl-app{display:flex;flex-direction:column;gap:8px}
+  .pl-fb{display:flex;flex-direction:column}
+  .pl-bar{display:flex;align-items:center;gap:10px}
+  .pl-bar input{flex:1;min-width:0;height:32px;padding:0 8px;font:inherit;font-size:12px;color:var(--ink);
+    background:var(--cream2);border:2px solid var(--ink);border-radius:0;-webkit-appearance:none;appearance:none}
+  .pl-bar input:focus-visible{outline:2px solid var(--rust);outline-offset:2px}
+  .pl-count{font-size:11px;font-weight:700;white-space:nowrap}
+  .pl-list{height:320px;overflow-y:auto;overscroll-behavior:contain;border:2px solid var(--ink);background:var(--cream2)}
+  .pl-row{display:grid;grid-template-columns:34px minmax(0,1fr) auto;column-gap:8px;align-items:center;width:100%;
+    text-align:left;font:inherit;font-size:12px;color:var(--ink);background:transparent;border:0;border-bottom:1px solid var(--line);
+    padding:6px 8px;cursor:pointer}
+  .pl-row:hover{background:var(--sage)}
+  .pl-row.on{background:var(--ink);color:var(--cream)}
+  .pl-row:focus-visible{outline:2px solid var(--rust);outline-offset:-3px}
+  .pl-idx,.pl-dur{font-size:11px;opacity:.75}
+  .pl-t{min-width:0}
+  .pl-t b,.pl-t small{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .pl-t small{font-size:11px;opacity:.8;margin-top:1px}
+  .pl-empty{padding:14px 10px;font-size:12px}
+  .pl-embed{display:block;width:100%;height:80px;border:0;border-radius:12px}
+  .plinks{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+  .plink{font:inherit;font-weight:800;font-size:12px;display:inline-flex;align-items:center;justify-content:center;
+    min-height:30px;padding:0 10px;color:var(--ink);background:var(--cream2);border:2px solid var(--ink);cursor:pointer;text-decoration:none}
+  .plink:hover{background:var(--sage)}
+  .plink:focus-visible{outline:2px solid var(--rust);outline-offset:2px}
   .lists{display:grid;grid-template-columns:1fr;gap:10px}
   .footer{height:20px;background:var(--cream2);border-top:1px solid var(--ink);margin:0 -12px}
 
@@ -166,6 +194,21 @@
     .mid{padding:.6cqw 0}
     .mid .text{line-height:1.35}
     .lists.text{font-size:1.1cqw}
+    .pl{flex:1;min-height:0;gap:1cqw;padding:1.2cqw 4cqw}
+    .spotify{flex:1;min-height:0;height:auto;border-radius:1.2cqw}
+    .pl-app{flex:1;min-height:0;gap:.8cqw}
+    .pl-fb{flex:1;min-height:0}
+    .pl-bar{flex:none;gap:1cqw}
+    .pl-bar input{height:2.6cqw;font-size:1.2cqw;padding:0 .8cqw;border-width:.25cqw}
+    .pl-count{font-size:1.1cqw}
+    .pl-list{flex:1;min-height:0;height:auto;border-width:.25cqw}
+    .pl-row{grid-template-columns:3.2cqw minmax(0,1fr) auto;column-gap:.8cqw;font-size:1.25cqw;padding:.5cqw .8cqw}
+    .pl-idx,.pl-dur,.pl-t small{font-size:1.05cqw}
+    .pl-empty{font-size:1.2cqw;padding:1.2cqw}
+    .pl-embed{flex:none;height:max(80px,7cqw);border-radius:1.2cqw}
+    .pl-note{flex:none;font-size:1.2cqw;gap:1cqw}
+    .plinks{gap:.8cqw;margin-top:.6cqw}
+    .plink{min-height:2.6cqw;padding:0 1cqw;font-size:1.1cqw;border-width:.25cqw}
 
     .lists{grid-template-columns:repeat(3,1fr);gap:1.4cqw}
     .footer{flex:none;margin:auto -1.2cqw 0;height:1.6cqw}
@@ -276,6 +319,7 @@
   <div class="tabs" role="tablist">
     <button class="tab" type="button" role="tab" aria-selected="true" aria-controls="panelArchive" data-panel="panelArchive"><svg class="i"><use href="#file"/></svg>ARCH!VE</button>
     <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="panelMusic" data-panel="panelMusic"><svg class="i"><use href="#note"/></svg>MUS!C</button>
+    <button class="tab" type="button" role="tab" aria-selected="false" aria-controls="panelPlaylist" data-panel="panelPlaylist"><svg class="i"><use href="#note"/></svg>PLAYL!ST</button>
   </div>
   <div class="window">
     <div class="titlebar">
@@ -342,8 +386,12 @@
           </div>
         </div>
         <div>
-          <h2 class="head"><svg class="i"><use href="#note"/></svg># B@NDS</h2>
-          <p class="text"></p>
+          <h2 class="head"><svg class="i"><use href="#note"/></svg># PLAYL!ST</h2>
+          <p class="text">My Spotify playlist! Browse it in the PLAYL!ST tab, or open it directly (no Spotify account needed to see it).</p>
+          <div class="plinks">
+            <button class="plink" type="button" id="goPlaylist">Browse playlist</button>
+            <a class="plink" href="https://open.spotify.com/playlist/71fnYEGAXnxM7I5WVB4umN" target="_blank" rel="noopener noreferrer">Open on Spotify &#8599;</a>
+          </div>
         </div>
       </div>
 
@@ -380,6 +428,31 @@
           </div>
           <button class="pbtn p-bass" id="pBass" type="button" aria-pressed="false"><span>Bass boost</span><span id="pBassState">OFF</span></button>
         </div>
+      </div>
+      <div class="footer"></div>
+    </div>
+
+    <!-- PLAYLIST TAB -->
+    <div class="body" id="panelPlaylist" role="tabpanel" hidden>
+      <div class="pl">
+        <!-- custom track list (filled from playlist.csv) -->
+        <div class="pl-app" id="plApp" hidden>
+          <div class="pl-bar">
+            <input type="search" id="plSearch" placeholder="search songs, artists, albums..." aria-label="Search the playlist" autocomplete="off">
+            <span class="pl-count" id="plCount"></span>
+          </div>
+          <div class="pl-list" id="plList"></div>
+          <iframe class="pl-embed" id="plEmbed" title="Selected song" hidden
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+        </div>
+        <!-- fallback while playlist.csv is missing: Spotify's own player (first 100 songs only) -->
+        <div class="pl-fb" id="plFallback">
+          <iframe class="spotify" title="ceiko_mill's Spotify playlist"
+            src="https://open.spotify.com/embed/playlist/71fnYEGAXnxM7I5WVB4umN?utm_source=generator&theme=0"
+            loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
+        </div>
+        <p class="pl-note">Want the whole thing on Spotify?
+          <a class="plink" href="https://open.spotify.com/playlist/71fnYEGAXnxM7I5WVB4umN" target="_blank" rel="noopener noreferrer">Click here to see my Spotify playlist &#8599;</a></p>
       </div>
       <div class="footer"></div>
     </div>
@@ -642,6 +715,93 @@
     });
   }
   tabBtns.forEach(b => b.addEventListener('click', () => showTab(b.dataset.panel)));
+  $('goPlaylist').addEventListener('click', () => showTab('panelPlaylist'));
+
+  /* ---------- PLAYLIST: custom track list (reads playlist.csv exported from Spotify) ---------- */
+  const PLAYLIST_CSV = 'playlist.csv';   // put the Exportify CSV next to index.html with this name
+  const PL_CHUNK = 100;                  // rows drawn at a time (more load as you scroll)
+  function parseCSV(text) {
+    const rows = []; let row = [], cell = '', q = false;
+    if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+    for (let i = 0; i < text.length; i++) {
+      const c = text[i];
+      if (q) {
+        if (c === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; }
+        else cell += c;
+      } else if (c === '"') q = true;
+      else if (c === ',') { row.push(cell); cell = ''; }
+      else if (c === '\n' || c === '\r') {
+        if (c === '\r' && text[i + 1] === '\n') i++;
+        row.push(cell); cell = ''; rows.push(row); row = [];
+      } else cell += c;
+    }
+    if (cell !== '' || row.length) { row.push(cell); rows.push(row); }
+    return rows.filter(r => r.length > 1 || (r[0] || '').trim() !== '');
+  }
+  (async () => {
+    const app = $('plApp'), fb = $('plFallback'), list = $('plList'), search = $('plSearch'), count = $('plCount'), embed = $('plEmbed');
+    try {
+      const r = await fetch(PLAYLIST_CSV, { cache: 'no-cache' });
+      if (!r.ok) throw new Error('HTTP ' + r.status);
+      const rows = parseCSV(await r.text());
+      const head = rows[0].map(h => h.trim().toLowerCase());
+      const col = (...names) => { for (const n of names) { const i = head.indexOf(n); if (i > -1) return i; } return -1; };
+      const iName = col('track name', 'name', 'title', 'song'), iArt = col('artist name(s)', 'artist name', 'artist', 'artists'),
+            iAlb = col('album name', 'album'), iDur = col('duration (ms)', 'duration_ms', 'duration'),
+            iId = col('track uri', 'spotify id', 'track id', 'spotify_id', 'uri', 'id');
+      if (iName < 0) throw new Error('no "Track Name" column');
+      const mmss = ms => { const t = Math.round(+ms / 1000); return isFinite(t) && t > 0 ? Math.floor(t / 60) + ':' + String(t % 60).padStart(2, '0') : ''; };
+      const songs = rows.slice(1).filter(c => (c[iName] || '').trim()).map((c, i) => {
+        const name = c[iName].trim(), artist = iArt > -1 ? (c[iArt] || '').replace(/;\s*/g, ', ') : '', album = iAlb > -1 ? c[iAlb] || '' : '';
+        const uri = iId > -1 ? (c[iId] || '').trim().split(':') : [], id = uri.pop() || '', kind = /^(track|episode)$/.test(uri[uri.length - 1] || '') ? uri[uri.length - 1] : 'track';
+        return { n: i + 1, name, artist, album, kind, id: /^[A-Za-z0-9]{22}$/.test(id) ? id : '', dur: iDur > -1 ? mmss(c[iDur]) : '',
+                 hay: (name + ' ' + artist + ' ' + album).toLowerCase() };
+      });
+      if (!songs.length) throw new Error('no songs in the file');
+
+      let shown = [], drawn = 0, activeBtn = null;
+      const row = s => {
+        const b = document.createElement('button');
+        b.type = 'button'; b.className = 'pl-row';
+        const idx = document.createElement('span'); idx.className = 'pl-idx'; idx.textContent = s.n;
+        const t = document.createElement('span'); t.className = 'pl-t';
+        const nm = document.createElement('b'); nm.textContent = s.name;
+        const sm = document.createElement('small'); sm.textContent = [s.artist, s.album].filter(Boolean).join(' \u2022 ');
+        t.append(nm, sm);
+        const d = document.createElement('span'); d.className = 'pl-dur'; d.textContent = s.dur;
+        b.append(idx, t, d);
+        b.addEventListener('click', () => {
+          if (!s.id) { window.open('https://open.spotify.com/search/' + encodeURIComponent(s.name + ' ' + s.artist), '_blank', 'noopener'); return; }
+          if (activeBtn) activeBtn.classList.remove('on');
+          activeBtn = b; b.classList.add('on');
+          embed.src = 'https://open.spotify.com/embed/' + s.kind + '/' + s.id + '?utm_source=generator&theme=0';
+          embed.title = s.name; embed.hidden = false;
+        });
+        return b;
+      };
+      const more = () => {
+        if (drawn >= shown.length) return;
+        const f = document.createDocumentFragment();
+        shown.slice(drawn, drawn + PL_CHUNK).forEach(s => f.appendChild(row(s)));
+        drawn = Math.min(shown.length, drawn + PL_CHUNK);
+        list.appendChild(f);
+      };
+      const render = () => {
+        const q = search.value.trim().toLowerCase();
+        shown = q ? songs.filter(s => s.hay.includes(q)) : songs;
+        list.replaceChildren(); drawn = 0; activeBtn = null; list.scrollTop = 0;
+        count.textContent = (q ? shown.length + ' of ' : '') + songs.length.toLocaleString() + ' songs';
+        if (!shown.length) { const e = document.createElement('div'); e.className = 'pl-empty'; e.textContent = 'no songs match that search'; list.appendChild(e); }
+        more();
+      };
+      list.addEventListener('scroll', () => { if (list.scrollTop + list.clientHeight >= list.scrollHeight - 250) more(); });
+      search.addEventListener('input', render);
+      render();
+      fb.hidden = true; app.hidden = false;
+    } catch (e) {
+      console.warn('playlist.csv not loaded, showing the Spotify player instead:', e);
+    }
+  })();
 
   /* ---------- INTRO ---------- */
   let n = 1;
