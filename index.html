@@ -51,8 +51,8 @@
   .panel.center{display:flex}
 
   /* ===== ARCHIVE ===== */
-  /* Tile layout: every card is the same compact size. Wide window = banner on top, 4 small cards in a row + 1 long card under them.
-     Medium = 2x2 small cards + the long one. Narrow = one column. The banner takes whatever height is left over, so it always fits. */
+  /* Tile layout: 3 small cards in one row, 2 medium cards in the row under them. Narrow window = one column.
+     The banner takes whatever height is left over, so it always fits. */
   .arch{--av:clamp(96px,14vw,150px);--ov:70px;display:grid;grid-template-columns:minmax(0,1fr);gap:14px;padding:clamp(12px,2vw,24px);align-content:start;max-width:1400px;margin:0 auto}
   #panelArchive{container:arch/size}
   .pic{background:var(--cream2) center/cover no-repeat}
@@ -71,18 +71,20 @@
   .arch .card .nb{flex:1;padding:8px 10px;font-size:12.5px;line-height:1.5}
   .anime{display:flex;flex-direction:column;gap:8px}
   .thumbs{display:flex;gap:6px}
-  .thumb{width:44px;aspect-ratio:1;border:2px solid var(--ink);border-radius:12px}
+  .thumb{width:40px;aspect-ratio:1;border:2px solid var(--ink);border-radius:12px}
   .lists{display:flex;flex-direction:column;gap:5px}
   @container arch (min-width:560px){
-    .cards{grid-template-columns:repeat(2,minmax(0,1fr))}
-    .c-long{grid-column:1/-1}
+    .cards{grid-template-columns:repeat(6,minmax(0,1fr))}
+    .c-sm{grid-column:span 2} .c-md{grid-column:span 3}
+  }
+  @container arch (max-height:480px) and (max-width:899px){   /* short window (phone sideways): smaller banner so the cards stay in reach */
+    .arch{--av:84px;--ov:44px} .bannerimg{aspect-ratio:16/4.5;max-height:150px}
   }
   @container arch (min-width:900px){
     .arch{--av:clamp(72px,18cqh,150px);--ov:calc(var(--av)*.47);height:100cqh;
       grid-template-rows:minmax(calc(var(--ov) + 72px),400px) auto;gap:clamp(10px,2cqh,16px);padding:clamp(10px,2.4cqh,22px) clamp(14px,2cqw,26px)}
     .hero{display:flex;flex-direction:column;min-height:0}
     .bannerimg{flex:1;min-height:0;aspect-ratio:auto;max-height:none}
-    .cards{grid-template-columns:repeat(4,minmax(0,1fr))}
   }
 
   /* ===== MUSIC ===== */
@@ -320,6 +322,15 @@
 
 
   
+  /* ================= PHONE HELD UPRIGHT: the page is turned 90 degrees so it shows landscape; people rotate their phone to read it ================= */
+  @media (orientation:portrait) and (pointer:coarse) and (max-width:600px){
+    html{background:var(--ink)}
+    body{position:fixed;top:0;left:0;width:100vh;height:100vw;width:100dvh;height:100dvw;transform-origin:0 0;transform:translateX(100vw) rotate(90deg);transform:translateX(100dvw) rotate(90deg)}
+    #intro{--u:min(1vh,1.6vw)}   /* the screen's width and height swap places */
+    .fly-start{width:min(480px,calc(100vh - 16px))}
+    .fly-hid,.fly-net,.fly-vol,.fly-cal{max-width:calc(100vh - 16px)}
+    .mp{grid-template-columns:clamp(110px,30vh,200px) minmax(0,1fr)} .mp-cover{max-width:none}
+  }
   @media (prefers-reduced-motion:reduce){#intro,#intro.ready .welcome{transition:none;animation:none}}
 </style>
 </head>
@@ -371,7 +382,7 @@
         <div class="hero-name">ceiko_mill</div>
       </div>
       <div class="cards">
-        <section class="card">
+        <section class="card c-sm">
           <h2><svg class="i"><use href="#bubble"/></svg># CE!KO_MILL</h2>
           <p class="nb">
             % <b>HALF FILO / HALF CHINESE</b> !!<br>
@@ -379,7 +390,7 @@
             <span class="hl"><u>Leo</u></span> <u>August</u> !! %
           </p>
         </section>
-        <section class="card">
+        <section class="card c-sm">
           <h2><svg class="i"><use href="#cloud"/></svg># DN!</h2>
           <p class="nb">
             <span class="hl">Do not Interact</span> : if you're a <b>pedophile</b>,
@@ -387,7 +398,7 @@
             if ur <b>debating politics or religion</b>.
           </p>
         </section>
-        <section class="card">
+        <section class="card c-sm">
           <h2><svg class="i"><use href="#onigiri"/></svg># AN!ME</h2>
           <div class="nb anime">
             <p>Armed Girls Machiavellism, Witch Craft Works, Mairimashita! Iruma-kun, Bocchi The Rock!</p>
@@ -398,7 +409,7 @@
             </div>
           </div>
         </section>
-        <section class="card">
+        <section class="card c-md">
           <h2><svg class="i"><use href="#file"/></svg># FAVS</h2>
           <div class="nb lists">
             <div><span class="hl">boys</span> : Luka (ALNST), Shion Tatsunami (Saihate Station)</div>
@@ -406,7 +417,7 @@
             <div><span class="hl">hobbies</span> : Studying, Osu, Sudoku, Chess</div>
           </div>
         </section>
-        <section class="card c-long">
+        <section class="card c-md">
           <h2>N0TE%!?</h2>
           <p class="nb">
             <b>mill</b> \ ˈmil \ <i>n</i>
@@ -589,6 +600,8 @@
   const MIN_LOAD_MS = 2200;    // how long the ". .. ..." loading screen shows at minimum
 
   const $ = id => document.getElementById(id);
+  const ROT_Q = '(orientation:portrait) and (pointer:coarse) and (max-width:600px)';   // phone held upright: the css turns the page sideways
+  const rot = () => matchMedia(ROT_Q).matches;
   const pTrack = $('pTrack');
   const intro = $('intro'), dots = $('dots'), enterBtn = $('enterBtn');
   const pName = $('pName'), pTime = $('pTime'), pSeek = $('pSeek');
@@ -907,7 +920,7 @@
     input.addEventListener('pointercancel', end);
     input.addEventListener('lostpointercapture', end);
   }
-  const rotated = () => false;
+  const rotated = () => rot();   // sliders read the finger along the other axis while the page is turned
   makeDraggable(pSeek);
   makeDraggable(pVol);
 
@@ -921,7 +934,7 @@
   let saved = {}; if (S.save && S.layout) { try { saved = JSON.parse(localStorage.getItem(LS)) || {}; } catch (e) {} }
   const W = {}; let zTop = 10, focusId = null;
   const dsz = () => ({ w: desk.clientWidth, h: desk.clientHeight });
-  const small = () => innerWidth < 700;
+  const small = () => rot() || innerWidth < 700 || (matchMedia('(pointer:coarse)').matches && Math.min(innerWidth, innerHeight) < 600);   // phones always get maximized windows
   writeLayout = () => { try { localStorage.setItem(LS, JSON.stringify({ order: [...tbLeft.querySelectorAll('.app')].map(b => b.dataset.win), focus: focusId,
     wins: Object.fromEntries(Object.entries(W).map(([k, v]) => [k, { x: v.x, y: v.y, w: v.w, h: v.h, max: v.max, s: v.s, z: v.z }])) })); } catch (e) {} };
   const save = () => changed();
@@ -999,7 +1012,7 @@
   document.querySelector('.taskbar').addEventListener('contextmenu', e => e.preventDefault());
   let td = null, noClick = false;
   tbLeft.addEventListener('click', e => { if (noClick) { e.stopPropagation(); e.preventDefault(); } }, true);
-  tbLeft.addEventListener('pointerdown', e => { const b = e.target.closest('.app'); if (b && e.button < 1) td = { b, sx: e.clientX, left: b.getBoundingClientRect().left, moved: false }; });
+  tbLeft.addEventListener('pointerdown', e => { const b = e.target.closest('.app'); if (b && e.button < 1 && !rot()) td = { b, sx: e.clientX, left: b.getBoundingClientRect().left, moved: false }; });
   addEventListener('pointermove', e => {
     if (!td) return; const b = td.b, dx = e.clientX - td.sx;
     if (!td.moved) { if (Math.abs(dx) < 6) return; td.moved = true; b.classList.add('dragging'); }
@@ -1326,7 +1339,7 @@
       open = on; menu.hidden = !on; box.classList.toggle('open', on); btn.setAttribute('aria-expanded', String(on));
       if (!on) return;
       menu.classList.remove('up'); const w = box.closest('.win');   // flip upward if the window would cut the list off
-      if (w && menu.getBoundingClientRect().bottom > w.getBoundingClientRect().bottom - 6) menu.classList.add('up');
+      if (w) { const m = menu.getBoundingClientRect(), r = w.getBoundingClientRect(); if (rot() ? m.left < r.left + 6 : m.bottom > r.bottom - 6) menu.classList.add('up'); }
       cur = sel.selectedIndex; mark();
     };
     const pick = i => { if (i !== sel.selectedIndex) { sel.selectedIndex = i; sel.dispatchEvent(new Event('change', { bubbles: true })); } sync(); show(false); btn.focus(); };
