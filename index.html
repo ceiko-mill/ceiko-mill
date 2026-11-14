@@ -138,6 +138,54 @@
     .sp-cols{margin:0 8px}.pl-list{padding:6px 8px}.sp-hero,.sp-tools{padding-left:14px;padding-right:14px}
   }
 
+  /* ===== INFO + SETTINGS WINDOWS ===== */
+  .panel.col{display:flex;flex-direction:column;overflow:hidden}
+  .tabs{flex:none;display:flex;background:var(--cream2);border-bottom:2px solid var(--ink)}
+  .tab{font:inherit;font-weight:800;font-size:13px;padding:9px 18px;color:var(--ink);background:transparent;border:0;border-right:2px solid var(--ink);cursor:pointer}
+  .tab:hover{background:var(--sage)}
+  .tab[aria-selected=true]{background:var(--ink);color:var(--lt)}
+  .tab:focus-visible{outline:2px solid var(--rust);outline-offset:-4px}
+  .tabbody{flex:1;min-height:0;overflow:auto}
+  .pane{display:flex;flex-direction:column;gap:14px;max-width:860px;margin:0 auto;padding:clamp(14px,2vw,26px);min-width:0}
+  .inf-head{display:flex;align-items:center;gap:16px}
+  .inf-av{flex:none;width:80px;aspect-ratio:1;border:3px solid var(--ink);border-radius:22px}
+  .inf-name{font-weight:800;font-size:clamp(16px,2.2vw,22px)}
+  .inf-ver{font-weight:800;font-size:clamp(22px,3.4vw,34px);line-height:1.1}
+  .kv{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 18px;font-size:13.5px;line-height:1.45}
+  .kv dt{font-weight:800} .kv dd{overflow-wrap:anywhere}
+  .ok{color:#1d4d2b} .bad{color:#7a2f2a}
+  .muted{font-size:12.5px;opacity:.8;line-height:1.5}
+  #logList{display:flex;flex-direction:column;gap:14px}
+  .rel ul{list-style:none;display:flex;flex-direction:column;gap:5px}
+  .tag{display:inline-block;min-width:6em;margin-right:6px;padding:0 5px;text-align:center;font-size:11px;font-weight:800;text-transform:uppercase;color:var(--lt);background:var(--ink)}
+  .tag.new,.tag.add{background:#1d4d2b} .tag.fix,.tag.rem{background:#8e2f27} .tag.chg{background:#7a5a1a}
+  .md{font-size:14px;line-height:1.6;overflow-wrap:anywhere}
+  .md h2,.md h3,.md h4{font-weight:800;margin:16px 0 6px;line-height:1.25} .md h2:first-child{margin-top:0}
+  .md h2{font-size:1.5em} .md h3{font-size:1.2em} .md h4{font-size:1.05em}
+  .md p{margin:0 0 10px} .md ul,.md ol{margin:0 0 10px;padding-left:22px} .md li{margin:2px 0}
+  .md code{font-family:ui-monospace,Consolas,monospace;font-style:normal;font-size:.9em;background:rgba(0,0,0,.14);padding:1px 4px}
+  .md pre{margin:0 0 12px;padding:10px 12px;overflow:auto;background:var(--ink);color:var(--lt);border:2px solid var(--ink)}
+  .md pre code{background:none;padding:0;font-size:12.5px;line-height:1.5}
+  .md a{color:var(--ink);font-weight:700}
+  .md hr{border:0;border-top:2px solid var(--ink);margin:14px 0}
+  .md table{width:100%;border-collapse:collapse;margin:0 0 12px;font-size:13px}
+  .md th,.md td{border:1px solid var(--ink);padding:5px 8px;text-align:left;vertical-align:top}
+  .md th{background:var(--cream2)}
+  .row{display:flex;align-items:flex-start;gap:12px;padding:9px 0;border-bottom:1px dashed var(--line);cursor:pointer}
+  .row:last-of-type{border-bottom:0}
+  .row input{flex:none;width:18px;height:18px;margin-top:2px;accent-color:var(--ink);cursor:pointer}
+  .row b{display:block;font-size:13.5px}
+  .row small{display:block;font-size:12px;opacity:.8;margin-top:2px;line-height:1.4}
+  .row.off{opacity:.5;cursor:default} .row.off input{cursor:default}
+  .btns{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px;align-items:center}
+  .btns .pbtn{height:34px;white-space:nowrap}
+  .pbtn:disabled{opacity:.45;cursor:default} .pbtn:disabled:hover{background:var(--cream2)}
+  .pbtn.danger:hover{background:#b9695f}
+  .pbtn.danger.arm{background:#8e2f27;color:#fff}
+  .stat{font-size:12.5px;font-weight:700}
+  .introopt{display:flex;align-items:center;gap:10px;font-size:clamp(12px,calc(var(--u)*1.3),17px);line-height:1.4;text-align:left;cursor:pointer}
+  .introopt input{flex:none;width:1.2em;height:1.2em;accent-color:var(--lt);cursor:pointer}
+
   /* ===== WINDOWS 11 TASKBAR ===== */
   .taskbar{position:fixed;left:0;right:0;bottom:0;height:48px;z-index:50;display:flex;align-items:center;justify-content:space-between;
     padding:0 6px;background:#000;border-top:1px solid #1f1f1f;color:#fff;font-style:normal;
@@ -164,6 +212,63 @@
   .clock{flex-direction:column;gap:0;align-items:flex-end;justify-content:center;font-size:12px;line-height:1.3;padding:0 8px;cursor:default}
   @media(max-width:600px){.app span{display:none}.app{padding:0 12px}.tray .wifi{display:none}}
   @media(max-width:380px){.tray .chev{display:none}}
+
+  /* ===== SPOTIFY-STYLE DROPDOWN (replaces the plain browser select in the playlist tab) ===== */
+  .sd{position:relative;flex:none}
+  .sd-btn{display:flex;align-items:center;gap:8px;height:34px;padding:0 10px 0 12px;font:inherit;font-size:13px;font-weight:700;color:#fff;background:#2a2a2a;border:0;border-radius:4px;cursor:pointer;white-space:nowrap}
+  .sd-btn:hover{background:#333}
+  .sd-btn:focus-visible,.sd.open .sd-btn{outline:2px solid #1ed760;outline-offset:0;background:#333}
+  .sd-btn svg{width:11px;height:11px;stroke-width:2;transition:transform .15s}
+  .sd.open .sd-btn svg{transform:rotate(180deg)}
+  .sd-menu{position:absolute;z-index:30;top:calc(100% + 6px);right:0;min-width:210px;padding:4px;background:#282828;border-radius:6px;box-shadow:0 16px 24px rgba(0,0,0,.4),0 6px 8px rgba(0,0,0,.25)}
+  .sd-menu.up{top:auto;bottom:calc(100% + 6px)}
+  .sd-h{padding:8px 12px 6px;font-size:12px;font-weight:700;color:#b3b3b3}
+  .sd-o{display:flex;align-items:center;justify-content:space-between;gap:16px;height:40px;padding:0 12px;font-size:14px;color:#fff;border-radius:3px;cursor:pointer}
+  .sd-o.act{background:rgba(30,215,96,.18)}
+  .sd-o.sel{color:#1ed760;font-weight:700}
+  .sd-o svg{width:14px;height:14px;stroke-width:2;opacity:0}
+  .sd-o.sel svg{opacity:1}
+
+  /* ===== START MENU + TRAY FLYOUTS ===== */
+  .tbtn.on{background:rgba(255,255,255,.09)}
+  .tray .wifi.off{opacity:.55} .tray .wx{display:none} .tray .wifi.off .wx{display:block}
+  .fly{position:fixed;z-index:60;bottom:56px;padding:12px;color:#fff;font-style:normal;font-size:13px;line-height:1.4;
+    font-family:"Segoe UI Variable","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
+    background:rgba(14,19,16,.94);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:1px solid #2b342d;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,.6)}
+  .fly-start{left:8px;width:min(480px,calc(100vw - 16px))}
+  .fly-hid,.fly-net,.fly-vol,.fly-cal{right:8px;max-width:calc(100vw - 16px)}
+  .fly-hid{display:flex;gap:4px} .fly-net{width:290px} .fly-vol{width:330px} .fly-cal{width:300px}
+  .fly button{font:inherit}
+  .st-q{width:100%;height:36px;margin-bottom:14px;padding:0 12px;font:inherit;color:#fff;background:#1b231e;border:1px solid #2f3a32;border-bottom:2px solid var(--sage);border-radius:5px;outline:0;-webkit-appearance:none;appearance:none}
+  .st-q:focus{border-bottom-color:var(--lt)}
+  .st-h{font-weight:700;margin:0 4px 8px}
+  .st-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(88px,1fr));gap:4px;min-height:96px;align-content:start}
+  .st-app,.hi{display:flex;flex-direction:column;align-items:center;gap:8px;padding:12px 4px 10px;color:#fff;font-size:12px;background:transparent;border:0;border-radius:6px;cursor:pointer}
+  .st-app svg,.hi svg{width:26px;height:26px;color:var(--lt)}
+  .st-app:hover,.hi:hover{background:rgba(255,255,255,.09)}
+  .st-app:focus-visible,.hi:focus-visible{outline:2px solid #fff;outline-offset:-2px}
+  .st-none{grid-column:1/-1;padding:18px 4px;color:#9aa595}
+  .st-foot{display:flex;align-items:center;gap:10px;margin:14px -12px -12px;padding:12px 16px;background:rgba(0,0,0,.4);border-radius:0 0 8px 8px}
+  .st-av{width:30px;height:30px;border-radius:50%;border:1px solid var(--sage);background:url(images/Avatar_Mill.jpg) center/cover}
+  .st-u{flex:1}
+  .st-pw svg{width:18px;height:18px}
+  .hi{width:96px} .hi small{font-size:11px;color:#9aa595} .hi.on{background:var(--rust)} .hi.on small{color:#fff}
+  .fl-t{font-weight:700;font-size:14px;margin-bottom:8px}
+  .fl-r{display:flex;justify-content:space-between;gap:16px;padding:7px 0;border-top:1px solid #222b25} .fl-r span{color:#b9c3b3;text-align:right}
+  .vf{display:flex;align-items:center;gap:10px} .vf-p{width:44px;text-align:right}
+  .vf-s{-webkit-appearance:none;appearance:none;flex:1;min-width:0;height:4px;border-radius:2px;outline:0;cursor:pointer;background:linear-gradient(to right,var(--lt) var(--p,0%),#3a443d var(--p,0%))}
+  .vf-s::-webkit-slider-thumb{-webkit-appearance:none;width:16px;height:16px;border-radius:50%;background:var(--lt);border:0}
+  .vf-s::-moz-range-thumb{width:16px;height:16px;border-radius:50%;background:var(--lt);border:0}
+  .vf-s:focus-visible{outline:2px solid #fff;outline-offset:6px}
+  .vf-np{display:flex;align-items:center;gap:4px;margin-top:12px;padding-top:12px;border-top:1px solid #222b25}
+  .vf-n{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .cl-big{font-size:15px;font-weight:600;margin-bottom:10px}
+  .cl-nav{display:flex;align-items:center;margin-bottom:6px} .cl-nav b{flex:1;font-weight:600}
+  .cl-nav .tbtn{height:32px;min-width:32px;padding:0} .cl-nav svg{width:14px;height:14px}
+  .cl-g{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;text-align:center}
+  .cl-g i{font-style:normal;display:grid;place-items:center;height:36px;border-radius:50%}
+  .cl-g .wd{height:26px;font-size:11px;color:#9aa595}
+  .cl-g .td{background:var(--lt);color:#000;font-weight:700}
 
 /* ================= INTRO / LOADING SCREEN ================= */
   body.locked{overflow:hidden}
@@ -219,7 +324,8 @@
   <div class="welcome">
     <h1>Welcome to ceiko_mill’s Portfolio!</h1>
     <button class="enter" id="enterBtn" type="button">Enter the website</button>
-    <p class="warn"><svg class="i"><use href="#p-warn"/></svg>Warning: music will play as soon as you press Enter. You can mute it or turn it down in the player.</p>
+    <p class="warn"><svg class="i"><use href="#p-warn"/></svg><span id="warnTxt">Warning: music will play as soon as you press Enter. You can mute it or turn it down in the player.</span></p>
+    <label class="introopt"><input type="checkbox" id="introSilent"><span>Don't play music when I enter (you can change this later in SETT!NGS)</span></label>
   </div>
 </div>
 
@@ -234,6 +340,8 @@
   <symbol id="cloud" viewBox="0 0 16 16"><path d="M4.5 12.5a3 3 0 010-6 4 4 0 017.5 1 2.5 2.5 0 01-.5 5z"/></symbol>
   <symbol id="onigiri" viewBox="0 0 16 16"><path d="M8 2.5L14 13H2z"/><path d="M6 10h4"/></symbol>
   <symbol id="note" viewBox="0 0 16 16"><path d="M6 12.5V3l7-1.5v9"/><circle cx="4.5" cy="12.5" r="1.5"/><circle cx="11.5" cy="10.5" r="1.5"/></symbol>
+  <symbol id="info" viewBox="0 0 16 16"><circle cx="8" cy="8" r="6"/><path d="M8 7.2v4M8 4.9v.2"/></symbol>
+  <symbol id="gear" viewBox="0 0 16 16"><circle cx="8" cy="8" r="2.2"/><path d="M8 1.5v2M8 12.5v2M1.5 8h2M12.5 8h2M3.4 3.4l1.4 1.4M11.2 11.2l1.4 1.4M12.6 3.4l-1.4 1.4M4.8 11.2l-1.4 1.4"/></symbol>
 </svg>
 
 
@@ -334,8 +442,8 @@
       <div class="sp-tools">
         <a class="sp-open" href="https://open.spotify.com/playlist/71fnYEGAXnxM7I5WVB4umN" target="_blank" rel="noopener noreferrer">Open on Spotify</a>
         <input type="search" id="plSearch" placeholder="Search in playlist" aria-label="Search the playlist" autocomplete="off">
-        <select id="plField" aria-label="Search in"><option value="all">Search: All</option><option value="name">Title</option><option value="artist">Artist</option><option value="album">Album</option></select>
-        <select id="plSort" aria-label="Sort by"><option value="n">Sort: Playlist order</option><option value="name">Title</option><option value="artist">Artist</option><option value="album">Album</option></select>
+        <select id="plField" aria-label="Search in" data-prefix="Search: "><option value="all">All</option><option value="name">Title</option><option value="artist">Artist</option><option value="album">Album</option></select>
+        <select id="plSort" aria-label="Sort by" data-prefix="Sort: "><option value="n">Playlist order</option><option value="name">Title</option><option value="artist">Artist</option><option value="album">Album</option></select>
       </div>
       <div class="sp-cols"><span>#</span><span>Title</span><span>Album</span><span>&#9719;</span></div>
       <div class="pl-list" id="plList"></div>
@@ -349,6 +457,81 @@
     </div>
   </div>
   </section>
+
+  <!-- INFO: version, changelog, readme (loaded from changelog.json and readme.md) -->
+  <section class="win" id="wInfo" data-icon="info" data-title="!NF0"><div class="panel col" id="panelInfo">
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" type="button" data-tab="about" aria-selected="true">About</button>
+      <button class="tab" role="tab" type="button" data-tab="log" aria-selected="false">Changelog</button>
+      <button class="tab" role="tab" type="button" data-tab="readme" aria-selected="false">Readme</button>
+    </div>
+    <div class="tabbody">
+      <div class="pane" data-pane="about">
+        <div class="inf-head">
+          <div class="pic inf-av" style="background-image:url('images/Avatar_Mill.jpg')"></div>
+          <div><div class="inf-name">ceiko_mill's computer</div><div class="inf-ver" id="infVer">version ...</div><div class="muted" id="infDate"></div></div>
+        </div>
+        <section class="card">
+          <h2><svg class="i"><use href="#info"/></svg># ABOUT TH!S S!TE</h2>
+          <dl class="nb kv">
+            <dt>Version</dt><dd id="aVer">-</dd>
+            <dt>Latest release</dt><dd id="aDate">-</dd>
+            <dt>Releases listed</dt><dd id="aCount">-</dd>
+            <dt>Songs</dt><dd id="aTracks">-</dd>
+            <dt>Offline mode</dt><dd id="aOffline">-</dd>
+            <dt>Saving</dt><dd id="aSaving">-</dd>
+          </dl>
+        </section>
+        <p class="muted">The version and the changelog come from <b>changelog.json</b>, and the readme comes from <b>readme.md</b>. Edit those files to update this window; you never need to touch index.html.</p>
+      </div>
+      <div class="pane" data-pane="log" hidden><div id="logList"></div></div>
+      <div class="pane" data-pane="readme" hidden><div class="md" id="mdReadme">loading...</div></div>
+    </div>
+  </div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section class="win" id="wSettings" data-icon="gear" data-title="SETT!NGS"><div class="panel" id="panelSettings">
+    <div class="pane">
+      <section class="card">
+        <h2><svg class="i"><use href="#note"/></svg># MUS!C</h2>
+        <div class="nb">
+          <label class="row"><input type="checkbox" id="sMusic"><span><b>Play music when I press Enter</b><small>Turn this off and the site opens silent. You can still press play in MUS!C any time.</small></span></label>
+          <label class="row"><input type="checkbox" id="sAudio"><span><b>Remember volume and bass boost</b><small>Your volume, mute and bass boost come back next visit.</small></span></label>
+        </div>
+      </section>
+      <section class="card">
+        <h2><svg class="i"><use href="#file"/></svg># SAV!NG</h2>
+        <div class="nb">
+          <label class="row"><input type="checkbox" id="sSave"><span><b>Save my settings on this device</b><small>Off = nothing is stored, so the site starts fresh every visit.</small></span></label>
+          <label class="row"><input type="checkbox" id="sAuto"><span><b>Autosave</b><small>Save every change straight away. Off = changes wait until you press Save now.</small></span></label>
+          <label class="row"><input type="checkbox" id="sLayout"><span><b>Remember window layout</b><small>Window positions, sizes, which windows are open and the taskbar order.</small></span></label>
+          <div class="btns"><button class="pbtn" id="sNow" type="button">Save now</button><span class="stat" id="sState"></span></div>
+        </div>
+      </section>
+      <section class="card">
+        <h2><svg class="i"><use href="#cloud"/></svg># OFFL!NE CACHE (sw.js)</h2>
+        <div class="nb">
+          <dl class="kv">
+            <dt>Service worker</dt><dd id="swState">checking...</dd>
+            <dt>Offline ready</dt><dd id="swReady">-</dd>
+            <dt>Saved files</dt><dd id="swFiles">-</dd>
+            <dt>Cache version</dt><dd id="swNames">-</dd>
+            <dt>Browser storage</dt><dd id="swUsage">-</dd>
+          </dl>
+          <div class="btns"><button class="pbtn" id="sRecheck" type="button">Check again</button><button class="pbtn danger" id="sClearCache" type="button">Clear offline cache and reload</button></div>
+        </div>
+      </section>
+      <section class="card">
+        <h2><svg class="i"><use href="#bubble"/></svg># RESET</h2>
+        <div class="nb">
+          <p>Reset settings puts every switch and the volume back to default. Reset site also wipes the saved windows, the song list, the offline cache and the service worker, then reloads.</p>
+          <div class="btns"><button class="pbtn danger" id="sResetSet" type="button">Reset settings</button><button class="pbtn danger" id="sResetSite" type="button">Reset site to default</button></div>
+        </div>
+      </section>
+    </div>
+  </div>
+  </section>
 </div>
 
 <!-- WINDOWS 11 TASKBAR -->
@@ -358,12 +541,14 @@
     <button class="tbtn app" type="button" data-win="wArchive" data-s="closed"><svg class="i"><use href="#file"/></svg><span>ARCH!VE</span></button>
     <button class="tbtn app" type="button" data-win="wMusic" data-s="closed"><svg class="i"><use href="#note"/></svg><span>MUS!C</span></button>
     <button class="tbtn app" type="button" data-win="wPlaylist" data-s="closed"><svg class="i"><use href="#p-vol"/></svg><span>PLAYL!ST</span></button>
+    <button class="tbtn app" type="button" data-win="wInfo" data-s="closed"><svg class="i"><use href="#info"/></svg><span>!NF0</span></button>
+    <button class="tbtn app" type="button" data-win="wSettings" data-s="closed"><svg class="i"><use href="#gear"/></svg><span>SETT!NGS</span></button>
   </div>
   <div class="tray">
     <button class="tbtn chev" type="button" aria-label="Show hidden icons"><svg class="i" viewBox="0 0 16 16"><path d="M4 10l4-4 4 4"/></svg></button>
-    <span class="tbtn wifi" aria-hidden="true"><svg class="i wf" viewBox="0 0 20 20"><path d="M2 7.2a11.5 11.5 0 0116 0M4.7 10.3a7.6 7.6 0 0110.6 0M7.4 13.3a3.7 3.7 0 015.2 0"/><circle cx="10" cy="16.4" r="1.3" fill="currentColor" stroke="none"/></svg></span>
-    <button class="tbtn" id="trayVol" type="button" aria-label="Mute or unmute"><svg class="i" viewBox="0 0 16 16"><use id="trayVolUse" href="#p-vol"/></svg></button>
-    <span class="tbtn clock"><span id="clkT">8:45 PM</span><span id="clkD">11/14/2026</span></span>
+    <button class="tbtn wifi" type="button" aria-label="Network"><svg class="i wf" viewBox="0 0 20 20"><path d="M2 7.2a11.5 11.5 0 0116 0M4.7 10.3a7.6 7.6 0 0110.6 0M7.4 13.3a3.7 3.7 0 015.2 0"/><circle cx="10" cy="16.4" r="1.3" fill="currentColor" stroke="none"/><path class="wx" d="M3 17L17 3"/></svg></button>
+    <button class="tbtn" id="trayVol" type="button" aria-label="Volume"><svg class="i" viewBox="0 0 16 16"><use id="trayVolUse" href="#p-vol"/></svg></button>
+    <button class="tbtn clock" type="button" aria-label="Calendar"><span id="clkT">8:45 PM</span><span id="clkD">11/14/2026</span></button>
   </div>
 </nav>
 
@@ -391,6 +576,97 @@
   const intro = $('intro'), dots = $('dots'), enterBtn = $('enterBtn');
   const pName = $('pName'), pTime = $('pTime'), pSeek = $('pSeek');
   const pVol = $('pVol'), pPct = $('pPct'), pBass = $('pBass');
+
+  /* ---------- USER SETTINGS (SETT!NGS window) ---------- */
+  const SKEY = 'ceiko.settings.v1', LAYOUT_KEY = 'ceiko.layout.v1';
+  const SDEF = { playOnEnter: true, save: true, autosave: true, layout: true, audio: true, vol: 25, muted: false, bass: false };
+  let S = { ...SDEF };
+  try {
+    const o = JSON.parse(localStorage.getItem(SKEY));
+    if (o && typeof o === 'object') Object.keys(SDEF).forEach(k => { if (typeof o[k] === typeof SDEF[k]) S[k] = o[k]; });
+  } catch (e) {}
+  S.vol = Math.min(200, Math.max(0, Math.round(S.vol) || 0));
+  let dirty = false, pending = null, resetting = false, writeLayout = () => {};
+  const WARN_ON = 'Warning: music will play as soon as you press Enter. You can mute it or turn it down in the player.';
+  const WARN_OFF = 'Music is off: the site will open silent. You can start it any time in the MUS!C window.';
+
+  function persistNow() {            // write settings (and the window layout) to this browser
+    clearTimeout(pending); pending = null;
+    if (resetting) return;
+    if (S.audio) { S.vol = vol; S.muted = muted; S.bass = bassOn; }
+    try {
+      localStorage.setItem(SKEY, JSON.stringify(S.save ? S : { save: false }));
+      if (S.save && S.layout) writeLayout(); else localStorage.removeItem(LAYOUT_KEY);
+    } catch (e) {}
+    dirty = false; updateSaveUI();
+  }
+  function changed() {               // something worth saving changed
+    if (!S.save) return;
+    if (S.autosave) { clearTimeout(pending); pending = setTimeout(persistNow, 200); }
+    else { dirty = true; updateSaveUI(); }
+  }
+  const audioChanged = () => { if (S.audio) changed(); };
+  addEventListener('pagehide', () => { if (pending) persistNow(); });
+
+  function syncIntro() {
+    $('introSilent').checked = !S.playOnEnter;
+    $('warnTxt').textContent = S.playOnEnter ? WARN_ON : WARN_OFF;
+  }
+  function updateSaveUI() {
+    const st = $('sState');
+    if (!S.save) { st.textContent = 'Not saving: everything resets when you close the tab'; st.className = 'stat bad'; }
+    else if (!S.autosave) { st.textContent = dirty ? 'Unsaved changes' : 'All changes saved'; st.className = 'stat ' + (dirty ? 'bad' : 'ok'); }
+    else { st.textContent = 'Autosave on: changes are saved as you make them'; st.className = 'stat ok'; }
+    $('sNow').disabled = !(S.save && !S.autosave && dirty);
+  }
+  function syncSettingsUI() {
+    [['sMusic', 'playOnEnter'], ['sSave', 'save'], ['sAuto', 'autosave'], ['sLayout', 'layout'], ['sAudio', 'audio']].forEach(([id, k]) => { $(id).checked = !!S[k]; });
+    ['sAuto', 'sLayout', 'sAudio'].forEach(id => { $(id).disabled = !S.save; $(id).closest('.row').classList.toggle('off', !S.save); });
+    updateSaveUI(); syncIntro();
+  }
+  $('sMusic').onchange = e => { S.playOnEnter = e.target.checked; syncSettingsUI(); changed(); };
+  $('introSilent').onchange = e => { S.playOnEnter = !e.target.checked; syncSettingsUI(); changed(); };
+  $('sSave').onchange = e => { S.save = e.target.checked; persistNow(); syncSettingsUI(); };
+  $('sAuto').onchange = e => { S.autosave = e.target.checked; persistNow(); syncSettingsUI(); };
+  $('sLayout').onchange = e => { S.layout = e.target.checked; changed(); syncSettingsUI(); };
+  $('sAudio').onchange = e => { S.audio = e.target.checked; changed(); syncSettingsUI(); };
+  $('sNow').onclick = persistNow;
+  $('sRecheck').onclick = () => refreshSW();
+
+  function resetSettings() {         // switches + volume back to default
+    S = { ...SDEF };
+    vol = SDEF.vol; muted = false; setBass(false); applyVol();
+    clearTimeout(pending); pending = null; dirty = false;
+    try { localStorage.removeItem(SKEY); } catch (e) {}
+    syncSettingsUI();
+  }
+  async function wipeOffline() {     // forget the service worker and its caches
+    try { if ('serviceWorker' in navigator) await Promise.all((await navigator.serviceWorker.getRegistrations()).map(r => r.unregister())); } catch (e) {}
+    try { if (window.caches) await Promise.all((await caches.keys()).map(k => caches.delete(k))); } catch (e) {}
+  }
+  async function clearCache() {
+    if (pending) persistNow();
+    await wipeOffline();
+    location.reload();
+  }
+  async function resetSite() {       // everything back to a first visit
+    clearTimeout(pending); pending = null; resetting = true;
+    try { Object.keys(localStorage).filter(k => k.startsWith('ceiko.')).forEach(k => localStorage.removeItem(k)); } catch (e) {}
+    await wipeOffline();
+    location.reload();
+  }
+  function arm(btn, label, run) {    // two-click confirm for the scary buttons
+    const orig = btn.textContent; let t = null;
+    btn.addEventListener('click', () => {
+      if (btn.classList.contains('arm')) { clearTimeout(t); btn.classList.remove('arm'); btn.textContent = orig; run(); return; }
+      btn.classList.add('arm'); btn.textContent = label;
+      t = setTimeout(() => { btn.classList.remove('arm'); btn.textContent = orig; }, 4000);
+    });
+  }
+  arm($('sResetSet'), 'Click again to reset settings', resetSettings);
+  arm($('sResetSite'), 'Click again: wipe everything', resetSite);
+  arm($('sClearCache'), 'Click again to clear and reload', clearCache);
+  syncSettingsUI();
 
   /* ---------- WHERE THE MUSIC LIVES ---------- */
   const pages = location.hostname.match(/^([^.]+)\.github\.io$/i);
@@ -451,7 +727,8 @@
   audio.crossOrigin = 'anonymous';
   audio.preload = 'auto';
   let ctx = null, gainNode = null, bassNode = null, mudNode = null;
-  let vol = 25, muted = false, bassOn = false;
+  let vol = S.audio ? S.vol : 25, muted = S.audio ? S.muted : false, bassOn = S.audio ? S.bass : false;
+  let volHook = () => {};   // the tray volume flyout plugs in here
 
   function initAudio() {
     const AC = window.AudioContext || window.webkitAudioContext;
@@ -474,10 +751,12 @@
     if (gainNode) gainNode.gain.setTargetAtTime(v, ctx.currentTime, 0.02);
     else audio.volume = Math.min(1, v);
     pPct.textContent = vol + '%';
+    pVol.value = vol;
     pVol.style.setProperty('--p', (vol / 2) + '%');
     $('pMuteUse').setAttribute('href', muted || vol === 0 ? '#p-mute' : '#p-vol');
     $('pMute').classList.toggle('on', muted);
     $('trayVolUse').setAttribute('href', muted || vol === 0 ? '#p-mute' : '#p-vol');
+    volHook();
   }
 
   /* ---------- PLAYBACK ---------- */
@@ -572,11 +851,11 @@
   $('pPlay').onclick = () => { if (!tracks.length) return; initAudio(); ctx && ctx.resume(); if (!audio.src) playCurrent(); else audio.paused ? audio.play() : audio.pause(); };
   $('pNext').onclick = next;
   $('pPrev').onclick = prev;
-  $('pMute').onclick = () => { muted = !muted; applyVol(); };
-  pVol.addEventListener('input', () => { vol = +pVol.value; if (vol > 0) muted = false; applyVol(); });
-  applyVol(); // sync slider fill + label with the default volume on load
-  pBass.onclick = () => {
-    bassOn = !bassOn;
+  $('pMute').onclick = () => { muted = !muted; applyVol(); audioChanged(); };
+  pVol.addEventListener('input', () => { vol = +pVol.value; if (vol > 0) muted = false; applyVol(); audioChanged(); });
+  applyVol(); // sync slider fill + label with the saved (or default) volume on load
+  function setBass(on) {
+    bassOn = on;
     if (bassNode) {
       bassNode.gain.setTargetAtTime(bassOn ? BASS_DB : 0, ctx.currentTime, 0.05);
       mudNode.gain.setTargetAtTime(bassOn ? MUD_DB : 0, ctx.currentTime, 0.05);
@@ -584,7 +863,9 @@
     pBass.classList.toggle('on', bassOn);
     pBass.setAttribute('aria-pressed', bassOn);
     $('pBassState').textContent = bassOn ? 'ON' : 'OFF';
-  };
+  }
+  pBass.onclick = () => { setBass(!bassOn); audioChanged(); };
+  setBass(bassOn); // sync the button with the saved (or default) state on load
   /* ---------- DRAGGABLE SLIDERS (pointer-based, works with touch + the rotated phone layout) ---------- */
   function makeDraggable(input) {
     input.style.touchAction = 'none';
@@ -614,18 +895,19 @@
   makeDraggable(pVol);
 
   /* ---------- WINDOW MANAGER (drag, resize, minimize, maximize, close; layout remembered per visitor) ---------- */
-  const LS = 'ceiko.layout.v1';
+  const LS = LAYOUT_KEY;
   const desk = document.querySelector('.desktop'), tbLeft = document.querySelector('.tb-left');
   const MINW = 380, MINH = 280, BAR = 34;
-  const DEF = { wArchive: { w: 1100, h: 720, s: 'open' }, wMusic: { w: 780, h: 430, s: 'closed' }, wPlaylist: { w: 720, h: 640, s: 'closed' } };
+  const DEF = { wArchive: { w: 1100, h: 720, s: 'open' }, wMusic: { w: 780, h: 430, s: 'closed' }, wPlaylist: { w: 720, h: 640, s: 'closed' }, wInfo: { w: 820, h: 620, s: 'closed' }, wSettings: { w: 680, h: 640, s: 'closed' } };
   const CAPS = '<button class="cap min" aria-label="Minimize"><svg viewBox="0 0 10 10"><path d="M0 5h10"/></svg></button><button class="cap mx" aria-label="Maximize"></button><button class="cap close" aria-label="Close"><svg viewBox="0 0 10 10"><path d="M.5.5l9 9M9.5.5l-9 9"/></svg></button>';
   const RESTORE = '<path d="M2.5 2.5V.5h7v7h-2M.5 2.5h7v7h-7z"/>', SQUARE = '<rect x=".5" y=".5" width="9" height="9"/>';
-  let saved = {}; try { saved = JSON.parse(localStorage.getItem(LS)) || {}; } catch (e) {}
+  let saved = {}; if (S.save && S.layout) { try { saved = JSON.parse(localStorage.getItem(LS)) || {}; } catch (e) {} }
   const W = {}; let zTop = 10, focusId = null;
   const dsz = () => ({ w: desk.clientWidth, h: desk.clientHeight });
   const small = () => innerWidth < 700;
-  const save = () => { try { localStorage.setItem(LS, JSON.stringify({ order: [...tbLeft.querySelectorAll('.app')].map(b => b.dataset.win), focus: focusId,
+  writeLayout = () => { try { localStorage.setItem(LS, JSON.stringify({ order: [...tbLeft.querySelectorAll('.app')].map(b => b.dataset.win), focus: focusId,
     wins: Object.fromEntries(Object.entries(W).map(([k, v]) => [k, { x: v.x, y: v.y, w: v.w, h: v.h, max: v.max, s: v.s, z: v.z }])) })); } catch (e) {} };
+  const save = () => changed();
   const clamp = v => { const d = dsz();
     v.w = Math.max(Math.min(MINW, d.w), Math.min(v.w, d.w)); v.h = Math.max(Math.min(MINH, d.h), Math.min(v.h, d.h));
     v.x = Math.min(Math.max(v.x, 120 - v.w), d.w - 120); v.y = Math.min(Math.max(v.y, 0), d.h - BAR); };
@@ -691,6 +973,7 @@
     v.btn.addEventListener('click', () => { if (v.s !== 'open') setState(id, 'open'); else if (focusId === id) setState(id, 'min'); else focusWin(id); });
   });
   (saved.order || []).forEach(id => { const b = tbLeft.querySelector('.app[data-win="' + id + '"]'); if (b) tbLeft.appendChild(b); });
+  [...tbLeft.querySelectorAll('.app')].filter(b => !(saved.order || []).includes(b.dataset.win)).forEach(b => tbLeft.appendChild(b)); // new apps go after the saved ones
   { const t = topOpen(); focusId = saved.focus && W[saved.focus] && W[saved.focus].s === 'open' ? saved.focus : t ? t[0] : null; }
   refresh();
   addEventListener('resize', refresh);
@@ -807,7 +1090,6 @@
     clkT.textContent = d.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit' });
     clkD.textContent = d.toLocaleDateString('en-US', { month: 'numeric', day: 'numeric', year: 'numeric' }); };
   tick(); setInterval(tick, 1000);
-  $('trayVol').addEventListener('click', () => $('pMute').click());
 
   /* ---------- OFFLINE CACHE (service worker saves everything after the first visit) ---------- */
   if ('serviceWorker' in navigator && /^https?:$/.test(location.protocol)) navigator.serviceWorker.register('sw.js').catch(() => {});
@@ -816,6 +1098,265 @@
     const urls = tracks.map(t => new URL(t.src, location.href).href).filter(u => u.startsWith(location.origin));
     navigator.serviceWorker.ready.then(r => r.active && r.active.postMessage({ type: 'precache', urls })).catch(() => {});
   }
+
+  /* ---------- !NF0 WINDOW: version + changelog + readme (loaded from changelog.json and readme.md) ---------- */
+  const CHANGELOG_FILE = 'changelog.json', README_FILE = 'readme.md';
+  const el = (tag, cls, txt) => { const e = document.createElement(tag); if (cls) e.className = cls; if (txt != null && txt !== '') e.textContent = txt; return e; };
+  function inline(parent, text) {    // **bold**, *italic*, `code`, [text](https://link)
+    const re = /`([^`]+)`|\*\*([^*]+)\*\*|\*([^*\s][^*]*)\*|\[([^\]]+)\]\((https?:\/\/[^\s)]+|mailto:[^\s)]+)\)/g;
+    let last = 0, m;
+    while ((m = re.exec(text))) {
+      if (m.index > last) parent.append(text.slice(last, m.index));
+      if (m[1] != null) parent.append(el('code', '', m[1]));
+      else if (m[2] != null) parent.append(el('b', '', m[2]));
+      else if (m[3] != null) parent.append(el('i', '', m[3]));
+      else { const a = el('a', '', m[4]); a.href = m[5]; a.target = '_blank'; a.rel = 'noopener noreferrer'; parent.append(a); }
+      last = re.lastIndex;
+    }
+    if (last < text.length) parent.append(text.slice(last));
+  }
+  function renderMd(md, into) {      // tiny markdown: headings, lists, tables, code blocks, rules, paragraphs
+    into.replaceChildren();
+    const lines = md.replace(/\r/g, '').split('\n'), isRow = s => /^\s*\|.*\|\s*$/.test(s);
+    let i = 0, list = null, para = [];
+    const flush = () => { if (para.length) { const p = el('p'); inline(p, para.join(' ')); into.append(p); para = []; } };
+    while (i < lines.length) {
+      const ln = lines[i]; let m;
+      if (/^```/.test(ln)) {
+        flush(); list = null; const buf = []; i++;
+        while (i < lines.length && !/^```/.test(lines[i])) buf.push(lines[i++]);
+        i++; const pre = el('pre'); pre.append(el('code', '', buf.join('\n'))); into.append(pre); continue;
+      }
+      if (!ln.trim()) { flush(); list = null; i++; continue; }
+      if (isRow(ln)) {
+        flush(); list = null; const rows = [];
+        while (i < lines.length && isRow(lines[i])) rows.push(lines[i++]);
+        const cells = r => r.trim().replace(/^\||\|$/g, '').split('|').map(c => c.trim());
+        const sep = rows[1] && /^[\s:|-]+$/.test(rows[1]) && rows[1].includes('-');
+        const t = el('table'), th = el('thead'), htr = el('tr'), tb = el('tbody');
+        cells(rows[0]).forEach(c => { const h = el('th'); inline(h, c); htr.append(h); }); th.append(htr);
+        rows.slice(sep ? 2 : 1).forEach(r => { const tr = el('tr'); cells(r).forEach(c => { const d = el('td'); inline(d, c); tr.append(d); }); tb.append(tr); });
+        t.append(th, tb); into.append(t); continue;
+      }
+      if ((m = /^(#{1,3})\s+(.*)$/.exec(ln))) { flush(); list = null; const h = el('h' + (m[1].length + 1)); inline(h, m[2]); into.append(h); }
+      else if (/^(-{3,}|\*{3,})$/.test(ln.trim())) { flush(); list = null; into.append(el('hr')); }
+      else if ((m = /^\s*([-*]|\d+\.)\s+(.*)$/.exec(ln))) {
+        flush(); const tag = /\d/.test(m[1]) ? 'ol' : 'ul';
+        if (!list || list.tagName.toLowerCase() !== tag) { list = el(tag); into.append(list); }
+        const li = el('li'); inline(li, m[2]); list.append(li);
+      } else { list = null; para.push(ln.trim()); }
+      i++;
+    }
+    flush();
+  }
+
+  const fmtBytes = n => n >= 1e9 ? (n / 1e9).toFixed(1) + ' GB' : n >= 1e6 ? (n / 1e6).toFixed(1) + ' MB' : Math.max(1, Math.round(n / 1e3)) + ' KB';
+  async function swInfo() {          // is sw.js installed, and what has it saved?
+    const o = { ok: false, page: false, label: '', files: 0, songs: 0, names: [], usage: '' };
+    if (!('serviceWorker' in navigator)) { o.label = 'Not supported by this browser'; return o; }
+    if (!/^https?:$/.test(location.protocol)) { o.label = 'Off (the site is opened as a file, not over http/https)'; return o; }
+    let reg = null; try { reg = await navigator.serviceWorker.getRegistration(); } catch (e) {}
+    if (!reg) o.label = 'Not registered (sw.js is missing or blocked)';
+    else {
+      const w = reg.active || reg.waiting || reg.installing, st = w ? w.state : 'unknown';
+      o.ok = st === 'activated';
+      o.label = o.ok ? (navigator.serviceWorker.controller ? 'Active, saving this site' : 'Active, takes over after a reload') : 'Installing (' + st + ')';
+    }
+    try {
+      if (window.caches) {
+        o.names = await caches.keys();
+        for (const k of o.names) { const reqs = await (await caches.open(k)).keys(); o.files += reqs.length; o.songs += reqs.filter(q => /\.mp3($|\?)/i.test(q.url)).length; }
+        o.page = !!(await caches.match(location.origin + location.pathname)) || !!(await caches.match(new URL('index.html', location.href).href));
+      }
+    } catch (e) {}
+    try { if (navigator.storage && navigator.storage.estimate) { const e = await navigator.storage.estimate(); o.usage = fmtBytes(e.usage || 0) + ' of ' + fmtBytes(e.quota || 0); } } catch (e) {}
+    return o;
+  }
+  async function refreshSW() {       // fills the OFFL!NE CACHE card in SETT!NGS
+    $('swState').textContent = 'checking...'; $('swState').className = '';
+    const o = await swInfo(), ready = o.ok && o.page;
+    $('swState').textContent = o.label; $('swState').className = o.ok ? 'ok' : 'bad';
+    $('swReady').textContent = ready ? 'Yes, the site opens without internet' : 'Not yet' + (o.ok ? ' (reload once so the page itself is saved)' : '');
+    $('swReady').className = ready ? 'ok' : 'bad';
+    $('swFiles').textContent = o.files ? o.files + ' files, ' + o.songs + (tracks.length ? ' of ' + tracks.length : '') + ' songs' : 'nothing saved yet';
+    $('swNames').textContent = o.names.length ? o.names.join(', ') : '-';
+    $('swUsage').textContent = o.usage || 'unknown';
+  }
+  async function refreshAbout() {    // the live lines in !NF0 > About
+    $('aTracks').textContent = tracks.length ? tracks.length + ' songs loaded' : 'none loaded';
+    $('aSaving').textContent = !S.save ? 'Off (starts fresh every visit)' : S.autosave ? 'On, autosave' : 'On, manual (Save now)';
+    const o = await swInfo();
+    $('aOffline').textContent = o.ok && o.page ? 'Ready, works without internet' : o.label;
+  }
+
+  let infoAt = 0;
+  async function getText(u) { const r = await fetch(u, { cache: 'no-cache' }); if (!r.ok) throw new Error('HTTP ' + r.status); return r.text(); }
+  async function loadInfo() {
+    infoAt = Date.now();
+    let data = null;
+    try { data = JSON.parse(await getText(CHANGELOG_FILE)); } catch (e) { console.warn('changelog.json not loaded:', e); }
+    // changelog.json = a list of entries, newest first. Each entry is a list of lines:
+    // line 1 = headline, line 2 = description, then "+ added", "- removed", "* changed" lines.
+    const entries = (Array.isArray(data) ? data : []).filter(Array.isArray).map(a => a.map(String)).filter(a => a.length && a[0].trim());
+    const head = entries[0] ? entries[0][0].trim() : '', vm = /\d+(?:\.\d+)+/.exec(head);
+    const version = vm ? vm[0] : '', name = vm ? head.slice(vm.index + vm[0].length).replace(/^\s*[-\u2013\u2014:]\s*/, '') : head;
+    $('infVer').textContent = version ? 'v' + version : 'version unknown';
+    $('infDate').textContent = name;
+    $('aVer').textContent = version || 'unknown'; $('aDate').textContent = name || '-'; $('aCount').textContent = String(entries.length);
+    const av = document.querySelector('#wArchive .ver'); if (av && version) av.textContent = 'VERS!ON ' + version;
+    const list = $('logList'); list.replaceChildren();
+    if (!entries.length) list.append(el('p', 'muted', data ? 'changelog.json needs a list of entries (see the example).' : 'changelog.json was not found next to index.html.'));
+    const KIND = { '+': ['add', 'added'], '-': ['rem', 'removed'], '*': ['chg', 'changed'] };
+    entries.forEach((lines, i) => {
+      const card = el('section', 'card rel'), h = el('h2'), body = el('div', 'nb'), ul = el('ul');
+      h.textContent = lines[0].trim() + (i === 0 ? ' (latest)' : '');
+      lines.slice(1).forEach(raw => {
+        const ln = raw.trim(), m = /^([+\-*])\s+(.*)$/.exec(ln); if (!ln) return;
+        if (m) { const li = el('li'); li.append(el('span', 'tag ' + KIND[m[1]][0], KIND[m[1]][1])); inline(li, m[2]); ul.append(li); }
+        else { const p = el('p'); inline(p, ln); body.append(p); }
+      });
+      if (ul.children.length) body.append(ul);
+      card.append(h, body); list.append(card);
+    });
+    try { renderMd(await getText(README_FILE), $('mdReadme')); } catch (e) { $('mdReadme').textContent = 'readme.md was not found next to index.html.'; }
+    refreshAbout();
+  }
+  function showTab(name) {
+    document.querySelectorAll('#wInfo .tab').forEach(t => t.setAttribute('aria-selected', String(t.dataset.tab === name)));
+    document.querySelectorAll('#wInfo [data-pane]').forEach(p => { p.hidden = p.dataset.pane !== name; });
+  }
+  document.querySelectorAll('#wInfo .tab').forEach(t => t.addEventListener('click', () => showTab(t.dataset.tab)));
+  tbLeft.querySelector('.app[data-win="wInfo"]').addEventListener('click', () => { if (Date.now() - infoAt > 60000) loadInfo(); else refreshAbout(); });
+  tbLeft.querySelector('.app[data-win="wSettings"]').addEventListener('click', refreshSW);
+  loadInfo();
+
+  /* ---------- SPOTIFY-STYLE DROPDOWNS (replace the plain browser select, same value + change event) ---------- */
+  const CHEV = '<svg class="i" viewBox="0 0 16 16"><path d="M3 6l5 5 5-5"/></svg>', TICK = '<svg class="i" viewBox="0 0 16 16"><path d="M3 8.5l3.2 3.2L13 5"/></svg>';
+  document.querySelectorAll('.sp-tools select').forEach(sel => {
+    const pre = sel.dataset.prefix || '', title = sel.getAttribute('aria-label') || '';
+    const box = el('div', 'sd'), btn = el('button', 'sd-btn'), lab = el('span'), menu = el('div', 'sd-menu');
+    let open = false, cur = 0;
+    btn.type = 'button'; btn.setAttribute('aria-haspopup', 'listbox'); btn.setAttribute('aria-expanded', 'false');
+    btn.append(lab); btn.insertAdjacentHTML('beforeend', CHEV);
+    menu.hidden = true; menu.setAttribute('role', 'listbox'); menu.setAttribute('aria-label', title); menu.append(el('div', 'sd-h', title));
+    const items = [...sel.options].map((o, i) => {
+      const b = el('div', 'sd-o'); b.setAttribute('role', 'option'); b.append(el('span', '', o.textContent)); b.insertAdjacentHTML('beforeend', TICK);
+      b.onclick = () => pick(i); b.onpointermove = () => { cur = i; mark(); }; menu.append(b); return b;
+    });
+    const mark = () => items.forEach((b, i) => b.classList.toggle('act', i === cur));
+    const sync = () => { lab.textContent = pre + sel.options[sel.selectedIndex].textContent;
+      items.forEach((b, i) => { b.classList.toggle('sel', i === sel.selectedIndex); b.setAttribute('aria-selected', String(i === sel.selectedIndex)); }); };
+    const show = on => {
+      open = on; menu.hidden = !on; box.classList.toggle('open', on); btn.setAttribute('aria-expanded', String(on));
+      if (!on) return;
+      menu.classList.remove('up'); const w = box.closest('.win');   // flip upward if the window would cut the list off
+      if (w && menu.getBoundingClientRect().bottom > w.getBoundingClientRect().bottom - 6) menu.classList.add('up');
+      cur = sel.selectedIndex; mark();
+    };
+    const pick = i => { if (i !== sel.selectedIndex) { sel.selectedIndex = i; sel.dispatchEvent(new Event('change', { bubbles: true })); } sync(); show(false); btn.focus(); };
+    btn.onclick = () => show(!open);
+    btn.addEventListener('keydown', e => {
+      const k = e.key;
+      if (k === 'ArrowDown' || k === 'ArrowUp') { e.preventDefault(); if (!open) show(true); else { cur = (cur + (k === 'ArrowDown' ? 1 : -1) + items.length) % items.length; mark(); } }
+      else if (k === 'Enter' || k === ' ') { e.preventDefault(); open ? pick(cur) : show(true); }
+      else if (k === 'Escape' && open) { e.stopPropagation(); show(false); }
+      else if (k === 'Tab' && open) show(false);
+    });
+    btn.addEventListener('keyup', e => { if (e.key === ' ') e.preventDefault(); });
+    addEventListener('pointerdown', e => { if (open && !box.contains(e.target)) show(false); });
+    box.append(btn, menu); sel.before(box); sel.hidden = true; sync();
+  });
+
+  /* ---------- START MENU + TRAY FLYOUTS (one open at a time; click outside or Esc closes) ---------- */
+  const tray = document.querySelector('.tray'), flies = {}; let flyOpen = null;
+  const closeFly = () => { if (!flyOpen) return; const f = flies[flyOpen]; f.el.hidden = true; f.btn.classList.remove('on'); f.btn.setAttribute('aria-expanded', 'false'); flyOpen = null; };
+  const toggleFly = name => { const was = flyOpen === name; closeFly(); if (was) return;
+    const f = flies[name]; f.el.hidden = false; f.btn.classList.add('on'); f.btn.setAttribute('aria-expanded', 'true'); flyOpen = name; f.open(); };
+  function mkFly(name, btn, cls, html, open) {
+    const e = el('div', 'fly ' + cls); e.hidden = true; e.setAttribute('role', 'dialog'); e.setAttribute('aria-label', name); e.innerHTML = html; document.body.append(e);
+    btn.setAttribute('aria-haspopup', 'dialog'); btn.setAttribute('aria-expanded', 'false'); btn.addEventListener('click', () => toggleFly(name));
+    flies[name] = { el: e, btn, open: open || (() => {}) }; return e;
+  }
+  addEventListener('pointerdown', e => { if (flyOpen && !flies[flyOpen].el.contains(e.target) && !flies[flyOpen].btn.contains(e.target)) closeFly(); });
+  addEventListener('keydown', e => { if (e.key === 'Escape' && flyOpen) { const b = flies[flyOpen].btn; closeFly(); b.focus(); } });
+  const openApp = id => { if (!(W[id].s === 'open' && focusId === id)) W[id].btn.click(); };   // same click the taskbar button gets
+
+  // Start: pinned apps (built from the taskbar), search, restart
+  const sm = mkFly('Start', document.querySelector('.start'), 'fly-start',
+    '<input class="st-q" type="search" placeholder="Search apps" aria-label="Search apps" autocomplete="off"><div class="st-h">Pinned</div><div class="st-grid"></div>' +
+    '<div class="st-foot"><span class="st-av"></span><span class="st-u">ceiko_mill</span><button class="tbtn st-pw" type="button" aria-label="Restart" title="Restart"><svg class="i" viewBox="0 0 16 16"><path d="M8 2v6M4.5 4.2a5.2 5.2 0 107 0"/></svg></button></div>',
+    () => { q.value = ''; drawStart(); q.focus(); });
+  const q = sm.querySelector('.st-q'), grid = sm.querySelector('.st-grid'), flat = s => s.replace(/!/g, 'i').replace(/0/g, 'o').toLowerCase();
+  function drawStart() {
+    const t = q.value.trim().toLowerCase(); grid.replaceChildren();
+    [...tbLeft.querySelectorAll('.app')].forEach(b => {
+      const name = b.querySelector('span').textContent; if (t && !flat(name).includes(t)) return;
+      const a = el('button', 'st-app'); a.type = 'button';
+      a.innerHTML = '<svg class="i"><use href="' + b.querySelector('use').getAttribute('href') + '"/></svg>'; a.append(el('span', '', name));
+      a.onclick = () => { closeFly(); openApp(b.dataset.win); }; grid.append(a);
+    });
+    if (!grid.children.length) grid.append(el('div', 'st-none', 'No apps match that search'));
+  }
+  q.addEventListener('input', drawStart);
+  q.addEventListener('keydown', e => { if (e.key === 'Enter') { const f = grid.querySelector('.st-app'); if (f) f.click(); } });
+  sm.querySelector('.st-pw').onclick = () => location.reload();
+
+  // Hidden icons: quick bass boost + shortcuts
+  const hid = mkFly('Hidden icons', tray.querySelector('.chev'), 'fly-hid',
+    '<button class="hi" data-a="bass" type="button"><svg class="i"><use href="#p-vol"/></svg>Bass boost<small>OFF</small></button>' +
+    '<button class="hi" data-a="wMusic" type="button"><svg class="i"><use href="#note"/></svg>MUS!C</button>' +
+    '<button class="hi" data-a="wSettings" type="button"><svg class="i"><use href="#gear"/></svg>SETT!NGS</button>',
+    () => syncHid());
+  const syncHid = () => { const b = hid.querySelector('[data-a=bass]'), on = pBass.classList.contains('on');
+    b.classList.toggle('on', on); b.setAttribute('aria-pressed', String(on)); b.querySelector('small').textContent = on ? 'ON' : 'OFF'; };
+  hid.addEventListener('click', e => { const b = e.target.closest('.hi'); if (!b) return;
+    if (b.dataset.a === 'bass') { pBass.click(); syncHid(); } else { closeFly(); openApp(b.dataset.a); } });
+
+  // Wi-Fi: online state + offline-cache status
+  const wifi = tray.querySelector('.wifi'), netUI = () => wifi.classList.toggle('off', !navigator.onLine);
+  addEventListener('online', netUI); addEventListener('offline', netUI); netUI();
+  const net = mkFly('Network', wifi, 'fly-net',
+    '<div class="fl-t">Network</div><div class="fl-r"><b>Status</b><span class="nS"></span></div><div class="fl-r"><b>Offline mode</b><span class="nO"></span></div><div class="fl-r"><b>Saved</b><span class="nF"></span></div>',
+    async () => {
+      const S_ = net.querySelector('.nS'), O_ = net.querySelector('.nO'), F_ = net.querySelector('.nF');
+      S_.textContent = navigator.onLine ? 'Connected' : 'No internet'; O_.textContent = F_.textContent = '...';
+      const o = await swInfo();
+      O_.textContent = o.ok && o.page ? 'Ready' : o.label; F_.textContent = o.files ? o.files + ' files, ' + o.songs + ' songs' : 'nothing yet';
+    });
+
+  // Volume: slider, mute, now playing + transport (stays in sync with the MUS!C window)
+  const vf = mkFly('Volume', $('trayVol'), 'fly-vol',
+    '<div class="vf"><button class="tbtn vf-m" type="button" aria-label="Mute"><svg class="i"><use href="#p-vol"/></svg></button><input class="vf-s" type="range" min="0" max="200" aria-label="Volume (up to 200%)"><b class="vf-p"></b></div>' +
+    '<div class="vf-np"><span class="vf-n"></span><button class="tbtn" data-c="pPrev" type="button" aria-label="Previous"><svg class="i"><use href="#p-prev"/></svg></button>' +
+    '<button class="tbtn" data-c="pPlay" type="button" aria-label="Play or pause"><svg class="i"><use href="#p-play"/></svg></button><button class="tbtn" data-c="pNext" type="button" aria-label="Next"><svg class="i"><use href="#p-next"/></svg></button></div>',
+    () => syncVol());
+  const vs = vf.querySelector('.vf-s');
+  const syncVol = () => { vs.value = vol; vs.style.setProperty('--p', vol / 2 + '%'); vf.querySelector('.vf-p').textContent = vol + '%';
+    vf.querySelector('.vf-m use').setAttribute('href', muted || !vol ? '#p-mute' : '#p-vol');
+    vf.querySelector('.vf-n').textContent = pName.textContent; vf.querySelector('[data-c=pPlay] use').setAttribute('href', audio.paused ? '#p-play' : '#p-pause'); };
+  volHook = syncVol;
+  vs.addEventListener('input', () => { pVol.value = vs.value; pVol.dispatchEvent(new Event('input')); });
+  vf.querySelector('.vf-m').onclick = () => $('pMute').click();
+  vf.addEventListener('click', e => { const b = e.target.closest('[data-c]'); if (b) $(b.dataset.c).click(); });
+  ['play', 'pause', 'playing'].forEach(ev => audio.addEventListener(ev, () => { if (flyOpen === 'Volume') syncVol(); }));
+
+  // Clock: calendar
+  let cy = 0, cmo = 0;
+  const cal = mkFly('Calendar', tray.querySelector('.clock'), 'fly-cal',
+    '<div class="cl-big"></div><div class="cl-nav"><b class="cl-m"></b><button class="tbtn" data-m="-1" type="button" aria-label="Previous month"><svg class="i" viewBox="0 0 16 16"><path d="M4 10l4-4 4 4"/></svg></button>' +
+    '<button class="tbtn" data-m="1" type="button" aria-label="Next month"><svg class="i" viewBox="0 0 16 16"><path d="M4 6l4 4 4-4"/></svg></button></div><div class="cl-g"></div>',
+    () => { const d = new Date(); cy = d.getFullYear(); cmo = d.getMonth(); drawCal(); });
+  function drawCal() {
+    const now = new Date(), first = new Date(cy, cmo, 1), g = cal.querySelector('.cl-g'); g.replaceChildren();
+    cal.querySelector('.cl-big').textContent = now.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric' });
+    cal.querySelector('.cl-m').textContent = first.toLocaleDateString('en-US', { month: 'long', year: 'numeric' });
+    ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'].forEach(c => g.append(el('i', 'wd', c)));
+    for (let i = 0; i < first.getDay(); i++) g.append(el('i'));
+    for (let d = 1, n = new Date(cy, cmo + 1, 0).getDate(); d <= n; d++)
+      g.append(el('i', cy === now.getFullYear() && cmo === now.getMonth() && d === now.getDate() ? 'td' : '', String(d)));
+  }
+  cal.addEventListener('click', e => { const b = e.target.closest('[data-m]'); if (!b) return;
+    const d = new Date(cy, cmo + +b.dataset.m, 1); cy = d.getFullYear(); cmo = d.getMonth(); drawCal(); });
 
   /* ---------- INTRO ---------- */
   let n = 1;
@@ -845,7 +1386,7 @@
     if (ctx) ctx.resume();
     intro.classList.add('out');
     document.body.classList.remove('locked');
-    if (tracks.length) playCurrent();
+    if (tracks.length && S.playOnEnter) playCurrent();
   });
 })();
 </script>

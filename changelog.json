@@ -1,0 +1,14 @@
+[
+  [
+    "Version 0.0.6.0 - Rebuild",
+    "The playlist dropdowns now look and feel like Spotify, and the taskbar finally does something: the Start button opens a real menu, and every icon in the tray opens its own panel.",
+    "+ Spotify-style dropdowns in the playlist tab with a green outline, green highlight and a checkmark on the selected option",
+    "+ Start menu with pinned apps, app search and a restart button",
+    "+ Volume panel in the tray with a slider, mute and now playing controls",
+    "+ Calendar panel when you click the clock",
+    "+ Network panel that shows online status and offline mode",
+    "+ Hidden icons panel with a bass boost switch and shortcuts",
+    "- Clicking the tray speaker no longer mutes right away, it opens the volume panel instead",
+    "* Changelog is now one simple list: headline, description, then + - * lines"
+  ]
+]
