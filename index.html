@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, interactive-widget=resizes-content">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>ceiko_mill's computer</title>
 <meta name="description" content="ceiko_mill's portfolio: anime, bands, hobbies and a music player.">
 <meta name="theme-color" content="#0a0e0b">
@@ -271,7 +271,7 @@
   .fly{position:fixed;z-index:60;bottom:56px;padding:12px;color:#fff;font-style:normal;font-size:13px;line-height:1.4;
     font-family:"Segoe UI Variable","Segoe UI",system-ui,-apple-system,Arial,sans-serif;
     background:rgba(14,19,16,.94);-webkit-backdrop-filter:blur(20px);backdrop-filter:blur(20px);border:1px solid #2b342d;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,.6)}
-  .fly-start{left:8px;width:min(480px,calc(100vw - 16px))}
+  .fly-start{left:8px;width:min(480px,calc(100vw - 16px));max-height:calc(100% - 64px);overflow-y:auto;overscroll-behavior:contain}
   .fly-hid,.fly-net,.fly-vol,.fly-cal{right:8px;max-width:calc(100vw - 16px)}
   .fly-hid{display:flex;gap:4px} .fly-net{width:290px} .fly-vol{width:330px} .fly-cal{width:300px}
   .fly button{font:inherit}
@@ -305,6 +305,21 @@
   .cl-g i{font-style:normal;display:grid;place-items:center;height:36px;border-radius:50%}
   .cl-g .wd{height:26px;font-size:11px;color:#9aa595}
   .cl-g .td{background:var(--lt);color:#000;font-weight:700}
+
+/* short screens (phone sideways): tighter start menu so it fits above the taskbar */
+  @media (max-height:420px), (orientation:portrait) and (pointer:coarse) and (max-width:600px){
+    .st-q{margin-bottom:8px} .st-grid{min-height:0} .st-app,.hi{padding:8px 4px 6px;gap:5px}
+    .st-foot{margin-top:8px;padding:8px 16px}
+  }
+  /* ===== ON-SCREEN KEYBOARD (phones only; floats above the taskbar, turns with the page) ===== */
+  .vk{position:fixed;left:50%;bottom:56px;transform:translateX(-50%);z-index:80;width:min(560px,calc(100% - 16px));padding:6px;display:flex;flex-direction:column;gap:4px;
+    background:rgba(14,19,16,.96);border:1px solid #2b342d;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,.6);font-style:normal;
+    font-family:"Segoe UI Variable","Segoe UI",system-ui,-apple-system,Arial,sans-serif;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
+  .vk-r{display:flex;gap:4px}
+  .vk-s{flex:.5 1 0}
+  .vk-k{flex:1 1 0;min-width:0;height:34px;padding:0;display:flex;align-items:center;justify-content:center;font:inherit;font-size:15px;font-weight:600;color:#fff;background:#232d26;border:0;border-radius:5px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+  .vk-k:active{background:var(--sage);color:#000}
+  .vk-k.w{flex:1.5 1 0} .vk-k.sp{flex:5 1 0;font-size:13px;font-weight:400;color:#b9c3b3} .vk-k.go{flex:1.7 1 0;background:var(--rust)}
 
 /* ================= INTRO / LOADING SCREEN ================= */
   body.locked{overflow:hidden}
@@ -620,6 +635,7 @@
   const $ = id => document.getElementById(id);
   const ROT_Q = '(orientation:portrait) and (pointer:coarse) and (max-width:600px)';   // phone held upright: the css turns the page sideways
   const rot = () => matchMedia(ROT_Q).matches;
+  const phone = () => rot() || (matchMedia('(pointer:coarse)').matches && Math.min(innerWidth, innerHeight) < 600);   // any phone, held either way
   const pTrack = $('pTrack');
   const intro = $('intro'), dots = $('dots'), enterBtn = $('enterBtn');
   const pName = $('pName'), pTime = $('pTime'), pSeek = $('pSeek');
@@ -952,7 +968,7 @@
   let saved = {}; if (S.save && S.layout) { try { saved = JSON.parse(localStorage.getItem(LS)) || {}; } catch (e) {} }
   const W = {}; let zTop = 10, focusId = null;
   const dsz = () => ({ w: desk.clientWidth, h: desk.clientHeight });
-  const small = () => rot() || innerWidth < 700 || (matchMedia('(pointer:coarse)').matches && Math.min(innerWidth, innerHeight) < 600);   // phones always get maximized windows
+  const small = () => phone() || innerWidth < 700;   // phones always get maximized windows
   writeLayout = () => { try { localStorage.setItem(LS, JSON.stringify({ order: [...tbLeft.querySelectorAll('.app')].map(b => b.dataset.win), focus: focusId,
     wins: Object.fromEntries(Object.entries(W).map(([k, v]) => [k, { x: v.x, y: v.y, w: v.w, h: v.h, max: v.max, s: v.s, z: v.z }])) })); } catch (e) {} };
   const save = () => changed();
@@ -1384,7 +1400,7 @@
     btn.setAttribute('aria-haspopup', 'dialog'); btn.setAttribute('aria-expanded', 'false'); btn.addEventListener('click', () => toggleFly(name));
     flies[name] = { el: e, btn, open: open || (() => {}) }; return e;
   }
-  addEventListener('pointerdown', e => { if (flyOpen && !flies[flyOpen].el.contains(e.target) && !flies[flyOpen].btn.contains(e.target)) closeFly(); });
+  addEventListener('pointerdown', e => { if (flyOpen && !flies[flyOpen].el.contains(e.target) && !flies[flyOpen].btn.contains(e.target) && !e.target.closest('.vk')) closeFly(); });   // taps on the on-screen keyboard don't count as "outside"
   addEventListener('keydown', e => { if (e.key === 'Escape' && flyOpen) { const b = flies[flyOpen].btn; closeFly(); b.focus(); } });
   const openApp = id => { if (!(W[id].s === 'open' && focusId === id)) W[id].btn.click(); };   // same click the taskbar button gets
 
@@ -1464,6 +1480,54 @@
   }
   cal.addEventListener('click', e => { const b = e.target.closest('[data-m]'); if (!b) return;
     const d = new Date(cy, cmo + +b.dataset.m, 1); cy = d.getFullYear(); cmo = d.getMonth(); drawCal(); });
+
+  /* ---------- ON-SCREEN KEYBOARD (phones): our own small keyboard for the search bars, so the phone's portrait keyboard never opens ---------- */
+  const VK_SEL = '#plSearch, .st-q';   // the search bars that get it
+  const VK_LAYERS = {
+    abc: [['q','w','e','r','t','y','u','i','o','p'], [' ','a','s','d','f','g','h','j','k','l',' '], ['z','x','c','v','b','n','m','BS'], ['SYM','-',"'",'SP','.','GO']],
+    sym: [['1','2','3','4','5','6','7','8','9','0'], ['-','_','.',',',"'",'"','(',')','&','!'], ['/',':',';','?','@','#','+','=','BS'], ['ABC','SP','GO']]
+  };
+  const VK_LABEL = { BS: '\u232B', SP: 'space', GO: 'Go', SYM: '?123', ABC: 'abc' };
+  const vk = el('div', 'vk'); vk.hidden = true; vk.setAttribute('aria-hidden', 'true'); document.body.append(vk);
+  let vkT = null, vkLayer = 'abc', vkRep = null;
+  const stopRep = () => { clearTimeout(vkRep); clearInterval(vkRep); vkRep = null; };
+  function drawVK() {
+    vk.replaceChildren();
+    VK_LAYERS[vkLayer].forEach(r => {
+      const row = el('div', 'vk-r');
+      r.forEach(k => {
+        if (k === ' ') { row.append(el('span', 'vk-s')); return; }
+        const cls = k === 'BS' || k === 'SYM' || k === 'ABC' ? ' w' : k === 'SP' ? ' sp' : k === 'GO' ? ' go' : '';
+        const b = el('button', 'vk-k' + cls, VK_LABEL[k] || k); b.type = 'button'; b.tabIndex = -1; b.dataset.k = k; row.append(b);
+      });
+      vk.append(row);
+    });
+  }
+  const showVK = inp => { vkT = inp; vkLayer = 'abc'; drawVK(); vk.hidden = false; };
+  const hideVK = () => { vkT = null; vk.hidden = true; stopRep(); };
+  function vkKey(k) {
+    if (!vkT) return;
+    if (k === 'SYM' || k === 'ABC') { vkLayer = k === 'SYM' ? 'sym' : 'abc'; drawVK(); return; }
+    if (k === 'GO') { const t = vkT; t.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true })); hideVK(); t.blur(); return; }
+    let s = vkT.selectionStart, e = vkT.selectionEnd; if (s == null) s = e = vkT.value.length;
+    if (k === 'BS') { if (s === e) { if (!s) return; s--; } vkT.setRangeText('', s, e, 'end'); }
+    else vkT.setRangeText(k === 'SP' ? ' ' : k, s, e, 'end');
+    vkT.dispatchEvent(new Event('input', { bubbles: true }));   // the playlist / start menu filter listens for this
+  }
+  vk.addEventListener('pointerdown', e => {
+    e.preventDefault();   // keep the cursor in the search bar
+    const b = e.target.closest('.vk-k'); if (!b) return;
+    vkKey(b.dataset.k);
+    if (b.dataset.k === 'BS') { stopRep(); vkRep = setTimeout(() => { vkRep = setInterval(() => vkKey('BS'), 55); }, 420); }   // hold to keep deleting
+  });
+  vk.addEventListener('mousedown', e => e.preventDefault());
+  vk.addEventListener('contextmenu', e => e.preventDefault());
+  ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => vk.addEventListener(ev, stopRep));
+  document.addEventListener('focusin', e => { if (e.target.matches && e.target.matches(VK_SEL) && phone()) showVK(e.target); });
+  document.addEventListener('focusout', e => { if (e.target === vkT) setTimeout(() => { if (vkT && document.activeElement !== vkT) hideVK(); }, 0); });   // tab out = keyboard goes away
+  document.addEventListener('pointerdown', e => { if (vkT && !vk.contains(e.target) && e.target !== vkT) { const t = vkT; hideVK(); t.blur(); } }, true);   // tap anywhere else = same
+  const syncVK = () => document.querySelectorAll(VK_SEL).forEach(i => phone() ? i.setAttribute('inputmode', 'none') : i.removeAttribute('inputmode'));   // "none" = the phone's own keyboard stays closed
+  syncVK(); addEventListener('resize', () => { syncVK(); if (vkT && !phone()) hideVK(); });
 
   /* ---------- INTRO ---------- */
   let n = 1;
