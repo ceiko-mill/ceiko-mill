@@ -94,7 +94,7 @@
     .arch{grid-template-rows:auto auto minmax(5em,1fr) auto auto;grid-template-areas:"bar bar bar" "av id dni" "av note note" "mid mid mid" "favs favs favs"}
     .a-banner{display:none}
   }
-  @container arch (max-width:599px){   /* narrow window: one column, scrolls */
+  @container arch (max-width:599px) or (max-aspect-ratio:1/1){   /* narrow OR portrait window (phone upright / desktop mode): one column, scrolls */
     .arch{font-size:clamp(10px,3.1cqw,13.5px);gap:.8em 1em;align-content:start;grid-template-columns:7.5em minmax(0,1fr);grid-template-rows:none;
       grid-template-areas:"bar bar" "av id" "dni dni" "banner banner" "note note" "mid mid" "favs favs"}
     .a-av{height:7.5em}
