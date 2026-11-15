@@ -17,6 +17,24 @@
 <link rel="icon" type="image/jpeg" sizes="192x192" href="images/Avatar_Mill.jpg">
 <link rel="shortcut icon" type="image/jpeg" href="images/Avatar_Mill.jpg">
 <link rel="apple-touch-icon" href="images/Avatar_Mill.jpg">
+<script>
+/* experiment: re-encode the avatar as a square 192px PNG and use it as the favicon (JPEG favicons are sometimes ignored) */
+(function(){
+  var im = new Image();
+  im.onload = function(){
+    try {
+      var c = document.createElement('canvas'); c.width = c.height = 192;
+      var x = c.getContext('2d'), m = Math.min(im.naturalWidth, im.naturalHeight);
+      x.drawImage(im, (im.naturalWidth-m)/2, (im.naturalHeight-m)/2, m, m, 0, 0, 192, 192);
+      var url = c.toDataURL('image/png');
+      document.querySelectorAll('link[rel~="icon"]').forEach(function(l){ l.remove(); });
+      var l = document.createElement('link'); l.rel = 'icon'; l.type = 'image/png'; l.sizes = '192x192'; l.href = url;
+      document.head.appendChild(l);
+    } catch (e) {}
+  };
+  im.src = 'images/Avatar_Mill.jpg';
+})();
+</script>
 <style>
   :root{
     --ink:#0f1511; --cream:#a4aa98; --cream2:#8b927e; --lt:#d3d7cb;
