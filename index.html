@@ -50,41 +50,58 @@
   .panel{flex:1;min-height:0;overflow:auto}
   .panel.center{display:flex}
 
-  /* ===== ARCHIVE ===== */
-  /* Tile layout: 3 small cards in one row, 2 medium cards in the row under them. Narrow window = one column.
-     The banner takes whatever height is left over, so it always fits. */
-  .arch{--av:clamp(96px,14vw,150px);--ov:70px;display:grid;grid-template-columns:minmax(0,1fr);gap:14px;padding:clamp(12px,2vw,24px);align-content:start;max-width:1400px;margin:0 auto}
-  #panelArchive{container:arch/size}
+  /* ===== ARCHIVE (the old tile layout). Everything inside is sized in em and the font-size follows the window,
+     so the whole page gets smaller or bigger with the window instead of scrolling. ===== */
   .pic{background:var(--cream2) center/cover no-repeat}
-  .hero{position:relative;margin-bottom:var(--ov)}
-  .avatar{position:absolute;left:clamp(10px,2vw,28px);bottom:calc(var(--ov)*-1);z-index:1;width:var(--av);aspect-ratio:1;border:4px solid var(--cream);outline:3px solid var(--ink);border-radius:26px}
-  .hero-name{position:absolute;left:calc(clamp(10px,2vw,28px) + var(--av) + 16px);bottom:calc(var(--ov)*-.83);font-weight:800;font-size:clamp(18px,2.4vw,30px)}
-  .bannerimg{position:relative;width:100%;aspect-ratio:16/5;max-height:280px;border:2px solid var(--ink);border-bottom:0}
-  .bannerimg::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,transparent 40%,var(--cream) 100%)}
+  .hl{background:var(--sage);padding:0 3px}
   .card{border:2px solid var(--ink)}
   .card > h2{display:flex;align-items:center;gap:6px;background:var(--rust);color:#fff;border-bottom:2px solid var(--ink);padding:5px 10px;font-size:13px;font-weight:800}
   .card .nb{padding:10px 12px;font-size:13.5px;line-height:1.55;overflow-wrap:anywhere}
-  .hl{background:var(--sage);padding:0 3px}
-  .cards{display:grid;grid-template-columns:minmax(0,1fr);gap:10px;min-width:0}
-  .arch .card{display:flex;flex-direction:column;min-width:0}
-  .arch .card > h2{padding:4px 9px;font-size:12px}
-  .arch .card .nb{flex:1;padding:8px 10px;font-size:12.5px;line-height:1.5}
-  .anime{display:flex;flex-direction:column;gap:8px}
-  .thumbs{display:flex;gap:6px}
-  .thumb{width:40px;aspect-ratio:1;border:2px solid var(--ink);border-radius:12px}
-  .lists{display:flex;flex-direction:column;gap:5px}
-  @container arch (min-width:560px){
-    .cards{grid-template-columns:repeat(6,minmax(0,1fr))}
-    .c-sm{grid-column:span 2} .c-md{grid-column:span 3}
+  #panelArchive{container:arch/size}
+  .arch{font-size:clamp(8.5px,min(1.4cqw,2.55cqh),15px);min-height:100cqh;display:grid;gap:.9em 1.4em;padding:0 1.4em 1.1em;
+    grid-template-columns:minmax(0,.72fr) minmax(0,1fr) minmax(0,1fr);
+    grid-template-rows:auto auto minmax(9.5em,1fr) auto auto;
+    grid-template-areas:"bar bar bar" "av id dni" "av banner note" "mid mid mid" "favs favs favs"}
+  .a-bar{grid-area:bar;display:flex;justify-content:space-between;align-items:center;margin:0 -1.4em;padding:.55em 1.4em;background:var(--cream2);border-bottom:2px solid var(--ink);font-size:.95em}
+  .a-ic{display:flex;gap:.9em} .a-ic svg{width:1.25em;height:1.25em}
+  .a-acc{display:flex;align-items:center;gap:.5em}
+  .a-acc button{font:inherit;color:inherit;background:none;border:0;padding:0;text-decoration:underline;cursor:pointer}
+  .a-acc button:hover{color:var(--rust)} .a-acc button:focus-visible{outline:2px solid var(--rust);outline-offset:2px}
+  .a-av{grid-area:av;container-type:size;display:grid;place-items:center;min-height:0}
+  .avatar{width:min(100cqw,100cqh);aspect-ratio:1;border:.3em solid var(--ink);border-radius:2.3em}
+  .arch h2{display:flex;align-items:center;gap:.35em;margin:0 0 .45em;font-size:1.55em;font-weight:800;line-height:1.1}
+  .arch h2 svg{width:1em;height:1em;color:var(--rust)}
+  .a-id{grid-area:id} .a-dni{grid-area:dni}
+  .a-id h2,.a-dni h2{padding-bottom:.2em;border-bottom:2px solid var(--ink)}
+  .arch p{line-height:1.6;overflow-wrap:anywhere}
+  .arch .hl{padding:0 .25em}
+  .a-banner{grid-area:banner;min-height:0;border:.22em solid var(--ink)}
+  .a-note{grid-area:note;display:flex;flex-direction:column;min-height:0;border:.22em solid var(--ink)}
+  .a-note h2{flex:none;margin:0;padding:.35em .7em;font-size:1em;color:#fff;background:var(--rust);border-bottom:.22em solid var(--ink)}
+  .a-note p{flex:1;min-height:0;overflow:auto;padding:.7em .9em;line-height:1.55}
+  .a-mid{grid-area:mid;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);padding-top:.9em;border-top:1px solid var(--line)}
+  .a-mid h2{margin-bottom:.35em;font-size:1.45em}
+  .a-mid p{font-size:.95em}
+  .a-anime{display:flex;align-items:center;gap:1.1em;min-width:0;padding-right:1.4em}
+  .a-anime > div:first-child{flex:1;min-width:0}
+  .a-bands{min-width:0;padding-left:1.4em;border-left:1px solid var(--line)}
+  .thumbs{flex:none;display:flex;gap:.55em}
+  .thumb{width:2.9em;aspect-ratio:1;border:.2em solid var(--ink);border-radius:.9em}
+  .a-favs{grid-area:favs;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.4em 1.4em;padding-top:.75em;border-top:1px solid var(--line);font-size:.95em;line-height:1.5;overflow-wrap:anywhere}
+  @container arch (min-width:600px) and (max-height:370px){   /* short window (phone sideways): no banner, the note takes its place */
+    .arch{grid-template-rows:auto auto minmax(5em,1fr) auto auto;grid-template-areas:"bar bar bar" "av id dni" "av note note" "mid mid mid" "favs favs favs"}
+    .a-banner{display:none}
   }
-  @container arch (max-height:480px) and (max-width:899px){   /* short window (phone sideways): smaller banner so the cards stay in reach */
-    .arch{--av:84px;--ov:44px} .bannerimg{aspect-ratio:16/4.5;max-height:150px}
-  }
-  @container arch (min-width:900px){
-    .arch{--av:clamp(72px,18cqh,150px);--ov:calc(var(--av)*.47);height:100cqh;
-      grid-template-rows:minmax(calc(var(--ov) + 72px),400px) auto;gap:clamp(10px,2cqh,16px);padding:clamp(10px,2.4cqh,22px) clamp(14px,2cqw,26px)}
-    .hero{display:flex;flex-direction:column;min-height:0}
-    .bannerimg{flex:1;min-height:0;aspect-ratio:auto;max-height:none}
+  @container arch (max-width:599px){   /* narrow window: one column, scrolls */
+    .arch{font-size:clamp(10px,3.1cqw,13.5px);gap:.8em 1em;align-content:start;grid-template-columns:7.5em minmax(0,1fr);grid-template-rows:none;
+      grid-template-areas:"bar bar" "av id" "dni dni" "banner banner" "note note" "mid mid" "favs favs"}
+    .a-av{height:7.5em}
+    .a-banner{aspect-ratio:16/6}
+    .a-note p{overflow:visible}
+    .a-mid{grid-template-columns:minmax(0,1fr);gap:.9em}
+    .a-bands{padding:.8em 0 0;border-left:0;border-top:1px solid var(--line)}
+    .a-anime{padding-right:0}
+    .a-favs{grid-template-columns:minmax(0,1fr)}
   }
 
   /* ===== MUSIC ===== */
@@ -179,17 +196,12 @@
   .tab:hover{background:var(--sage)}
   .tab[aria-selected=true]{background:var(--ink);color:var(--lt)}
   .tab:focus-visible{outline:2px solid var(--rust);outline-offset:-4px}
-  .tabbody{flex:1;min-height:0;overflow:auto}
-  .pane{display:flex;flex-direction:column;gap:14px;max-width:860px;margin:0 auto;padding:clamp(14px,2vw,26px);min-width:0}
-  .inf-head{display:flex;align-items:center;gap:16px}
-  .inf-av{flex:none;width:80px;aspect-ratio:1;border:3px solid var(--ink);border-radius:22px}
-  .inf-name{font-weight:800;font-size:clamp(16px,2.2vw,22px)}
-  .inf-ver{font-weight:800;font-size:clamp(22px,3.4vw,34px);line-height:1.1}
+  .tabbody{flex:1;min-height:0;overflow:auto;container:inf/size}
+  .pane{display:flex;flex-direction:column;gap:.9em;margin:0;padding:1.1em 1.3em;min-width:0;font-size:clamp(10px,1.75cqw,14.5px)}
   .kv{display:grid;grid-template-columns:max-content minmax(0,1fr);gap:6px 18px;font-size:13.5px;line-height:1.45}
   .kv dt{font-weight:800} .kv dd{overflow-wrap:anywhere} .kv a{color:var(--ink);font-weight:700}
   .ok{color:#1d4d2b} .bad{color:#7a2f2a}
   .muted{font-size:12.5px;opacity:.8;line-height:1.5}
-  #logList{display:flex;flex-direction:column;gap:14px}
   .rel ul{list-style:none;display:flex;flex-direction:column;gap:5px}
   .tag{display:inline-block;min-width:6em;margin-right:6px;padding:0 5px;text-align:center;font-size:11px;font-weight:800;text-transform:uppercase;color:var(--lt);background:var(--ink)}
   .tag.new,.tag.add{background:#1d4d2b} .tag.fix,.tag.rem{background:#8e2f27} .tag.chg{background:#7a5a1a}
@@ -219,6 +231,47 @@
   .stat{font-size:12.5px;font-weight:700}
   .introopt{display:flex;align-items:center;gap:10px;font-size:clamp(12px,calc(var(--u)*1.3),17px);line-height:1.4;text-align:left;cursor:pointer}
   .introopt input{flex:none;width:1.2em;height:1.2em;accent-color:var(--lt);cursor:pointer}
+
+
+  /* ===== INFO + SETTINGS: tiles that scale with the window (same idea as ARCH!VE) ===== */
+  #panelSettings{container:set/size}
+  .pane .card > h2{gap:.4em;padding:.4em .75em;font-size:.95em}
+  .pane .card > h2 svg{width:1.1em;height:1.1em}
+  .pane .card .nb{padding:.65em .85em;font-size:1em;line-height:1.5}
+  .pane .kv{gap:.4em 1.3em;font-size:1em;line-height:1.45}
+  .pane .row{gap:.8em;padding:.5em 0}
+  .pane .row input{width:1.25em;height:1.25em;margin-top:.1em}
+  .pane .row b{font-size:1em} .pane .row small{font-size:.88em}
+  .pane .btns{gap:.55em;margin-top:.7em}
+  .pane .btns .pbtn{height:2.5em;min-width:0;padding:0 1em;font-size:1em}
+  .pane .stat{font-size:.92em}
+  .pane .muted{font-size:.9em}
+  .pane .tag{font-size:.78em}
+  .pane .rel ul{gap:.35em}
+  .pane .card p + p{margin-top:.5em}
+  .pane .md{font-size:1.03em;columns:27em;column-gap:2em}
+  .pane .md pre,.pane .md table{break-inside:avoid}
+  .pane .md h2,.pane .md h3,.pane .md h4{break-after:avoid}
+  #logList{display:grid;grid-template-columns:repeat(auto-fill,minmax(21em,1fr));gap:.9em;align-items:start}
+  /* About */
+  .pane.about{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.5fr);gap:.9em 1.3em;align-content:start;font-size:clamp(9.5px,min(1.75cqw,3cqh),14.5px)}
+  .ab-id{grid-row:1/3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6em;min-width:0;text-align:center}
+  .inf-av{flex:none;width:min(11em,100%);aspect-ratio:1;border:.28em solid var(--ink);border-radius:2.2em}
+  .inf-name{font-size:1.45em;font-weight:800;line-height:1.2;overflow-wrap:anywhere}
+  .inf-ver{font-size:2.3em;font-weight:800;line-height:1.1}
+  .ab-site{grid-column:2}
+  .ab-note{grid-column:2}
+  /* Settings: cards flow into two balanced columns */
+  .pane.set{display:block;columns:2 21em;column-gap:1.1em;font-size:clamp(9px,min(1.75cqw,2.5cqh),14.5px)}
+  .pane.set .card{break-inside:avoid;margin:0 0 1.1em}
+  @container (max-width:599px){
+    .pane{font-size:clamp(10px,3.1cqw,14px)}
+    .pane.about{grid-template-columns:minmax(0,1fr);font-size:clamp(10px,3.1cqw,14px)}
+    .ab-id{grid-row:auto;flex-direction:row;justify-content:flex-start;gap:1em;text-align:left}
+    .inf-av{width:5em}
+    .ab-site,.ab-note{grid-column:1}
+    .pane.set{columns:1;font-size:clamp(10px,3.1cqw,14px)}
+  }
 
   /* ===== WINDOWS 11 TASKBAR ===== */
   .taskbar{position:fixed;left:0;right:0;bottom:0;height:48px;z-index:50;display:flex;align-items:center;justify-content:space-between;
@@ -312,14 +365,59 @@
     .st-foot{margin-top:8px;padding:8px 16px}
   }
   /* ===== ON-SCREEN KEYBOARD (phones only; floats above the taskbar, turns with the page) ===== */
-  .vk{position:fixed;left:50%;bottom:56px;transform:translateX(-50%);z-index:80;width:min(560px,calc(100% - 16px));padding:6px;display:flex;flex-direction:column;gap:4px;
+  .vk{position:fixed;left:0;top:0;z-index:1200;width:min(560px,calc(100% - 16px));padding:0 6px 6px;display:flex;flex-direction:column;gap:2px;
     background:rgba(14,19,16,.96);border:1px solid #2b342d;border-radius:8px;box-shadow:0 10px 40px rgba(0,0,0,.6);font-style:normal;
     font-family:"Segoe UI Variable","Segoe UI",system-ui,-apple-system,Arial,sans-serif;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;touch-action:manipulation}
   .vk-r{display:flex;gap:4px}
+  .vk-grip{height:20px;display:flex;align-items:center;justify-content:center;cursor:grab;touch-action:none}
+  .vk-grip span{width:44px;height:4px;border-radius:2px;background:#56665a}
+  .vk-body{display:grid}
+  .vk-l{grid-area:1/1;display:flex;flex-direction:column;gap:4px}
+  .vk-l.off{visibility:hidden;pointer-events:none}
+  .vk-k.on{background:var(--sage);color:#000}
   .vk-s{flex:.5 1 0}
   .vk-k{flex:1 1 0;min-width:0;height:34px;padding:0;display:flex;align-items:center;justify-content:center;font:inherit;font-size:15px;font-weight:600;color:#fff;background:#232d26;border:0;border-radius:5px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
   .vk-k:active{background:var(--sage);color:#000}
   .vk-k.w{flex:1.5 1 0} .vk-k.sp{flex:5 1 0;font-size:13px;font-weight:400;color:#b9c3b3} .vk-k.go{flex:1.7 1 0;background:var(--rust)}
+
+/* ===== FULL SCREEN BUTTON (top left) ===== */
+  .fsbtn{position:fixed;top:6px;left:6px;z-index:1100;width:32px;height:32px;display:flex;align-items:center;justify-content:center;padding:0;color:#fff;background:rgba(0,0,0,.5);border:1px solid rgba(255,255,255,.28);border-radius:8px;cursor:pointer;-webkit-tap-highlight-color:transparent}
+  .fsbtn svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}
+  @media (pointer:coarse){.fsbtn{width:40px;height:40px} .wbar{padding-left:46px}}   /* bigger tap target on phones; titles make room for it */
+
+  /* ===== LOCK SCREEN (black wallpaper, windows-style sign-in: big profile picture, name, password box) ===== */
+  #lock{container:lock/size;position:fixed;inset:0;z-index:900;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;color:#fff;text-align:center;
+    background:#000;transition:opacity .35s ease,visibility .35s}
+  #lock.out{opacity:0;visibility:hidden;pointer-events:none}
+  .lk-main{display:flex;flex-direction:column;align-items:center;gap:clamp(8px,4cqh,36px);width:100%}
+  .lk-clock{display:flex;flex-direction:column;gap:2px} .lk-clock b{font-size:clamp(30px,9cqh,72px);font-weight:300;line-height:1} .lk-clock span{font-size:clamp(12px,2.6cqh,17px);opacity:.75}
+  .lk-row{display:flex;justify-content:center;width:100%}
+  .lk-card{display:flex;flex-direction:column;align-items:center;gap:clamp(6px,1.6cqh,12px);width:min(320px,100%)}
+  .lk-av{width:clamp(64px,24cqh,148px);height:clamp(64px,24cqh,148px);border:0;box-shadow:0 0 0 1px rgba(255,255,255,.2)}
+  .lk-name{font-weight:700;font-size:clamp(16px,3.4cqh,24px)}
+  .lk-fw{position:relative;width:100%}
+  .lk-f{display:flex;align-items:center;height:42px;padding-left:12px;overflow:hidden;background:rgba(255,255,255,.09);border:1px solid rgba(255,255,255,.22);border-bottom:2px solid var(--sage);border-radius:8px}
+  .lk-f:focus-within{background:rgba(255,255,255,.14);border-color:rgba(255,255,255,.4);border-bottom-color:var(--lt)}
+  .lk-f input{flex:1;min-width:0;height:100%;padding:0;font:inherit;font-style:normal;font-size:14px;color:#fff;background:transparent;border:0;outline:none}
+  .lk-f input::placeholder{color:rgba(255,255,255,.5)}
+  .lk-f button{flex:none;width:40px;height:100%;padding:0;display:flex;align-items:center;justify-content:center;color:#fff;font-size:17px;background:transparent;border:0;cursor:pointer}
+  .lk-f button:hover{background:rgba(255,255,255,.14)}
+  .lk-f button:focus-visible{outline:2px solid #fff;outline-offset:-3px}
+  .lk-f #lkGo{background:var(--rust)} .lk-f #lkGo:hover{background:#6a8275}
+  .lk-eye svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
+  .lk-eye .ex{display:none} .lk-eye[aria-pressed=true] .ex{display:block}
+  .lk-hint{margin-top:.6em;font-size:11px;color:rgba(255,255,255,.5)}
+  .lk-hint b{margin-left:.35em;padding:1px 6px;font-weight:700;color:var(--ink);background:var(--sage);border-radius:3px}
+  @container lock (min-width:640px){   /* wide enough: the hint sits small on the left of the password box */
+    .lk-hint{position:absolute;right:calc(100% + 16px);top:50%;margin:0;transform:translateY(-50%);white-space:nowrap}
+  }
+  .lk-msg{min-height:16px;font-size:12px;color:#ffb4a3}
+  .lk-sd{position:absolute;right:14px;bottom:14px;display:flex;align-items:center;gap:6px;height:36px;padding:0 12px;font:inherit;font-size:13px;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);border-radius:6px;cursor:pointer}
+  .lk-sd svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round}
+  #lock.shake .lk-card{animation:lkShake .35s}
+  @keyframes lkShake{25%{transform:translateX(-8px)}75%{transform:translateX(8px)}}
+  #lock.kb{justify-content:flex-start;padding-top:8px} #lock.kb .lk-clock{display:none}   /* keyboard up: the sign-in box moves to the top so it is not covered */
+  #lock.kb .lk-av{width:44px;height:44px} #lock.kb .lk-name{font-size:14px}
 
 /* ================= INTRO / LOADING SCREEN ================= */
   body.locked{overflow:hidden}
@@ -379,6 +477,29 @@
   <symbol id="p-warn" viewBox="0 0 16 16"><path d="M8 2L14.5 13.5h-13z"/><path d="M8 6.5v3.5M8 12v.2"/></symbol>
 </svg>
 
+<button class="fsbtn" id="fsBtn" type="button" aria-label="Full screen" title="Full screen" hidden><svg viewBox="0 0 16 16"><path id="fsIcon" d="M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4"/></svg></button>
+
+<div id="lock" class="out" role="dialog" aria-modal="true" aria-label="Lock screen">
+  <div class="lk-main">
+    <div class="lk-clock"><b id="lkTime"></b><span id="lkDate"></span></div>
+    <div class="lk-row">
+      <div class="lk-card">
+        <span class="st-av lk-av"></span><span class="lk-name">ceiko_mill</span>
+        <div class="lk-fw">
+          <div class="lk-f">
+            <input id="lkPw" type="password" placeholder="Password" autocomplete="off" aria-label="Password">
+            <button id="lkEye" class="lk-eye" type="button" aria-label="Show password" aria-pressed="false"><svg viewBox="0 0 16 16"><path d="M1.5 8s2.3-4.5 6.5-4.5S14.5 8 14.5 8s-2.3 4.5-6.5 4.5S1.5 8 1.5 8z"/><circle cx="8" cy="8" r="1.9"/><path class="ex" d="M3 13.5L13 2.5"/></svg></button>
+            <button id="lkGo" type="button" aria-label="Unlock">&rarr;</button>
+          </div>
+          <div class="lk-hint">password<b>FaceDown</b></div>
+        </div>
+        <span class="lk-msg" id="lkMsg" role="alert"></span>
+      </div>
+    </div>
+  </div>
+  <button class="lk-sd" id="lkShut" type="button"><svg viewBox="0 0 16 16"><path d="M8 2v6M4.5 4.2a5.2 5.2 0 107 0"/></svg>Shut down</button>
+</div>
+
 <div id="intro" role="dialog" aria-modal="true" aria-label="Welcome">
   <div class="loader" aria-label="Loading">loading<span id="dots">.</span></div>
   <div class="welcome">
@@ -409,55 +530,58 @@
   <!-- ARCHIVE -->
   <section class="win" id="wArchive" data-icon="file" data-title="ARCH!VE"><div class="panel" id="panelArchive">
     <div class="arch">
-      <div class="hero">
-        <div class="pic bannerimg" style="background-image:url('images/Banner_Mill.jpg')"></div>
-        <div class="pic avatar" style="background-image:url('images/Avatar_Mill.jpg')"></div>
-        <div class="hero-name">ceiko_mill</div>
+      <div class="a-bar">
+        <span class="a-ic" aria-hidden="true"><svg class="i"><use href="#globe"/></svg><svg class="i"><use href="#home"/></svg><svg class="i"><use href="#search"/></svg><svg class="i"><use href="#mail"/></svg></span>
+        <span class="a-acc"><button type="button" id="aAccount">My Account</button><span aria-hidden="true">|</span><button type="button" id="aSignOut">Sign Out</button></span>
       </div>
-      <div class="cards">
-        <section class="card c-sm">
-          <h2><svg class="i"><use href="#bubble"/></svg># CE!KO_MILL</h2>
-          <p class="nb">
-            % <b>HALF FILO / HALF CHINESE</b> !!<br>
-            <span class="hl"><u>male</u></span> <span class="hl">he/him</span><br>
-            <span class="hl"><u>Leo</u></span> <u>August</u> !! %
-          </p>
-        </section>
-        <section class="card c-sm">
-          <h2><svg class="i"><use href="#cloud"/></svg># DN!</h2>
-          <p class="nb">
-            <span class="hl">Do not Interact</span> : if you're a <b>pedophile</b>,
-            <b>flat earther</b>, <u>force religions</u>, <u>force genders</u>,
-            if ur <b>debating politics or religion</b>.
-          </p>
-        </section>
-        <section class="card c-sm">
-          <h2><svg class="i"><use href="#onigiri"/></svg># AN!ME</h2>
-          <div class="nb anime">
+      <div class="a-av"><div class="pic avatar" style="background-image:url('images/Avatar_Mill.jpg')"></div></div>
+      <section class="a-id">
+        <h2><svg class="i"><use href="#bubble"/></svg># CE!KO_MILL</h2>
+        <p>
+          <b>ceiko_mill</b><br>
+          % <b>HALF FILO / HALF CHINESE</b> !!<br>
+          <span class="hl"><u>male</u></span> <span class="hl">he/him</span><br>
+          <span class="hl"><u>Leo</u></span> <u>August</u> !! %
+        </p>
+      </section>
+      <section class="a-dni">
+        <h2><svg class="i"><use href="#cloud"/></svg># DN!</h2>
+        <p>
+          <span class="hl">Do not Interact</span> : if you're a <b>pedophile</b>,
+          <b>flat earther</b>, <u>force religions</u>, <u>force genders</u>,
+          if ur <b>debating politics or religion</b>.
+        </p>
+      </section>
+      <div class="pic a-banner" style="background-image:url('images/Banner_Mill.jpg')"></div>
+      <section class="a-note">
+        <h2>N0TE%!?</h2>
+        <p>
+          <b>mill</b> \ ˈmil \ <i>n</i>
+          <b>1</b> : An unyielding execution of a routine that requires no sentience.
+          <b>2</b> : An irrecoverable condition of automatic labor that manufactures architecture through the endless repetition of a simple action.
+        </p>
+      </section>
+      <div class="a-mid">
+        <section class="a-anime">
+          <div>
+            <h2><svg class="i"><use href="#onigiri"/></svg># AN!ME</h2>
             <p>Armed Girls Machiavellism, Witch Craft Works, Mairimashita! Iruma-kun, Bocchi The Rock!</p>
-            <div class="thumbs">
-              <div class="pic thumb" style="background-image:url('images/Icon1_Mill.jpg')"></div>
-              <div class="pic thumb" style="background-image:url('images/Icon2_Mill.jpg')"></div>
-              <div class="pic thumb" style="background-image:url('images/Icon3_Mill.jpg')"></div>
-            </div>
+          </div>
+          <div class="thumbs">
+            <div class="pic thumb" style="background-image:url('images/Icon1_Mill.jpg')"></div>
+            <div class="pic thumb" style="background-image:url('images/Icon2_Mill.jpg')"></div>
+            <div class="pic thumb" style="background-image:url('images/Icon3_Mill.jpg')"></div>
           </div>
         </section>
-        <section class="card c-md">
-          <h2><svg class="i"><use href="#file"/></svg># FAVS</h2>
-          <div class="nb lists">
-            <div><span class="hl">boys</span> : Luka (ALNST), Shion Tatsunami (Saihate Station)</div>
-            <div><span class="hl">girls</span> : Silence Suzuka (UMA), Hitori Gotoh (BTR)</div>
-            <div><span class="hl">hobbies</span> : Studying, Osu, Sudoku, Chess</div>
-          </div>
+        <section class="a-bands">
+          <h2><svg class="i"><use href="#note"/></svg># B@NDS</h2>
+          <p>Pierce The Veil, Sleeping With Sirens, Silverstein, Flyleaf, Weezer, Yorushika, Tuyu</p>
         </section>
-        <section class="card c-md">
-          <h2>N0TE%!?</h2>
-          <p class="nb">
-            <b>mill</b> \ ˈmil \ <i>n</i>
-            <b>1</b> : An unyielding execution of a routine that requires no sentience.
-            <b>2</b> : An irrecoverable condition of automatic labor that manufactures architecture through the endless repetition of a simple action.
-          </p>
-        </section>
+      </div>
+      <div class="a-favs">
+        <div><span class="hl">boys</span> : Luka (ALNST), Shion Tatsunami (Saihate Station)</div>
+        <div><span class="hl">girls</span> : Silence Suzuka (UMA), Hitori Gotoh (BTR)</div>
+        <div><span class="hl">hobbies</span> : Studying, Osu, Sudoku, Chess</div>
       </div>
     </div>
   </div>
@@ -525,12 +649,12 @@
       <button class="tab" role="tab" type="button" data-tab="readme" aria-selected="false">Readme</button>
     </div>
     <div class="tabbody">
-      <div class="pane" data-pane="about">
-        <div class="inf-head">
+      <div class="pane about" data-pane="about">
+        <div class="ab-id">
           <div class="pic inf-av" style="background-image:url('images/Avatar_Mill.jpg')"></div>
           <div><div class="inf-name">ceiko_mill's computer</div><div class="inf-ver" id="infVer">version ...</div><div class="muted" id="infDate"></div></div>
         </div>
-        <section class="card">
+        <section class="card ab-site">
           <h2><svg class="i"><use href="#info"/></svg># ABOUT TH!S S!TE</h2>
           <dl class="nb kv">
             <dt>Version</dt><dd id="aVer">-</dd>
@@ -542,7 +666,10 @@
             <dt>Saving</dt><dd id="aSaving">-</dd>
           </dl>
         </section>
-        <p class="muted">The version and the changelog come from <b>changelog.json</b>, the socials from <b>socials.json</b> and the readme from <b>README.md</b>. Edit those files to update this window; you never need to touch index.html.</p>
+        <section class="card ab-note">
+          <h2>N0TE%!?</h2>
+          <p class="nb">The version and the changelog come from <b>changelog.json</b>, the socials from <b>socials.json</b> and the readme from <b>README.md</b>. Edit those files to update this window; you never need to touch index.html.</p>
+        </section>
       </div>
       <div class="pane" data-pane="socials" hidden><div id="socList">loading...</div></div>
       <div class="pane" data-pane="log" hidden><div id="logList"></div></div>
@@ -553,7 +680,7 @@
 
   <!-- SETTINGS -->
   <section class="win" id="wSettings" data-icon="gear" data-title="SETT!NGS"><div class="panel" id="panelSettings">
-    <div class="pane">
+    <div class="pane set">
       <section class="card">
         <h2><svg class="i"><use href="#note"/></svg># MUS!C</h2>
         <div class="nb">
@@ -1407,7 +1534,7 @@
   // Start: pinned apps (built from the taskbar), search, restart
   const sm = mkFly('Start', document.querySelector('.start'), 'fly-start',
     '<input class="st-q" type="search" placeholder="Search apps" aria-label="Search apps" autocomplete="off"><div class="st-h">Pinned</div><div class="st-grid"></div>' +
-    '<div class="st-foot"><span class="st-av"></span><span class="st-u">ceiko_mill</span><button class="tbtn st-pw" type="button" aria-label="Restart" title="Restart"><svg class="i" viewBox="0 0 16 16"><path d="M8 2v6M4.5 4.2a5.2 5.2 0 107 0"/></svg></button></div>',
+    '<div class="st-foot"><span class="st-av"></span><span class="st-u">ceiko_mill</span><button class="tbtn st-pw st-lk" type="button" aria-label="Lock" title="Lock"><svg class="i" viewBox="0 0 16 16"><rect x="3.5" y="7" width="9" height="6.5" rx="1"/><path d="M5.5 7V5a2.5 2.5 0 015 0v2"/></svg></button><button class="tbtn st-pw st-rs" type="button" aria-label="Restart" title="Restart"><svg class="i" viewBox="0 0 16 16"><path d="M13 8a5 5 0 11-1.6-3.7M13 2.5v3h-3"/></svg></button><button class="tbtn st-pw st-sd" type="button" aria-label="Shut down" title="Shut down"><svg class="i" viewBox="0 0 16 16"><path d="M8 2v6M4.5 4.2a5.2 5.2 0 107 0"/></svg></button></div>',
     () => { q.value = ''; drawStart(); if (!matchMedia('(pointer:coarse)').matches) q.focus(); });   // no surprise keyboard on phones
   const q = sm.querySelector('.st-q'), grid = sm.querySelector('.st-grid'), flat = s => s.replace(/!/g, 'i').replace(/0/g, 'o').toLowerCase();
   function drawStart() {
@@ -1422,7 +1549,9 @@
   }
   q.addEventListener('input', drawStart);
   q.addEventListener('keydown', e => { if (e.key === 'Enter') { const f = grid.querySelector('.st-app'); if (f) f.click(); } });
-  sm.querySelector('.st-pw').onclick = () => location.reload();
+  sm.querySelector('.st-rs').onclick = () => location.reload();
+  sm.querySelector('.st-lk').onclick = () => lockScreen();
+  sm.querySelector('.st-sd').onclick = () => exitSite();
 
   // Hidden icons: quick bass boost + shortcuts
   const hid = mkFly('Hidden icons', tray.querySelector('.chev'), 'fly-hid',
@@ -1482,57 +1611,141 @@
     const d = new Date(cy, cmo + +b.dataset.m, 1); cy = d.getFullYear(); cmo = d.getMonth(); drawCal(); });
 
   /* ---------- ON-SCREEN KEYBOARD (phones): our own small keyboard for the search bars, so the phone's portrait keyboard never opens ---------- */
-  const VK_SEL = '#plSearch, .st-q';   // the search bars that get it
+  const VK_SEL = '#plSearch, .st-q, #lkPw';   // the search bars that get it
   const VK_LAYERS = {
     abc: [['q','w','e','r','t','y','u','i','o','p'], [' ','a','s','d','f','g','h','j','k','l',' '], ['SH','z','x','c','v','b','n','m','BS'], ['SYM','-',"'",'SP','.','GO']],
     sym: [['1','2','3','4','5','6','7','8','9','0'], ['-','_','.',',',"'",'"','(',')','&','!'], ['/',':',';','?','@','#','+','=','BS'], ['ABC','SP','GO']]
   };
   const VK_LABEL = { BS: '\u232B', SP: 'space', GO: 'Go', SYM: '?123', ABC: 'abc', SH: '\u21E7' };
-  const vk = el('div', 'vk'); vk.hidden = true; vk.setAttribute('aria-hidden', 'true'); document.body.append(vk);
-  let vkT = null, vkLayer = 'abc', vkRep = null, vkShift = false;
+  const vk = el('div', 'vk'); vk.hidden = true; vk.setAttribute('aria-hidden', 'true');
+  const vkGrip = el('div', 'vk-grip'); vkGrip.append(el('span'));   // drag this bar to move the keyboard
+  const vkBody = el('div', 'vk-body');
+  vk.append(vkGrip, vkBody); document.body.append(vk);
+  let vkT = null, vkLayer = 'abc', vkRep = null, vkShift = false, vkPos = null, vkTouched = 0, vkRot = rot();
+  const vkLayers = {}, vkLetters = [], vkShiftKeys = [];
   const stopRep = () => { clearTimeout(vkRep); clearInterval(vkRep); vkRep = null; };
-  function drawVK() {
-    vk.replaceChildren();
-    VK_LAYERS[vkLayer].forEach(r => {
+  Object.keys(VK_LAYERS).forEach(name => {   // every key is built once and only updated afterwards: removing the key under your finger used to make the search bar lose focus
+    const L = el('div', 'vk-l'); vkLayers[name] = L;
+    VK_LAYERS[name].forEach(r => {
       const row = el('div', 'vk-r');
       r.forEach(k => {
         if (k === ' ') { row.append(el('span', 'vk-s')); return; }
         const cls = k === 'BS' || k === 'SYM' || k === 'ABC' || k === 'SH' ? ' w' : k === 'SP' ? ' sp' : k === 'GO' ? ' go' : '';
-        const b = el('button', 'vk-k' + cls + (k === 'SH' && vkShift ? ' on' : ''), VK_LABEL[k] || (vkShift ? k.toUpperCase() : k));
-        b.type = 'button'; b.tabIndex = -1; b.dataset.k = k; row.append(b);
+        const b = el('button', 'vk-k' + cls, VK_LABEL[k] || k); b.type = 'button'; b.tabIndex = -1; b.dataset.k = k; row.append(b);
+        if (/^[a-z]$/.test(k)) vkLetters.push(b);
+        if (k === 'SH') vkShiftKeys.push(b);
       });
-      vk.append(row);
+      L.append(row);
     });
+    vkBody.append(L);
+  });
+  function vkSync() {
+    Object.keys(vkLayers).forEach(n => vkLayers[n].classList.toggle('off', n !== vkLayer));
+    vkLetters.forEach(b => { b.textContent = vkShift ? b.dataset.k.toUpperCase() : b.dataset.k; });
+    vkShiftKeys.forEach(b => b.classList.toggle('on', vkShift));
   }
-  const showVK = inp => { vkT = inp; vkLayer = 'abc'; vkShift = false; drawVK(); vk.hidden = false; };
-  const hideVK = () => { vkT = null; vk.hidden = true; stopRep(); };
+  function placeVK() {   // position in the page's own (possibly turned) coordinates, kept inside the screen
+    const W = document.body.offsetWidth, H = document.body.offsetHeight, w = vk.offsetWidth, h = vk.offsetHeight;
+    const lockUp = typeof lockEl !== 'undefined' && !lockEl.classList.contains('out');
+    if (!vkPos) vkPos = { x: (W - w) / 2, y: H - h - (lockUp ? 6 : 56) };
+    vkPos.x = Math.max(0, Math.min(W - w, vkPos.x)); vkPos.y = Math.max(0, Math.min(H - h, vkPos.y));
+    vk.style.left = vkPos.x + 'px'; vk.style.top = vkPos.y + 'px';
+  }
+  const showVK = inp => { vkT = inp; vkLayer = 'abc'; vkShift = false; vkSync(); vk.hidden = false; placeVK(); if (typeof lockEl !== 'undefined') lockEl.classList.toggle('kb', inp.id === 'lkPw'); };
+  const hideVK = () => { vkT = null; vk.hidden = true; stopRep(); if (typeof lockEl !== 'undefined') lockEl.classList.remove('kb'); };
+  let vkDrag = null;
+  vkGrip.addEventListener('pointerdown', e => { vkGrip.setPointerCapture(e.pointerId); vkDrag = { x: e.clientX, y: e.clientY, px: vkPos.x, py: vkPos.y }; });
+  vkGrip.addEventListener('pointermove', e => {
+    if (!vkDrag) return;
+    const dx = e.clientX - vkDrag.x, dy = e.clientY - vkDrag.y;   // finger movement on the real screen -> movement inside the turned page
+    vkPos.x = vkDrag.px + (rot() ? dy : dx); vkPos.y = vkDrag.py + (rot() ? -dx : dy);
+    placeVK();
+  });
+  ['pointerup', 'pointercancel'].forEach(ev => vkGrip.addEventListener(ev, () => { vkDrag = null; }));
   function vkKey(k) {
     if (!vkT) return;
-    if (k === 'SYM' || k === 'ABC') { vkLayer = k === 'SYM' ? 'sym' : 'abc'; drawVK(); return; }
-    if (k === 'SH') { vkShift = !vkShift; drawVK(); return; }
+    if (k === 'SYM' || k === 'ABC') { vkLayer = k === 'SYM' ? 'sym' : 'abc'; vkSync(); return; }
+    if (k === 'SH') { vkShift = !vkShift; vkSync(); return; }
     if (k === 'GO') { const t = vkT; t.dispatchEvent(new KeyboardEvent('keydown', { key: 'Enter', bubbles: true, cancelable: true })); hideVK(); t.blur(); return; }
     let s = vkT.selectionStart, e = vkT.selectionEnd; if (s == null) s = e = vkT.value.length;
     if (k === 'BS') { if (s === e) { if (!s) return; s--; } vkT.setRangeText('', s, e, 'end'); }
     else {
       vkT.setRangeText(k === 'SP' ? ' ' : (vkShift ? k.toUpperCase() : k), s, e, 'end');
-      if (vkShift) { vkShift = false; drawVK(); }   // one tap = one capital
+      if (vkShift) { vkShift = false; vkSync(); }   // one tap = one capital
     }
-    vkT.dispatchEvent(new Event('input', { bubbles: true }));
+    vkT.dispatchEvent(new Event('input', { bubbles: true }));   // the playlist / start menu filter listens for this
   }
   vk.addEventListener('pointerdown', e => {
-    e.preventDefault();   // keep the cursor in the search bar
+    e.preventDefault(); vkTouched = Date.now();   // keep the cursor in the search bar
     const b = e.target.closest('.vk-k'); if (!b) return;
+    if (b.dataset.k === 'GO') return;   // Go acts on click (below): hiding the keyboard on touch-down let the tap fall through onto whatever was underneath
     vkKey(b.dataset.k);
     if (b.dataset.k === 'BS') { stopRep(); vkRep = setTimeout(() => { vkRep = setInterval(() => vkKey('BS'), 55); }, 420); }   // hold to keep deleting
   });
   vk.addEventListener('mousedown', e => e.preventDefault());
+  vk.addEventListener('click', e => { const b = e.target.closest('.vk-k'); if (b && b.dataset.k === 'GO') vkKey('GO'); });
   vk.addEventListener('contextmenu', e => e.preventDefault());
   ['pointerup', 'pointercancel', 'pointerleave'].forEach(ev => vk.addEventListener(ev, stopRep));
   document.addEventListener('focusin', e => { if (e.target.matches && e.target.matches(VK_SEL) && phone()) showVK(e.target); });
-  document.addEventListener('focusout', e => { if (e.target === vkT) setTimeout(() => { if (vkT && document.activeElement !== vkT) hideVK(); }, 0); });   // tab out = keyboard goes away
-  document.addEventListener('pointerdown', e => { if (vkT && !vk.contains(e.target) && e.target !== vkT) { const t = vkT; hideVK(); t.blur(); } }, true);   // tap anywhere else = same
+  document.addEventListener('focusout', e => { if (e.target === vkT) setTimeout(() => {   // tab out = keyboard goes away, but not while you are pressing its keys
+    if (!vkT || document.activeElement === vkT) return;
+    if (Date.now() - vkTouched < 600) vkT.focus({ preventScroll: true }); else hideVK();
+  }, 0); });
+  document.addEventListener('pointerdown', e => { if (vkT && !vk.contains(e.target) && e.target !== vkT && !e.target.closest('.lk-eye')) { const t = vkT; hideVK(); t.blur(); } }, true);   // tap anywhere else = same
   const syncVK = () => document.querySelectorAll(VK_SEL).forEach(i => phone() ? i.setAttribute('inputmode', 'none') : i.removeAttribute('inputmode'));   // "none" = the phone's own keyboard stays closed
-  syncVK(); addEventListener('resize', () => { syncVK(); if (vkT && !phone()) hideVK(); });
+  syncVK(); addEventListener('resize', () => { syncVK(); if (vkT && !phone()) hideVK(); if (rot() !== vkRot) { vkRot = rot(); vkPos = null; } if (vkT) placeVK(); });
+
+  /* ---------- FULL SCREEN button (top left) ---------- */
+  const fsBtn = $('fsBtn'), fsRoot = document.documentElement;   // the whole page (not just <body>) so the sideways trick on phones keeps working
+  const fsReq = fsRoot.requestFullscreen || fsRoot.webkitRequestFullscreen;
+  const fsEl = () => document.fullscreenElement || document.webkitFullscreenElement;
+  if (fsReq) fsBtn.hidden = false;   // browsers without it (iPhone Safari) simply don't get the button
+  fsBtn.addEventListener('click', () => {
+    if (fsEl()) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); return; }
+    try { const p = fsReq.call(fsRoot); if (p && p.catch) p.catch(() => {}); } catch (_) {}
+  });
+  const fsSync = () => {
+    const on = !!fsEl();
+    fsBtn.setAttribute('aria-label', on ? 'Exit full screen' : 'Full screen'); fsBtn.title = on ? 'Exit full screen' : 'Full screen';
+    $('fsIcon').setAttribute('d', on ? 'M6 2v4H2M10 2v4h4M6 14v-4H2M10 14v-4h4' : 'M2 6V2h4M14 6V2h-4M2 10v4h4M14 10v4h-4');
+  };
+  document.addEventListener('fullscreenchange', fsSync); document.addEventListener('webkitfullscreenchange', fsSync);
+
+  /* ---------- LOCK SCREEN (after ENTER, and from the start menu) ---------- */
+  const LOCK_PW = 'FaceDown';   // shown on the lock screen on purpose
+  const lockEl = $('lock'), lkPw = $('lkPw'), lkMsg = $('lkMsg');
+  let lkTick = null;
+  const lkInert = on => document.querySelectorAll('.desktop,.taskbar').forEach(n => { n.inert = on; });
+  const lkClock = () => {
+    const d = new Date();
+    $('lkTime').textContent = d.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    $('lkDate').textContent = d.toLocaleDateString([], { weekday: 'long', month: 'long', day: 'numeric' });
+  };
+  function lockScreen() {
+    closeFly(); lkPw.value = ''; lkMsg.textContent = ''; setEye(false);
+    lockEl.classList.remove('out'); lkInert(true); lkClock();
+    clearInterval(lkTick); lkTick = setInterval(lkClock, 1000);
+    if (!phone()) lkPw.focus();
+  }
+  function unlockScreen() { lockEl.classList.add('out'); lkInert(false); clearInterval(lkTick); lkPw.blur(); }
+  function tryUnlock() {
+    if (lkPw.value === LOCK_PW) { unlockScreen(); return; }
+    lkMsg.textContent = 'Wrong password'; lkPw.value = '';
+    lockEl.classList.remove('shake'); void lockEl.offsetWidth; lockEl.classList.add('shake');
+  }
+  lkPw.addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); tryUnlock(); } });
+  $('lkGo').addEventListener('click', tryUnlock);
+  const lkEye = $('lkEye');   // eye button: click once to show the password, click again to hide it (a toggle, not hold)
+  function setEye(on) { lkPw.type = on ? 'text' : 'password'; lkEye.setAttribute('aria-pressed', String(on)); lkEye.setAttribute('aria-label', on ? 'Hide password' : 'Show password'); }
+  lkEye.addEventListener('mousedown', e => e.preventDefault());   // keep the cursor in the box
+  lkEye.addEventListener('click', () => { setEye(lkPw.type === 'password'); if (!phone()) lkPw.focus(); });
+  $('aSignOut').addEventListener('click', lockScreen);   // ARCH!VE toolbar: Sign Out = lock screen
+  $('aAccount').addEventListener('click', () => { const b = tbLeft.querySelector('.app[data-win="wInfo"]'); if (b && b.dataset.s !== 'focus') b.click(); });   // My Account = open !NF0
+  function exitSite() {   // shut down = close this site's tab (only works if the browser allows it), otherwise go to google
+    try { window.close(); } catch (_) {}
+    setTimeout(() => location.replace('https://www.google.com/'), 150);
+  }
+  $('lkShut').addEventListener('click', exitSite);
 
   /* ---------- INTRO ---------- */
   let n = 1;
@@ -1562,9 +1775,10 @@
     if (ctx) ctx.resume();
     intro.classList.add('out');
     document.body.classList.remove('locked');
+    lockScreen();
     if (tracks.length && S.playOnEnter) playCurrent();
   });
 })();
 </script>
 </body>
-</html>
+</html>
