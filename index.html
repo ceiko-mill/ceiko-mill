@@ -90,9 +90,10 @@
   .thumbs{flex:none;display:flex;gap:.55em}
   .thumb{width:2.9em;aspect-ratio:1;border:.2em solid var(--ink);border-radius:.9em}
   .a-favs{grid-area:favs;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.4em 1.4em;padding-top:.75em;border-top:1px solid var(--line);font-size:.95em;line-height:1.5;overflow-wrap:anywhere}
-  @container arch (min-width:600px) and (max-height:370px){   /* short window (phone sideways): no banner, the note takes its place */
-    .arch{grid-template-rows:auto auto minmax(5em,1fr) auto auto;grid-template-areas:"bar bar bar" "av id dni" "av note note" "mid mid mid" "favs favs favs"}
-    .a-banner{display:none}
+  @container arch (min-width:600px) and (max-height:370px){   /* short window (phone sideways): keep the banner, let the page scroll */
+    .arch{font-size:clamp(10px,1.7cqw,13px);grid-template-rows:auto auto auto auto auto}
+    .a-banner{aspect-ratio:16/9}
+    .a-note p{overflow:visible}
   }
   @container arch (max-width:599px) or (max-aspect-ratio:1/1){   /* narrow OR portrait window (phone upright / desktop mode): one column, scrolls */
     .arch{font-size:clamp(10px,3.1cqw,13.5px);gap:.8em 1em;align-content:start;grid-template-columns:7.5em minmax(0,1fr);grid-template-rows:none;
