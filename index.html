@@ -78,9 +78,10 @@
   .a-banner{grid-area:banner;min-height:0;border:.22em solid var(--ink)}
   .a-banner[data-fail]{display:flex;align-items:center;justify-content:center;padding:1em;text-align:center;font-size:.9em;overflow-wrap:anywhere}
   .a-banner[data-fail]::after{content:"banner failed to load: " attr(data-fail) " (" attr(data-why) ")"}
-  .a-note{grid-area:note;display:flex;flex-direction:column;min-height:0;border:.22em solid var(--ink)}
+  .a-note{grid-area:note;display:flex;flex-direction:column;min-height:0;contain:size;border:.22em solid var(--ink)}   /* contain:size = the note never makes its row taller; it takes the banner's height. Its font-size is set by fitNotes() */
   .a-note h2{flex:none;margin:0;padding:.35em .7em;font-size:1em;color:#fff;background:var(--rust);border-bottom:.22em solid var(--ink)}
-  .a-note p{flex:1;min-height:0;overflow:auto;padding:.7em .9em;line-height:1.55}
+  .a-note p{flex:1;min-height:0;overflow:auto;padding:.7em .9em;line-height:1.5;display:flex;flex-direction:column;justify-content:center}
+  .a-note p > span{display:block}
   .a-mid{grid-area:mid;display:grid;grid-template-columns:minmax(0,5fr) minmax(0,7fr);padding-top:.9em;border-top:1px solid var(--line)}
   .a-mid h2{margin-bottom:.35em;font-size:1.45em}
   .a-mid p{font-size:.95em}
@@ -93,14 +94,12 @@
   @container arch (min-width:600px) and (max-height:370px){   /* short window (phone sideways): keep the banner, let the page scroll */
     .arch{font-size:clamp(10px,1.7cqw,13px);grid-template-rows:auto auto auto auto auto}
     .a-banner{aspect-ratio:16/9}
-    .a-note p{overflow:visible}
   }
   @container arch (max-width:599px) or (max-aspect-ratio:1/1){   /* narrow OR portrait window (phone upright / desktop mode): one column, scrolls */
     .arch{font-size:clamp(10px,3.1cqw,13.5px);gap:.8em 1em;align-content:start;grid-template-columns:7.5em minmax(0,1fr);grid-template-rows:none;
       grid-template-areas:"bar bar" "av id" "dni dni" "banner banner" "note note" "mid mid" "favs favs"}
     .a-av{height:7.5em}
-    .a-banner{aspect-ratio:16/6}
-    .a-note p{overflow:visible}
+    .a-banner,.a-note{aspect-ratio:16/8}   /* banner and note are the same size, one under the other */
     .a-mid{grid-template-columns:minmax(0,1fr);gap:.9em}
     .a-bands{padding:.8em 0 0;border-left:0;border-top:1px solid var(--line)}
     .a-anime{padding-right:0}
@@ -560,11 +559,11 @@
       <div class="pic a-banner" style="background-image:url('images/Banner_Mill.jpg')"></div>
       <section class="a-note">
         <h2>N0TE%!?</h2>
-        <p>
+        <p><span>
           <b>mill</b> \ ˈmil \ <i>n</i>
           <b>1</b> : An unyielding execution of a routine that requires no sentience.
           <b>2</b> : An irrecoverable condition of automatic labor that manufactures architecture through the endless repetition of a simple action.
-        </p>
+        </span></p>
       </section>
       <div class="a-mid">
         <section class="a-anime">
@@ -1751,6 +1750,21 @@
     setTimeout(() => location.replace('https://www.google.com/'), 150);
   }
   $('lkShut').addEventListener('click', exitSite);
+
+  /* ---------- NOTE fit: the note is as big as the banner, and its text is scaled to fill it (bigger on big screens, smaller on small ones) ---------- */
+  function fitNotes() {
+    document.querySelectorAll('.a-note').forEach(n => {
+      const p = n.querySelector('p'), t = p && p.firstElementChild; if (!t || !n.clientHeight || !n.clientWidth) return;
+      const fits = px => { n.style.fontSize = px + 'px'; const cs = getComputedStyle(p); return t.offsetHeight + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) <= p.clientHeight + 0.5; };
+      let lo = 6, hi = Math.max(12, Math.min(n.clientWidth, n.clientHeight));
+      if (fits(hi)) lo = hi; else for (let i = 0; i < 14; i++) { const m = (lo + hi) / 2; if (fits(m)) lo = m; else hi = m; }
+      n.style.fontSize = lo + 'px';
+    });
+  }
+  let fitRaf = 0; const fitSoon = () => { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(fitNotes); };
+  document.querySelectorAll('.a-note').forEach(n => { if (window.ResizeObserver) new ResizeObserver(fitSoon).observe(n); });
+  addEventListener('resize', fitSoon); fitSoon();
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitSoon);
 
   /* ---------- picture check: if the banner can't load, say so inside the box (so you can see why on a phone) ---------- */
   document.querySelectorAll('.a-banner').forEach(d => {
