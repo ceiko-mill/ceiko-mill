@@ -252,7 +252,12 @@
   .pane .md{font-size:1.03em;columns:27em;column-gap:2em}
   .pane .md pre,.pane .md table{break-inside:avoid}
   .pane .md h2,.pane .md h3,.pane .md h4{break-after:avoid}
-  #logList{display:grid;grid-template-columns:repeat(auto-fill,minmax(21em,1fr));gap:.9em;align-items:start}
+  #logList{display:grid;grid-template-columns:repeat(auto-fit,minmax(21em,1fr));gap:.9em;align-items:start}
+  .pane .rel .nb{display:flex;flex-direction:column;gap:.6em}
+  .pane .rel p{margin:0}
+  .pane .rel ul{display:block;columns:22em;column-gap:2em}
+  .pane .rel li{display:grid;grid-template-columns:5.2em minmax(0,1fr);gap:.7em;align-items:baseline;break-inside:avoid;padding:.2em 0}
+  .pane .rel .tag{min-width:0;margin:0;padding:.15em 0}
   /* About */
   .pane.about{display:grid;grid-template-columns:minmax(0,.8fr) minmax(0,1.5fr);gap:.9em 1.3em;align-content:start;font-size:clamp(9.5px,min(1.75cqw,3cqh),14.5px)}
   .ab-id{grid-row:1/3;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.6em;min-width:0;text-align:center}
@@ -387,8 +392,8 @@
 
   /* ===== LOCK SCREEN (black wallpaper, windows-style sign-in: big profile picture, name, password box) ===== */
   #lock{container:lock/size;position:fixed;inset:0;z-index:900;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:16px;color:#fff;text-align:center;
-    background:#000;transition:opacity .35s ease,visibility .35s}
-  #lock.out{opacity:0;visibility:hidden;pointer-events:none}
+    background:#000}
+  #lock.out{opacity:0;visibility:hidden;pointer-events:none;transition:opacity .35s ease,visibility .35s}   /* fade only when unlocking; showing it is instant so the desktop never peeks through */
   .lk-main{display:flex;flex-direction:column;align-items:center;gap:clamp(8px,4cqh,36px);width:100%}
   .lk-clock{display:flex;flex-direction:column;gap:2px} .lk-clock b{font-size:clamp(30px,9cqh,72px);font-weight:300;line-height:1} .lk-clock span{font-size:clamp(12px,2.6cqh,17px);opacity:.75}
   .lk-row{display:flex;justify-content:center;width:100%}
@@ -406,11 +411,8 @@
   .lk-f #lkGo{background:var(--rust)} .lk-f #lkGo:hover{background:#6a8275}
   .lk-eye svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.4;stroke-linecap:round;stroke-linejoin:round}
   .lk-eye .ex{display:none} .lk-eye[aria-pressed=true] .ex{display:block}
-  .lk-hint{margin-top:.6em;font-size:11px;color:rgba(255,255,255,.5)}
+  .lk-hint{margin-top:.7em;font-size:11px;color:rgba(255,255,255,.5);text-align:center}
   .lk-hint b{margin-left:.35em;padding:1px 6px;font-weight:700;color:var(--ink);background:var(--sage);border-radius:3px}
-  @container lock (min-width:640px){   /* wide enough: the hint sits small on the left of the password box */
-    .lk-hint{position:absolute;right:calc(100% + 16px);top:50%;margin:0;transform:translateY(-50%);white-space:nowrap}
-  }
   .lk-msg{min-height:16px;font-size:12px;color:#ffb4a3}
   .lk-sd{position:absolute;right:14px;bottom:14px;display:flex;align-items:center;gap:6px;height:36px;padding:0 12px;font:inherit;font-size:13px;color:#fff;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);border-radius:6px;cursor:pointer}
   .lk-sd svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round}
@@ -1445,7 +1447,7 @@
       h.textContent = lines[0].trim() + (i === 0 ? ' (latest)' : '');
       lines.slice(1).forEach(raw => {
         const ln = raw.trim(), m = /^([+\-*])\s+(.*)$/.exec(ln); if (!ln) return;
-        if (m) { const li = el('li'); li.append(el('span', 'tag ' + KIND[m[1]][0], KIND[m[1]][1])); inline(li, m[2]); ul.append(li); }
+        if (m) { const li = el('li'); const t = el('span', 't'); inline(t, m[2]); li.append(el('span', 'tag ' + KIND[m[1]][0], KIND[m[1]][1]), t); ul.append(li); }
         else { const p = el('p'); inline(p, ln); body.append(p); }
       });
       if (ul.children.length) body.append(ul);
