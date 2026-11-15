@@ -58,7 +58,7 @@
   .card > h2{display:flex;align-items:center;gap:6px;background:var(--rust);color:#fff;border-bottom:2px solid var(--ink);padding:5px 10px;font-size:13px;font-weight:800}
   .card .nb{padding:10px 12px;font-size:13.5px;line-height:1.55;overflow-wrap:anywhere}
   #panelArchive{container:arch/size}
-  .arch{font-size:clamp(8.5px,min(1.4cqw,2.55cqh),15px);min-height:100cqh;display:grid;gap:.9em 1.4em;padding:0 1.4em 1.1em;
+  .arch{--mode:fill;font-size:clamp(8.5px,min(1.4cqw,2.55cqh),15px);min-height:100cqh;display:grid;gap:.9em 1.4em;padding:0 1.4em 1.1em;
     grid-template-columns:minmax(0,.72fr) minmax(0,1fr) minmax(0,1fr);
     grid-template-rows:auto auto minmax(9.5em,1fr) auto auto;
     grid-template-areas:"bar bar bar" "av id dni" "av banner note" "mid mid mid" "favs favs favs"}
@@ -92,11 +92,11 @@
   .thumb{width:2.9em;aspect-ratio:1;border:.2em solid var(--ink);border-radius:.9em}
   .a-favs{grid-area:favs;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.4em 1.4em;padding-top:.75em;border-top:1px solid var(--line);font-size:.95em;line-height:1.5;overflow-wrap:anywhere}
   @container arch (min-width:600px) and (max-height:370px){   /* short window (phone sideways): keep the banner, let the page scroll */
-    .arch{font-size:clamp(10px,1.7cqw,13px);grid-template-rows:auto auto auto auto auto}
+    .arch{--mode:scroll;font-size:clamp(10px,1.7cqw,13px);grid-template-rows:auto auto auto auto auto}
     .a-banner{aspect-ratio:16/9}
   }
   @container arch (max-width:599px) or (max-aspect-ratio:1/1){   /* narrow OR portrait window (phone upright / desktop mode): one column, scrolls */
-    .arch{font-size:clamp(10px,3.1cqw,13.5px);gap:.8em 1em;align-content:start;grid-template-columns:7.5em minmax(0,1fr);grid-template-rows:none;
+    .arch{--mode:scroll;font-size:clamp(10px,3.1cqw,13.5px);gap:.8em 1em;align-content:start;grid-template-columns:7.5em minmax(0,1fr);grid-template-rows:none;
       grid-template-areas:"bar bar" "av id" "dni dni" "banner banner" "note note" "mid mid" "favs favs"}
     .a-av{height:7.5em}
     .a-banner,.a-note{aspect-ratio:16/8}   /* banner and note are the same size, one under the other */
@@ -1751,18 +1751,26 @@
   }
   $('lkShut').addEventListener('click', exitSite);
 
-  /* ---------- NOTE fit: the note is as big as the banner, and its text is scaled to fill it (bigger on big screens, smaller on small ones) ---------- */
-  function fitNotes() {
-    document.querySelectorAll('.a-note').forEach(n => {
-      const p = n.querySelector('p'), t = p && p.firstElementChild; if (!t || !n.clientHeight || !n.clientWidth) return;
-      const fits = px => { n.style.fontSize = px + 'px'; const cs = getComputedStyle(p); return t.offsetHeight + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) <= p.clientHeight + 0.5; };
-      let lo = 6, hi = Math.max(12, Math.min(n.clientWidth, n.clientHeight));
-      if (fits(hi)) lo = hi; else for (let i = 0; i < 14; i++) { const m = (lo + hi) / 2; if (fits(m)) lo = m; else hi = m; }
-      n.style.fontSize = lo + 'px';
-    });
+  /* ---------- ARCH!VE fit: ONE text size for the whole tab (headings, bio, DN!, note, anime, bands, faves all scale together).
+     Big window: the biggest size where everything still fits the window and the note text fills its box (note = banner height).
+     Scrolling layouts (phone upright / sideways): the biggest size where the note text fills its banner-sized box. ---------- */
+  function fitArchive() {
+    const panel = $('panelArchive'), arch = panel && panel.querySelector('.arch'), note = arch && arch.querySelector('.a-note');
+    if (!arch || !note || !panel.clientWidth || !panel.clientHeight) return;
+    const p = note.querySelector('p'), t = p.firstElementChild;
+    const fill = getComputedStyle(arch).getPropertyValue('--mode').trim() === 'fill';
+    const noteFits = () => { const cs = getComputedStyle(p); return t.offsetHeight + parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom) <= p.clientHeight + 0.5; };
+    const fits = px => {
+      arch.style.fontSize = px + 'px';
+      if (!noteFits() || panel.scrollWidth > panel.clientWidth + 1) return false;
+      return fill ? panel.scrollHeight <= panel.clientHeight + 1 : true;
+    };
+    let lo = 6, hi = fill ? 30 : 24;
+    if (fits(hi)) lo = hi; else for (let i = 0; i < 14; i++) { const m = (lo + hi) / 2; if (fits(m)) lo = m; else hi = m; }
+    arch.style.fontSize = lo + 'px';
   }
-  let fitRaf = 0; const fitSoon = () => { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(fitNotes); };
-  document.querySelectorAll('.a-note').forEach(n => { if (window.ResizeObserver) new ResizeObserver(fitSoon).observe(n); });
+  let fitRaf = 0; const fitSoon = () => { cancelAnimationFrame(fitRaf); fitRaf = requestAnimationFrame(fitArchive); };
+  if (window.ResizeObserver && $('panelArchive')) new ResizeObserver(fitSoon).observe($('panelArchive'));
   addEventListener('resize', fitSoon); fitSoon();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitSoon);
 
