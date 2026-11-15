@@ -76,6 +76,8 @@
   .arch p{line-height:1.6;overflow-wrap:anywhere}
   .arch .hl{padding:0 .25em}
   .a-banner{grid-area:banner;min-height:0;border:.22em solid var(--ink)}
+  .a-banner[data-fail]{display:flex;align-items:center;justify-content:center;padding:1em;text-align:center;font-size:.9em;overflow-wrap:anywhere}
+  .a-banner[data-fail]::after{content:"banner failed to load: " attr(data-fail) " (" attr(data-why) ")"}
   .a-note{grid-area:note;display:flex;flex-direction:column;min-height:0;border:.22em solid var(--ink)}
   .a-note h2{flex:none;margin:0;padding:.35em .7em;font-size:1em;color:#fff;background:var(--rust);border-bottom:.22em solid var(--ink)}
   .a-note p{flex:1;min-height:0;overflow:auto;padding:.7em .9em;line-height:1.55}
@@ -1748,6 +1750,14 @@
     setTimeout(() => location.replace('https://www.google.com/'), 150);
   }
   $('lkShut').addEventListener('click', exitSite);
+
+  /* ---------- picture check: if the banner can't load, say so inside the box (so you can see why on a phone) ---------- */
+  document.querySelectorAll('.a-banner').forEach(d => {
+    const m = /url\(['"]?([^'")]+)/.exec(d.getAttribute('style') || ''); if (!m) return;
+    const im = new Image();
+    im.onerror = () => { d.dataset.fail = m[1]; d.dataset.why = navigator.onLine ? 'file not found or blocked' : 'offline and not saved'; };
+    im.src = m[1];
+  });
 
   /* ---------- INTRO ---------- */
   let n = 1;
