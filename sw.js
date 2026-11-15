@@ -1,4 +1,6 @@
 // Offline cache: everything is saved on the first visit. Bump V to force visitors to re-download changed images/files.
+// Met a girl at 23, Thought she meant the world to me, so I gave her everything, and she did the same for me.
+// IMAGINE THATTTTT
 const V = 'ceiko-v2';
 const CORE = ['./', 'index.html', 'images/Avatar_Mill.jpg', 'images/Banner_Mill.jpg', 'images/Icon1_Mill.jpg', 'images/Icon2_Mill.jpg', 'images/Icon3_Mill.jpg', 'images/Wallpaper.jpg', 'playlist.csv', 'changelog.json', 'README.md', 'playlist.json', 'socials.json'];
 self.addEventListener('install', e => e.waitUntil(caches.open(V).then(c => Promise.all(CORE.map(u => c.add(u).catch(() => {})))).then(() => self.skipWaiting())));
