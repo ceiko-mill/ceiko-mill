@@ -14,7 +14,8 @@
 <meta name="twitter:image" content="https://ceiko-mill.github.io/ceiko-mill/images/Avatar_Mill.jpg">
 <meta name="twitter:title" content="ceiko_mill's computer">
 <meta name="twitter:description" content="Welcome to ceiko_mill's Portfolio! Anime, bands, hobbies and a music player.">
-<link rel="icon" type="image/jpeg" href="images/Avatar_Mill.jpg">
+<link rel="icon" type="image/jpeg" sizes="192x192" href="images/Avatar_Mill.jpg">
+<link rel="shortcut icon" type="image/jpeg" href="images/Avatar_Mill.jpg">
 <link rel="apple-touch-icon" href="images/Avatar_Mill.jpg">
 <style>
   :root{
@@ -957,11 +958,12 @@
   /* ---------- PLAYBACK ---------- */
   /* ---------- LOCK SCREEN / MEDIA KEY CONTROLS ---------- */
   const ms = 'mediaSession' in navigator ? navigator.mediaSession : null;
+  const NOTIF_TITLE = '';   // custom notification title; leave '' to show the song name
   function setMeta(name) {   // identical to the old version that worked on the phone
     if (!ms || !window.MediaMetadata || !name) return;
     const i = name.indexOf(' - ');
     ms.metadata = new MediaMetadata({
-      title: i > -1 ? name.slice(i + 3) : name,
+      title: NOTIF_TITLE || (i > -1 ? name.slice(i + 3) : name),
       artist: i > -1 ? name.slice(0, i) : "ceiko_mill's computer",
       album: "ceiko_mill's computer",
       artwork: [{ src: new URL('images/Avatar_Mill.jpg', location.href).href, sizes: '512x512', type: 'image/jpeg' }]
