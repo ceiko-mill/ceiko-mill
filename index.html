@@ -957,16 +957,19 @@
   /* ---------- PLAYBACK ---------- */
   /* ---------- LOCK SCREEN / MEDIA KEY CONTROLS ---------- */
   const ms = 'mediaSession' in navigator ? navigator.mediaSession : null;
-  function setMeta(name) {
-    if (!ms || !window.MediaMetadata) return;
-    const i = name.indexOf(' - ');
-    ms.metadata = new MediaMetadata({
-      title: i > -1 ? name.slice(i + 3) : name,
-      artist: i > -1 ? name.slice(0, i) : "ceiko_mill's computer",
-      album: "ceiko_mill's computer",
-      artwork: [{ src: new URL('images/Avatar_Mill.jpg', location.href).href, sizes: '512x512', type: 'image/jpeg' }]
-    });
+  function setMeta(name) {   // what the phone's lock screen / notification card shows: the file name + your avatar
+    if (!ms || !window.MediaMetadata || !name) return;
+    const art = new URL('images/Avatar_Mill.jpg', location.href).href;
+    try {
+      ms.metadata = new MediaMetadata({
+        title: name,                         // the mp3's file name (no .mp3)
+        artist: "ceiko_mill's computer",
+        album: "ceiko_mill's computer",
+        artwork: [96, 128, 192, 256, 384, 512].map(n => ({ src: art, sizes: n + 'x' + n, type: 'image/jpeg' }))   // avatar = the card's picture and its background colours
+      });
+    } catch (e) { console.warn('Media metadata failed:', e); }
   }
+  const curName = () => { const t = tracks[order[pos]]; return t ? t.name : ''; };
   function setPos() {
     if (!ms || !ms.setPositionState || !isFinite(audio.duration) || !audio.duration) return;
     try { ms.setPositionState({ duration: audio.duration, position: Math.min(audio.currentTime, audio.duration), playbackRate: audio.playbackRate || 1 }); } catch (e) {}
@@ -980,7 +983,8 @@
     set('seekto', d => { if (d.seekTime != null) { audio.currentTime = d.seekTime; setPos(); } });
     set('seekbackward', d => { audio.currentTime = Math.max(0, audio.currentTime - (d.seekOffset || 10)); setPos(); });
     set('seekforward', d => { audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + (d.seekOffset || 10)); setPos(); });
-    audio.addEventListener('play',  () => { ms.playbackState = 'playing'; });
+    audio.addEventListener('play',  () => { ms.playbackState = 'playing'; setMeta(curName()); });   // also covers the 1st song, which starts without going through playCurrent()
+    audio.addEventListener('playing', () => setMeta(curName()));
     audio.addEventListener('pause', () => { ms.playbackState = 'paused'; });
     audio.addEventListener('loadedmetadata', setPos);
     audio.addEventListener('seeked', setPos);
@@ -1797,7 +1801,7 @@
       newOrder(-1); warnUnmatched();
       await preloadFirst(PRELOAD_TIMEOUT_MS);   // wait for the first song before letting you in
       preloadNext();
-      pName.textContent = tracks[order[0]].name; pTrack.textContent = 'Track 1/' + order.length; pTime.textContent = tracks.length + ' tracks loaded';
+      setMeta(tracks[order[0]].name); pName.textContent = tracks[order[0]].name; pTrack.textContent = 'Track 1/' + order.length; pTime.textContent = tracks.length + ' tracks loaded';
     }
     else { pName.textContent = loadErr ? 'music failed to load' : 'no .mp3 files found'; pTime.textContent = loadErr ? loadErr.message : 'in /' + GH_FOLDER; }
     clearInterval(dotTimer);
