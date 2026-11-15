@@ -16,7 +16,6 @@
 <meta name="twitter:description" content="Welcome to ceiko_mill's Portfolio! Anime, bands, hobbies and a music player.">
 <link rel="icon" type="image/jpeg" href="images/Avatar_Mill.jpg">
 <link rel="apple-touch-icon" href="images/Avatar_Mill.jpg">
-<link rel="manifest" href="manifest.webmanifest">   <!-- lets Chrome install this as an app with your avatar as its icon -->
 <style>
   :root{
     --ink:#0f1511; --cream:#a4aa98; --cream2:#8b927e; --lt:#d3d7cb;
@@ -958,17 +957,15 @@
   /* ---------- PLAYBACK ---------- */
   /* ---------- LOCK SCREEN / MEDIA KEY CONTROLS ---------- */
   const ms = 'mediaSession' in navigator ? navigator.mediaSession : null;
-  function setMeta(name) {   // what the phone's lock screen / notification card shows: the file name + your avatar
+  function setMeta(name) {   // identical to the old version that worked on the phone
     if (!ms || !window.MediaMetadata || !name) return;
-    const art = new URL('images/Avatar_Mill.jpg', location.href).href;
-    try {
-      ms.metadata = new MediaMetadata({
-        title: name,                         // the mp3's file name (no .mp3)
-        artist: "",                          // nothing extra under the song name
-        album: "",
-        artwork: [96, 128, 192, 256, 384, 512].map(n => ({ src: art, sizes: n + 'x' + n, type: 'image/jpeg' }))   // avatar = the card's picture and its background colours
-      });
-    } catch (e) { console.warn('Media metadata failed:', e); }
+    const i = name.indexOf(' - ');
+    ms.metadata = new MediaMetadata({
+      title: i > -1 ? name.slice(i + 3) : name,
+      artist: i > -1 ? name.slice(0, i) : "ceiko_mill's computer",
+      album: "ceiko_mill's computer",
+      artwork: [{ src: new URL('images/Avatar_Mill.jpg', location.href).href, sizes: '512x512', type: 'image/jpeg' }]
+    });
   }
   const curName = () => { const t = tracks[order[pos]]; return t ? t.name : ''; };
   function setPos() {
@@ -985,7 +982,6 @@
     set('seekbackward', d => { audio.currentTime = Math.max(0, audio.currentTime - (d.seekOffset || 10)); setPos(); });
     set('seekforward', d => { audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + (d.seekOffset || 10)); setPos(); });
     audio.addEventListener('play',  () => { ms.playbackState = 'playing'; setMeta(curName()); });   // also covers the 1st song, which starts without going through playCurrent()
-    audio.addEventListener('playing', () => setMeta(curName()));
     audio.addEventListener('pause', () => { ms.playbackState = 'paused'; });
     audio.addEventListener('loadedmetadata', setPos);
     audio.addEventListener('seeked', setPos);
@@ -1830,4 +1826,4 @@
 })();
 </script>
 </body>
-</html>
+</html>
