@@ -1,5 +1,5 @@
-<!DOCTYPE html> <!-- woo-ee-oo I look just like buddy holly -->
-<html lang="en"> <!-- uh oh and you're mary tyler moore -->
+<!DOCTYPE html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -16,6 +16,7 @@
 <meta name="twitter:description" content="Welcome to ceiko_mill's Portfolio! Anime, bands, hobbies and a music player.">
 <link rel="icon" type="image/jpeg" href="images/Avatar_Mill.jpg">
 <link rel="apple-touch-icon" href="images/Avatar_Mill.jpg">
+<link rel="manifest" href="manifest.webmanifest">   <!-- lets Chrome install this as an app with your avatar as its icon -->
 <style>
   :root{
     --ink:#0f1511; --cream:#a4aa98; --cream2:#8b927e; --lt:#d3d7cb;
@@ -638,7 +639,7 @@
     <!-- fallback while playlist.csv is missing: Spotify's own embed, filling the whole tab -->
     <div class="pl-fb" id="plFallback">
       <iframe class="spotify" title="ceiko_mill's Spotify playlist"
-        src="https://open.spotify.com/embed/playlist/71fnYEGAXnxM7I5WVB4umN?utm_source=generator&theme=0"
+        data-src="https://open.spotify.com/embed/playlist/71fnYEGAXnxM7I5WVB4umN?utm_source=generator&theme=0"
         loading="lazy" allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"></iframe>
     </div>
   </div>
@@ -963,8 +964,8 @@
     try {
       ms.metadata = new MediaMetadata({
         title: name,                         // the mp3's file name (no .mp3)
-        artist: "ceiko_mill's computer",
-        album: "ceiko_mill's computer",
+        artist: "",                          // nothing extra under the song name
+        album: "",
         artwork: [96, 128, 192, 256, 384, 512].map(n => ({ src: art, sizes: n + 'x' + n, type: 'image/jpeg' }))   // avatar = the card's picture and its background colours
       });
     } catch (e) { console.warn('Media metadata failed:', e); }
@@ -1778,6 +1779,15 @@
   addEventListener('resize', fitSoon); fitSoon();
   if (document.fonts && document.fonts.ready) document.fonts.ready.then(fitSoon);
 
+  /* ---------- Spotify embed: only load it when the PLAYLIST tab is actually on screen.
+     (Loaded in the background it is a second media player on the page, and on Android it can take over the notification card from your own player.) ---------- */
+  document.querySelectorAll('iframe.spotify[data-src]').forEach(f => {
+    const load = () => { if (!f.src) f.src = f.dataset.src; };
+    if (!window.IntersectionObserver) { load(); return; }
+    const io = new IntersectionObserver(es => { if (es.some(e => e.isIntersecting)) { load(); io.disconnect(); } });
+    io.observe(f);
+  });
+
   /* ---------- picture check: if the banner can't load, say so inside the box (so you can see why on a phone) ---------- */
   document.querySelectorAll('.a-banner').forEach(d => {
     const m = /url\(['"]?([^'")]+)/.exec(d.getAttribute('style') || ''); if (!m) return;
@@ -1820,4 +1830,4 @@
 })();
 </script>
 </body>
-</html>
+</html>
